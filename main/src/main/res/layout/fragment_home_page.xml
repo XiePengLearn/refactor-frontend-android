@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cube_ptr="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/jkx_public_title_home" />
+
+    <!-- <android.support.v4.widget.SwipeRefreshLayout
+         android:id="@+id/refresh"
+         android:layout_width="match_parent"
+
+         android:layout_height="match_parent">-->
+    <com.sxjs.common.widget.headerview.JDHeaderView
+        android:id="@+id/find_pull_refresh_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        cube_ptr:ptr_duration_to_close="200"
+        cube_ptr:ptr_duration_to_close_header="300"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
+        cube_ptr:ptr_resistance="2.0">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x13"
+                android:layout_marginRight="@dimen/x13"
+                android:orientation="vertical">
+
+                <com.youth.banner.Banner
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y119"
+                    android:visibility="visible"
+                    app:image_scale_type="fit_xy" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:id="@+id/ll_examSchedule"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/y12"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <com.sxjs.common.view.MediumBoldTextView
+                                android:id="@+id/tv_examName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2019年度国家公立医院绩效考核"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x15" />
+
+                            <TextView
+                                android:id="@+id/tv_statusNameAndDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/y3"
+                                android:text="数据填报 (截止 2019-08-31)"
+                                android:textColor="@color/color_fonts_999999"
+                                android:textSize="@dimen/x15" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/y12"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_day1"
+                                android:layout_width="@dimen/x43"
+                                android:layout_height="@dimen/x43"
+                                android:background="@drawable/bg_home_gradient_shape"
+                                android:gravity="center"
+                                android:text="2"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/x25" />
+
+                            <TextView
+                                android:id="@+id/tv_day2"
+                                android:layout_width="@dimen/x43"
+                                android:layout_height="@dimen/x43"
+                                android:layout_marginLeft="@dimen/x4"
+                                android:background="@drawable/bg_home_gradient_shape"
+                                android:gravity="center"
+                                android:text="4"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/x25" />
+
+                            <com.sxjs.common.view.MediumBoldTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/x7"
+                                android:text="天"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x15" />
+
+                            <TextView
+                                android:id="@+id/tv_hour1"
+                                android:layout_width="@dimen/x43"
+                                android:layout_height="@dimen/x43"
+                                android:layout_marginLeft="@dimen/x7"
+                                android:background="@drawable/bg_home_gradient_shape"
+                                android:gravity="center"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/x25" />
+
+                            <TextView
+                                android:id="@+id/tv_hour2"
+                                android:layout_width="@dimen/x43"
+                                android:layout_height="@dimen/x43"
+                                android:layout_marginLeft="@dimen/x4"
+                                android:background="@drawable/bg_home_gradient_shape"
+                                android:gravity="center"
+                                android:shadowColor="#8084bcea"
+                                android:shadowDx="0"
+                                android:shadowDy="8"
+                                android:text="6"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/x25" />
+
+                            <com.sxjs.common.view.MediumBoldTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/x7"
+                                android:text="时"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x15" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_examFinsh"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y32"
+                        android:layout_marginTop="@dimen/y12"
+                        android:background="@drawable/bg_home_fff2d6_corner_shape"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="2019年度国家公立医院绩效考核胜利结束"
+                            android:textColor="#EF9039"
+                            android:textSize="@dimen/x13" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_examWarn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y12"
+                        android:background="@drawable/bg_home_ffe8e8_corner_shape"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/yichang_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:src="@drawable/home_baojing" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/yichang_img"
+                            android:orientation="vertical"
+                            android:paddingTop="@dimen/y5"
+                            android:paddingBottom="@dimen/y5">
+
+                            <TextView
+                                android:id="@+id/tv_totleExceptions"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="@dimen/x4"
+                                android:drawablePadding="@dimen/x5"
+                                android:gravity="center_vertical"
+                                android:text="指标 9 项异常"
+                                android:textColor="#EF3939"
+                                android:textSize="@dimen/x13"
+                                android:textStyle="bold" />
+
+                            <com.sxjs.common.view.TextViewScrollVertical
+                                android:id="@+id/tv_exceptiopDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/x4"
+                                android:text="第3项指标填写异常"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x9" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x20"
+                            android:src="@drawable/home_go" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/zhibiao_sort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y14"
+                    android:background="#f8f8f8"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y43"
+                        android:layout_marginLeft="@dimen/x4"
+                        android:layout_marginRight="@dimen/x17">
+
+                        <com.sxjs.common.view.MediumBoldTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:drawableLeft="@drawable/paihangbang"
+                            android:drawablePadding="@dimen/y3"
+                            android:gravity="center"
+                            android:text="指标排行榜"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x17" />
+
+                        <com.sxjs.common.view.MediumBoldTextView
+                            android:id="@+id/tv_rank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:drawableRight="@drawable/home_down"
+                            android:drawablePadding="@dimen/x5"
+                            android:text="27"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x17"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_changeTotle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:drawableRight="@drawable/home_go"
+                            android:drawablePadding="@dimen/x6"
+                            android:text="12项指标下降"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x13" />
+
+                        <com.sxjs.common.view.MediumBoldTextView
+                            android:id="@+id/tv_finshRank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="27"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x17"
+                            android:visibility="gone" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x9"
+                        android:layout_marginRight="@dimen/x9"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/x10"
+                        android:paddingTop="@dimen/x10"
+                        android:paddingRight="@dimen/x10"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/y9">
+
+                            <com.sxjs.common.view.MediumBoldTextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="出院患者手术占比"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x14" />
+
+                            <com.sxjs.common.view.MediumBoldTextView
+                                android:id="@+id/tv_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="60.09%"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x14" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/y1"
+                            android:background="#F2F2F2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/y32">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="同类医院排名"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_change1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:drawableRight="@drawable/home_down"
+                                android:drawablePadding="@dimen/x5"
+                                android:text="18"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_old1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="12 原排名"
+                                android:textColor="#74849D"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_finshOld1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:text="18"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/y1"
+                            android:background="#F2F2F2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/y32">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="地区医院排名"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_change2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:drawableRight="@drawable/home_down"
+                                android:drawablePadding="@dimen/x5"
+                                android:text="18"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_old2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:text="12 原排名"
+                                android:textColor="#74849D"
+                                android:textSize="@dimen/x13" />
+
+                            <TextView
+                                android:id="@+id/tv_finshOld2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:text="18"
+                                android:textColor="@color/color_fonts_333333"
+                                android:textSize="@dimen/x13"
+                                android:visibility="gone" />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/zhibiao_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y12"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/gkzb"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/consult"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y69"
+                    android:layout_marginTop="@dimen/y12"
+                    android:background="#f8f8f8"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x12"
+                        android:background="@drawable/home_pic" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x9"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="咨询服务"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x17" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="提供国考,专家一对一指导，避免漏报，错报，免丢分，从而提升绩效。"
+                            android:textColor="#74849D"
+                            android:textSize="@dimen/x13" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/zcjd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y6"
+                    android:background="@drawable/home_zcjd" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="国考快讯"
+                        android:textColor="@color/color_fonts_333333"
+                        android:textSize="@dimen/x15"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_news_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/x5"
+                        android:text="更多"
+                        android:textColor="#087AE7"
+                        android:textSize="@dimen/x13" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y1"
+                    android:layout_marginTop="@dimen/y9"
+                    android:background="#F2F2F2" />
+
+                <LinearLayout
+                    android:id="@+id/ll_newsItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y12"
+                    android:layout_marginBottom="@dimen/y9"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_imgUrl"
+                        android:layout_width="@dimen/x94"
+                        android:layout_height="@dimen/y54"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/home_pic1" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y52"
+                        android:layout_marginLeft="@dimen/x13">
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="健康医疗产品展览会资源通告"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x15" />
+
+                        <TextView
+                            android:id="@+id/tv_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:text="506阅读"
+                            android:textColor="#999999"
+                            android:textSize="@dimen/x13"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="@dimen/x5"
+                            android:text="2019-06-21"
+                            android:textColor="#999999"
+                            android:textSize="@dimen/x11" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:background="#F2F2F2" />
+
+                <LinearLayout
+                    android:id="@+id/ll_newsItem1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y12"
+                    android:layout_marginBottom="@dimen/y9"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_imgUrl1"
+                        android:layout_width="@dimen/x94"
+                        android:layout_height="@dimen/y54"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/home_pic1" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y52"
+                        android:layout_marginLeft="@dimen/x13">
+
+                        <TextView
+                            android:id="@+id/tv_title1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:text="健康医疗产品展览会资源通告"
+                            android:textColor="@color/color_fonts_333333"
+                            android:textSize="@dimen/x15" />
+
+                        <TextView
+                            android:id="@+id/tv_count1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:text="506阅读"
+                            android:textColor="#999999"
+                            android:textSize="@dimen/x13"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tv_time1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginRight="@dimen/x5"
+                            android:text="2019-06-21"
+                            android:textColor="#999999"
+                            android:textSize="@dimen/x11" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </com.sxjs.common.widget.headerview.JDHeaderView>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+</LinearLayout>

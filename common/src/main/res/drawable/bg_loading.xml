@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/jmjk2"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk3"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk4"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk5"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk6"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk7"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk8"
+        android:duration="80"/>
+    <item
+        android:drawable="@drawable/jmjk9"
+        android:duration="80"/>
+
+</animation-list>

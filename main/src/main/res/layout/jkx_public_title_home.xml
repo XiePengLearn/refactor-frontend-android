@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/fake_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/statusbar_view_height" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/jkx_title_left"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:drawableLeft="@drawable/back"
+            android:textColor="#333333"
+            android:textSize="@dimen/x15"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/jkx_title_left_btn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x15"
+            android:background="@drawable/home_saoma"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/jkx_title_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:maxEms="6"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/color_fonts_333333"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/x17" />
+
+        <RelativeLayout
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x15">
+
+            <TextView
+                android:id="@+id/jkx_title_right_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/y2"
+                android:background="@drawable/home_xiaoxi"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/rl_new_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/new_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/new_message"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/x3"
+                    android:paddingRight="@dimen/x3"
+                    android:text="1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/x9" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/jkx_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x15"
+            android:ellipsize="end"
+            android:maxEms="6"
+            android:singleLine="true"
+            android:text="国家绩效考核"
+            android:textColor="@color/color_fonts_333333"
+            android:textIsSelectable="false"
+            android:textSize="@dimen/x13"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

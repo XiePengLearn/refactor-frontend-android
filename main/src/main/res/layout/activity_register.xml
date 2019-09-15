@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:id="@+id/ll_register_root_view"
+    android:orientation="vertical">
+
+    <include layout="@layout/jkx_public_title_home" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/reg_realName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:background="@drawable/bg_register_edit"
+            android:hint="@string/regist_realName"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_sex"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_register_edit"
+            android:gravity="center_vertical"
+            android:hint="请选择您的性别"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/reg_idnumber"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_register_edit"
+            android:digits="0123456789Xx"
+            android:hint="@string/regist_idnumber"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:maxLength="18"
+            android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/reg_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_register_edit"
+            android:hint="@string/password_character_restrict"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/reg_again_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:background="@drawable/bg_register_edit"
+            android:hint="@string/reg_again_password"
+            android:inputType="textPassword"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/reg_phone"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@drawable/text_cursor"
+            android:background="@drawable/bg_register_edit"
+            android:hint="@string/regist_phone"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:paddingLeft="10dp"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/reg_verification_code"
+                android:layout_width="180dp"
+                android:layout_height="40dp"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@drawable/text_cursor"
+                android:background="@drawable/bg_register_edit"
+                android:hint="@string/regist_verification_code"
+                android:inputType="phone"
+                android:maxLength="6"
+                android:paddingLeft="10dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_getValidateCode"
+                android:layout_width="100dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="12dp"
+                android:background="@drawable/bg_shap_button_1"
+                android:text="@string/regist_get_verification_code"
+                android:textColor="@color/bg_withe"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x2"
+            android:layout_marginTop="@dimen/y6"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收不到短信？使用"
+                android:textColor="#999999"
+                android:textSize="@dimen/x13" />
+
+            <TextView
+                android:id="@+id/voice_remind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x2"
+                android:text="语音验证码"
+                android:textColor="@color/bg_green"
+                android:textSize="@dimen/x13" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/reg_agree_terms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@null"
+                android:checked="true"
+                android:drawableLeft="@drawable/bt_register_checkbox" />
+
+            <TextView
+                android:id="@+id/reg_agree_terms_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/x3"
+                android:text="@string/regist_agree_terms"
+                android:textColor="@color/rh_background_menu"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/reg_btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_shap_button_1"
+                android:text="@string/regist_regist"
+                android:textColor="#fff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_notReceiveSecurityCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reg_btn_register"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/not_receive_security_code"
+                android:textColor="@color/rh_background_menu"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="testmodule_colorPrimary">#ffffff</color>
+    <color name="testmodule_colorPrimaryDark">#00c4ad</color>
+    <color name="testmodule_colorAccent">#ffffff</color>
+    <color name="testmodule_color_orange_red">#f03f33</color>
+    <color name="testmodule_lineColor">#11333333</color>
+    <color name="testmodule_black_font">#bb000000</color>
+    <color name="testmodule_black_bg">#66333333</color>
+
+
+
+</resources>

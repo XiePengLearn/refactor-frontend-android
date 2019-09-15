@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="design_bottom_navigation_active_text_size">12sp</dimen>
+    <dimen name="switch_layout_height">40dp</dimen>
+
+    <dimen name="new_radio_btn_width">100dp</dimen>
+    <dimen name="ui_10_dip">10dip</dimen>
+    <dimen name="expand_tab_item_height">45dp</dimen>
+    <dimen name="height_top_bar">46dp</dimen>
+    <dimen name="doctor_details_font">15sp</dimen>
+    <dimen name="doctor_details_margin_left">10dp</dimen>
+
+    <!--  日期时间选择控件所需尺寸-->
+    <!-- 顶部按钮栏高度 -->
+    <dimen name="pickerview_topbar_height">44dp</dimen>
+    <!-- 顶部按钮paddingLeft -->
+    <dimen name="pickerview_topbar_paddingleft">10dp</dimen>
+    <!-- 顶部按钮paddingRight -->
+    <dimen name="pickerview_topbar_paddingright">30dp</dimen>
+    <!-- 顶部按钮文字大小 -->
+    <dimen name="pickerview_topbar_btn_textsize">20sp</dimen>
+    <dimen name="pickerview_topbar_title_textsize">21sp</dimen>
+    <!-- 选项文字大小 需要配合 bools.xml 的 pickerview_customTextSize 为 true 才有效果-->
+    <dimen name="pickerview_textsize">20sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="statusbar_view_height">25dp</dimen>
+    <!--神思开始-->
+    <dimen name="oliveapp_activity_horizontal_margin">0dp</dimen>
+    <dimen name="oliveapp_activity_vertical_margin">0dp</dimen>
+</resources>

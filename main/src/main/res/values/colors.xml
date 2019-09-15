@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!--<color name="colorPrimary">#000</color>-->
+    <!--<color name="colorPrimaryDark">#000</color>-->
+    <!--<color name="colorAccent">#f03f33</color>-->
+    <color name="color_orange_red">#f03f33</color>
+    <color name="lineColor">#11333333</color>
+    <color name="black_font">#bb000000</color>
+    <color name="black_bg">#66333333</color>
+
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#00c4ad</color>
+    <color name="colorAccent">#ffffff</color>
+    <color name="bg_withe">#FFFFFF</color>
+    <color name="bg_black">#000000</color>
+    <color name="bg_red">#FF0000</color>
+    <color name="bg_green">#00c4ad</color>
+    <color name="bg_bottom_menu">#39A7D5</color>
+    <color name="bg_bottom_menu_tv_no">#9ED3EC</color>
+    <color name="bg_title_top_bottom">#3aa6d6</color>
+    <color name="refresh_timer">#969696</color>
+    <color name="littleBlue">#0099CC</color>
+    <color name="pj_tjd">#f8750d</color>
+    <color name="pj_number">#787878</color>
+    <color name="highlight_color1">#333333</color>
+    <color name="selected">#3aa6d6</color>
+    <color name="light_black2">#666666</color>
+    <color name="orange">#ffba00</color>
+    <color name="grey">#CCCCCC</color>
+    <color name="greys">#F59000</color>
+    <color name="light_gray">#f3f3f3</color>
+    <color name="greyss">#999999</color>
+    <color name="bg_blue">#33baf6</color>
+    <color name="bg_green1">#33baf6</color>
+    <color name="bg_green2">#00c4ad</color>
+    <color name="highlight_color">#FFBA00</color>
+    <!-- Public -->
+    <color name="list_item_color">#dbf7f4</color>
+    <color name="list_items_color">#EDEDED</color>
+    <color name="divider_line_color">#DCDCDC</color>
+    <color name="blue">#0099CC</color>
+    <color name="deptblue">#23b0ef</color>
+    <color name="gray">#D6D6D6</color>
+    <color name="gray_bg">#cccccc</color>
+    <color name="bg_more_page">#EEEEEE</color>
+    <color name="bg_news_dh">#E9E9E9</color>
+    <color name="bg_news_dh_line">#39A7D5</color>
+    <color name="bg_news_page">#FAFAFA</color>
+    <color name="bg_news_menu_font">#38A6D5</color>
+    <color name="transparent_background">#00FFFFFF</color>
+    <color name="menu_color">#F6F6F6</color>
+    <color name="frame_divider_color">#dedede</color>
+    <color name="huise">#D7D4CF</color>
+    <color name="golden">#FFA54F</color>
+    <color name="color_fonts_999999">#999999</color>
+    <color name="color_fonts_000000">#000000</color>
+    <color name="color_fonts_ffffff">#ffffff</color>
+    <color name="color_fonts_00c4ad">#00c4ad</color>
+    <color name="color_fonts_2fc0b0">#2fc0b0</color>
+    <color name="color_fonts_e94754">#e94754</color>
+    <color name="color_fonts_96fdf2">#96fdf2</color>
+    <color name="color_fonts_666666">#666666</color>
+    <color name="color_fonts_333333">#333333</color>
+    <color name="color_fonts_f4ac4e">#f4ac4e</color>
+    <color name="color_background_ebebeb">#ebebeb</color>
+    <color name="color_bacnground_f3f3f3">#f3f3f3</color>
+    <color name="color_bacnground_dddddd">#dddddd</color>
+
+    <!-- 2015-02-03 -->
+
+    <color name="dark_gray">#888888</color>
+
+    <!-- 选择图片颜色 -->
+    <color name="albumback">#E1E0DE</color>
+    <color name="black">#000000</color>
+    <color name="week_color">#f4ac4e</color>
+    <!-- 黑色 -->
+    <color name="white">#FFFFFF</color>
+    <!-- 白色 -->
+    <color name="none_color">#00000000</color>
+    <color name="plugin_camera_black">#000000</color>
+
+    <!-- 2015-06-17 -->
+    <color name="choose_eara_item_press_color">#f4f4f4</color>
+    <color name="no_color">#00000000</color>
+    <color name="popup_main_background">#b0000000</color>
+
+    <!-- 2015-09-07 -->
+    <color name="pharmacy_phone">#787878</color>
+    <color name="pharmacy_phone_click">#FFFFFF</color>
+    <color name="pharmacy_query">#00000000</color>
+    <color name="pharmacy_query_click">#3aa6d6</color>
+    <color name="bg_text_blue">#3aa6d5</color>
+
+    <!-- 环信 -->
+    <color name="top_bar_normal_bg">#00acff</color>
+    <color name="gray_normal">#666667</color>
+    <color name="list_itease_primary_color">#000</color>
+    <color name="list_itease_secondary_color">#888888</color>
+    <color name="common_bg">#fcfcfc</color>
+    <color name="divider_list">#d4d4d4</color>
+    <color name="divider_list_two">#dddddd</color>
+    <color name="btn_gray_normal">#c0c0c0</color>
+    <color name="btn_gray_pressed_status">#b5b5b6</color>
+    <color name="btn_blue_pressed">#0066FF</color>
+    <color name="btn_blue_normal">#1e90ff</color>
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="holo_green_light">#ff99cc00</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+    <color name="holo_red_light">#ffff4444</color>
+    <color name="viewfinder_mask">#cb000000</color>
+    <color name="backgroud">#ffffffff</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
+    <color name="possible_result_points">#c0ffbd21</color>
+    <color name="transparent">#00000000</color>
+    <color name="title_tv_color">#ffffffff</color>
+    <color name="radio_color">#f3f3f3</color>
+    <color name="bg_gray">#999999</color>
+    <color name="voip_interface_text_color">#bababa</color>
+    <color name="error_item_color">#F6EBE6</color>
+    <color name="text_color_ffd1d1">#ffd1d1</color>
+    <color name="text_color_ef9929">#ef9929</color>
+    <color name="exit_button">#F04C4A</color>
+
+    <!-- 居民健康 医疗 -->
+    <color name="rh_background_main">#e5e5e5</color>
+    <color name="rh_backgroundcardtitle_main">#FFF5E6</color>
+    <color name="rh_color1">#000000</color>
+    <color name="rh_color2">#999999</color>
+    <color name="rh_color3">#333333</color>
+    <color name="rh_bottom_menu">#f8f8f8</color>
+    <color name="rh_text_menu">#00c4ad</color>
+    <color name="rh_text_menu_no">#999999</color>
+    <color name="rh_background_menu">#00c4ad</color>
+    <color name="rh_background_menu2">#f3f3f3</color>
+    <color name="rh_textcolor">#0099CC</color>
+    <!-- 居民健康 健康记录 -->
+
+    <color name="rh_background_add_record">#dcf6f3</color>
+    <!-- 居民健康 我的 -->
+    <color name="rh_myspace_text1">#d1e0fc</color>
+    <color name="rh_myspace_background_button">#01bda7</color>
+    <color name="myspace_titlebutton_line_height">#00eed2</color>
+    <color name="rh_myspace_view">#e5e5e5</color>
+    <!-- 居民健康 农合 -->
+    <color name="rural_B020011_background">#7dbd9a</color>
+    <color name="rural_C020007_background">#ddae4a</color>
+    <color name="rural_C020005_background">#76bfbb</color>
+    <color name="rural_A040001_background">#dda69f</color>
+    <color name="rural_C010003_background">#7dbd9a</color>
+    <color name="rural_C020004_background">#ddae4a</color>
+    <color name="rural_C000001_background">#76bfbb</color>
+    <color name="rural_C000002_background">#cbc560</color>
+    <color name="rural_C000003_background">#dda69f</color>
+    <color name="rural_C020007_editText">#909090</color>
+    <color name="rural_C020007_textColor">#787878</color>
+
+    <!-- 日期时间选择控件所需颜色值 -->
+    <color name="pickerview_timebtn_nor">#057dff</color>
+    <color name="pickerview_timebtn_pre">#c2daf5</color>
+    <color name="pickerview_bg_topbar">#f5f5f5</color>
+    <color name="pickerview_topbar_title">#000000</color>
+    <color name="pickerview_wheelview_textcolor_out">#a8a8a8</color>
+    <color name="pickerview_wheelview_textcolor_center">#2a2a2a</color>
+    <color name="pickerview_wheelview_textcolor_divider">#d5d5d5</color>
+    <color name="bgColor_overlay">#60000000</color>
+    <color name="theme_color_blue">#14aedf</color>
+    <color name="desc_right">#0788ca</color>
+    <color name="desc_erro">#e90334</color>
+
+
+    <color name="exception">#DC4141</color>
+    <color name="indicator">#FD8F47</color>
+
+    <color name="pop_left">#F8F8F8</color>
+    <color name="pop_right">#FFFFFF</color>
+</resources>
