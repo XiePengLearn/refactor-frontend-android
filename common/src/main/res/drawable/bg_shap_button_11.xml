@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 设置填充颜色，颜色值以#80开头表示透明 -->
+    <solid android:color="#ffffff"/>
+
+    <!-- corners设置圆角 -->
+    <corners android:radius="28dp"/>
+
+
+</shape>

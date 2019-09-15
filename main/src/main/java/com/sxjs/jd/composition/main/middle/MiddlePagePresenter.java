@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.main.mine;
+package com.sxjs.jd.composition.main.middle;
 
 import com.google.gson.Gson;
 import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
@@ -19,14 +19,14 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/15 16:53
  * @Description:
  */
-public class MinePagePresenter extends BasePresenter implements MinePageContract.Presenter {
+public class MiddlePagePresenter extends BasePresenter implements MiddlePageContract.Presenter {
 
     private MainDataManager mDataManager;
 
-    private MinePageContract.View mContractView;
-    private static  final String  TAG = "MiddlePagePresenter";
+    private MiddlePageContract.View mContractView;
+    private static  final String    TAG = "MiddlePagePresenter";
     @Inject
-    public MinePagePresenter(MainDataManager mDataManager, MinePageContract.View view) {
+    public MiddlePagePresenter(MainDataManager mDataManager, MiddlePageContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 

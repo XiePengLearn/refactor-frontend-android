@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cube_ptr="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <include layout="@layout/jkx_public_title_home" />
+
+    <com.sxjs.common.widget.headerview.JDHeaderView
+        android:id="@+id/find_pull_refresh_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        cube_ptr:ptr_duration_to_close="200"
+        cube_ptr:ptr_duration_to_close_header="300"
+        cube_ptr:ptr_keep_header_when_refresh="true"
+        cube_ptr:ptr_pull_to_fresh="false"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
+        cube_ptr:ptr_resistance="2.0">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y80"
+                    android:paddingLeft="@dimen/x13"
+                    android:paddingRight="@dimen/x13">
+
+                    <ImageView
+                        android:id="@+id/iv_userPic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/x19"
+                        android:background="@drawable/iv_my_default_user" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/x12"
+                        android:layout_toRightOf="@id/iv_userPic"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="张院长"
+                                android:textColor="#333333"
+                                android:textSize="@dimen/x17" />
+
+                            <ImageView
+                                android:id="@+id/iv_isVip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/x5"
+                                android:background="@drawable/iv_my_vip" />
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/y5">
+
+                            <TextView
+                                android:id="@+id/renzheng_no"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/bg_shap_button_39"
+                                android:drawableLeft="@drawable/renzheng_img"
+                                android:drawableRight="@drawable/renzheng_arrow"
+                                android:drawablePadding="@dimen/x8"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/x5"
+                                android:paddingTop="@dimen/x3"
+                                android:paddingRight="@dimen/x5"
+                                android:paddingBottom="@dimen/x3"
+                                android:text="未认证"
+                                android:textColor="#ffffff"
+                                android:textSize="@dimen/x13"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/renzheng_shenhe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/bg_shap_button_40"
+                                android:drawableLeft="@drawable/renzheng_img"
+                                android:drawablePadding="@dimen/x3"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/x5"
+                                android:paddingTop="@dimen/x3"
+                                android:paddingRight="@dimen/x5"
+                                android:paddingBottom="@dimen/x3"
+                                android:text="认证审核中"
+                                android:textColor="#ffffff"
+                                android:textSize="@dimen/x13"
+                                android:visibility="visible" />
+
+                            <TextView
+                                android:id="@+id/renzheng_biangeng_shenhe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/bg_shap_button_40"
+                                android:drawableLeft="@drawable/renzheng_img"
+                                android:drawablePadding="@dimen/x3"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/x5"
+                                android:paddingTop="@dimen/x3"
+                                android:paddingRight="@dimen/x5"
+                                android:paddingBottom="@dimen/x3"
+                                android:text="变更审核中"
+                                android:textColor="#ffffff"
+                                android:textSize="@dimen/x13"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/renzheng_already"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/bg_shap_button_38"
+                                android:drawableLeft="@drawable/renzheng_img"
+                                android:drawablePadding="@dimen/x3"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/x5"
+                                android:paddingTop="@dimen/x3"
+                                android:paddingRight="@dimen/x5"
+                                android:paddingBottom="@dimen/x3"
+                                android:text="已认证"
+                                android:textColor="#ffffff"
+                                android:textSize="@dimen/x13"
+                                android:visibility="gone" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_userAuthentication"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="@dimen/y7"
+                        android:background="@drawable/bg_shap_button_32"
+                        android:gravity="center_vertical"
+                        android:paddingTop="@dimen/y4"
+                        android:paddingBottom="@dimen/y4"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x10"
+                            android:background="@drawable/iv_my_user" />
+
+                        <TextView
+                            android:id="@+id/tv_isAuthentation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x7"
+                            android:layout_marginRight="@dimen/x15"
+                            android:text="用户认证"
+                            android:textColor="#FFFFFF"
+                            android:textSize="@dimen/x13" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y8"
+                    android:background="#F9F8F8" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/x13"
+                    android:paddingRight="@dimen/x13">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_myFeedBack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y17">
+
+                        <ImageView
+                            android:id="@+id/iv_image1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/iv_my_1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image1"
+                            android:text="我的反馈"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/cert_download"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/iv_my_2" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image2"
+                            android:text="证书下载"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_findCa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/iv_my_3" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image3"
+                            android:text="证书找回"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_modifyPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/xgmm" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image6"
+                            android:text="修改密码"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/hospital_change"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/yybg" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image10"
+                            android:text="医院变更"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_rebindPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/ghsj" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image7"
+                            android:text="更换手机"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/y1"
+                        android:layout_marginTop="@dimen/y11"
+                        android:background="#F2F2F2" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y11">
+
+                        <ImageView
+                            android:id="@+id/iv_image4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x4"
+                            android:background="@drawable/iv_my_4" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/x2"
+                            android:layout_toRightOf="@id/iv_image4"
+                            android:text="关于"
+                            android:textColor="#000000"
+                            android:textSize="@dimen/x13" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/x7"
+                            android:background="@drawable/iv_my_go" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_loginOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y24"
+                    android:layout_marginBottom="@dimen/y12"
+                    android:background="@drawable/bg_shap_button_33"
+                    android:gravity="center"
+                    android:padding="@dimen/y8"
+                    android:text="退出"
+                    android:textColor="#EF3939"
+                    android:textSize="@dimen/x15" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </com.sxjs.common.widget.headerview.JDHeaderView>
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+
+</LinearLayout>

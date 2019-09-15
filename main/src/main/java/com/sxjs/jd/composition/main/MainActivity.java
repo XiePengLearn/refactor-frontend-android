@@ -8,22 +8,18 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.app_common.service.ITokenService;
-import com.sxjs.common.util.PrefUtils;
+import com.sxjs.common.base.BaseActivity;
 import com.sxjs.common.util.statusbar.StatusBarUtil;
 import com.sxjs.common.widget.bottomnavigation.BadgeItem;
 import com.sxjs.common.widget.bottomnavigation.BottomNavigationBar;
 import com.sxjs.common.widget.bottomnavigation.BottomNavigationItem;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
-import com.sxjs.common.base.BaseActivity;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.composition.main.classificationfragment.ClassificationFragment;
-import com.sxjs.jd.composition.main.findfragment.FindFragment;
+import com.sxjs.jd.composition.main.before.BeforePageFragment;
 import com.sxjs.jd.composition.main.home.HomePageFragment;
-import com.sxjs.jd.composition.main.homefragment.MainHomeFragment;
-import com.sxjs.jd.composition.main.my.MyFragment;
+import com.sxjs.jd.composition.main.middle.MiddlePageFragment;
+import com.sxjs.jd.composition.main.mine.MinePageFragment;
 
 import javax.inject.Inject;
 
@@ -40,11 +36,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     @BindView(R2.id.main_container)
     FrameLayout         mainContainer;
     //    private MainHomeFragment       mMainHomeFragment;
-    private HomePageFragment       mMainHomeFragment;
-    private ClassificationFragment mClassificationFragment;
-    private FragmentManager        mFragmentManager;
-    private FindFragment           mFindFragment;
-    private MyFragment             mMyFragment;
+    private HomePageFragment   mMainHomeFragment;
+//    private ClassificationFragment mClassificationFragment;
+    private MiddlePageFragment mClassificationFragment;
+    private FragmentManager    mFragmentManager;
+//    private FindFragment       mFindFragment;
+    private BeforePageFragment mFindFragment;
+//    private MyFragment             mMyFragment;
+    private MinePageFragment   mMyFragment;
 
 
     @Override
@@ -62,9 +61,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
     public void initView() {
         mMainHomeFragment = (HomePageFragment) mFragmentManager.findFragmentByTag("home_fg");
-        mClassificationFragment = (ClassificationFragment) mFragmentManager.findFragmentByTag("class_fg");
-        mFindFragment = (FindFragment) mFragmentManager.findFragmentByTag("find_fg");
-        mMyFragment = (MyFragment) mFragmentManager.findFragmentByTag("my_fg");
+        mClassificationFragment = (MiddlePageFragment) mFragmentManager.findFragmentByTag("class_fg");
+        mFindFragment = (BeforePageFragment) mFragmentManager.findFragmentByTag("find_fg");
+        mMyFragment = (MinePageFragment) mFragmentManager.findFragmentByTag("my_fg");
 
         if (mMainHomeFragment == null) {
             mMainHomeFragment = HomePageFragment.newInstance();
@@ -123,7 +122,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
         } else if (position == 1) {
             if (mClassificationFragment == null) {
-                mClassificationFragment = ClassificationFragment.newInstance();
+                mClassificationFragment = MiddlePageFragment.newInstance();
                 addFragment(R.id.main_container, mClassificationFragment, "class_fg");
             }
 
@@ -140,7 +139,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
         } else if (position == 2) {
             if (mFindFragment == null) {
-                mFindFragment = FindFragment.newInstance();
+                mFindFragment = BeforePageFragment.newInstance();
                 addFragment(R.id.main_container, mFindFragment, "find_fg");
             }
 
@@ -159,7 +158,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         } else if (position == 3) {
 
             if (mMyFragment == null) {
-                mMyFragment = MyFragment.newInstance();
+                mMyFragment = MinePageFragment.newInstance();
                 addFragment(R.id.main_container, mMyFragment, "my_fg");
             }
 
@@ -229,7 +228,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
 
     public void initData() {
-        presenter.getText();
+//        presenter.getText();
     }
 
     private String text;
@@ -241,10 +240,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
         this.text = text;
 
-        Toast.makeText(this, "text:" + text, Toast.LENGTH_SHORT).show();
-
-
-        Log.e(TAG, "initData: " + text);
+//        Toast.makeText(this, "text:" + text, Toast.LENGTH_SHORT).show();
+//
+//
+//        Log.e(TAG, "initData: " + text);
 
 
     }
