@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.main.home;
 
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.HomePageResponse;
 import com.sxjs.jd.entities.RegisterCodeResponse;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public interface HomePageContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(HomePageResponse homePageResponse);
 
         void showProgressDialogView();
 

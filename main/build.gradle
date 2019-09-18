@@ -49,6 +49,7 @@ dependencies {
 
     api project(':app_common')
     implementation project(path: ':banner')
+    implementation project(path: ':tablayout')
 
 
 }

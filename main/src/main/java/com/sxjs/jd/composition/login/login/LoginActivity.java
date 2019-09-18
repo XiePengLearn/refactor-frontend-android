@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R2.id.register)
     TextView       register;
     private              String        mXinGeToken;
-    private static final String        TAG                   = "LoginActivity";
+    private static final String        TAG                   = "MessageActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
     private              boolean       isClickForgetPassword = false;

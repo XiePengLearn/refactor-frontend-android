@@ -9,6 +9,10 @@ import com.example.app_common.CommonModule;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
+import com.tencent.smtt.export.external.TbsCoreSettings;
+import com.tencent.smtt.sdk.QbSdk;
+
+import java.util.HashMap;
 
 /**
  * @author admin
@@ -32,6 +36,9 @@ public class MyApplication extends Application {
 
         //初始化信鸽
         registPushXG();
+
+        //初始化x5内核
+        initX5webview();
     }
 
     public static MyApplication getInstance() {
@@ -66,6 +73,35 @@ public class MyApplication extends Application {
                         Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
                     }
                 });
+
+    }
+
+    //初始化X5内核
+    private void initX5webview() {
+        //搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
+
+        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+
+            @Override
+            public void onViewInitFinished(boolean arg0) {
+                // TODO Auto-generated method stub
+                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                Log.e("app", " onViewInitFinished is " + arg0);
+            }
+
+            @Override
+            public void onCoreInitFinished() {
+                // TODO Auto-generated method stub
+            }
+        };
+
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER, true);
+        QbSdk.initTbsSettings(map);
+
+        //x5内核初始化接口
+        QbSdk.initX5Environment(getApplicationContext(), cb);
 
     }
 }

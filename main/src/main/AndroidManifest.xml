@@ -20,8 +20,6 @@
         android:persistent="true"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".composition.login.forget.ForgetPasswordActivity"></activity>
-        <activity android:name=".composition.login.register.RegisterActivity" />
         <activity
             android:name=".composition.main.MainActivity"
             android:launchMode="singleTask"
@@ -29,10 +27,24 @@
         <activity
             android:name=".composition.login.login.LoginActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" /> <!-- 配置APP ID -->
+            android:screenOrientation="portrait" />
+
+        <activity android:name=".composition.login.forget.ForgetPasswordActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".composition.login.register.RegisterActivity"
+            android:screenOrientation="portrait"
+            />
+
+        <activity
+            android:name=".composition.message.MessageActivity"
+            android:screenOrientation="portrait" />
+        <!-- 配置APP ID -->
         <meta-data
             android:name="BUGLY_APPID"
-            android:value="bb858e6fd0" /> <!-- 配置APP版本号 -->
+            android:value="bb858e6fd0" />
+        <!-- 配置APP版本号 -->
         <meta-data
             android:name="BUGLY_APP_VERSION"
             android:value="1.0" /> <!-- 配置APP渠道号 -->

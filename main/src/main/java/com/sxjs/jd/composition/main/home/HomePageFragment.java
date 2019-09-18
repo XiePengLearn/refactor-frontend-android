@@ -1,9 +1,12 @@
 package com.sxjs.jd.composition.main.home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.TimeUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.PrefUtils;
+import com.sxjs.common.util.ResponseCode;
+import com.sxjs.common.util.ToastUtil;
 import com.sxjs.common.view.MediumBoldTextView;
 import com.sxjs.common.view.TextViewScrollVertical;
 import com.sxjs.common.widget.headerview.JDHeaderView;
@@ -22,12 +35,19 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.composition.main.findfragment.DaggerFindFragmentComponent;
-import com.sxjs.jd.composition.main.findfragment.FindPresenterModule;
-import com.sxjs.jd.composition.main.findfragment.FindsAdapter;
-import com.sxjs.jd.composition.main.homefragment.HomePresenter;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.composition.message.MessageActivity;
+import com.sxjs.jd.entities.HomePageResponse;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -142,13 +162,15 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     @Inject
     HomePagePresenter mPresenter;
-    private Handler mHandler;
+    private              Handler mHandler;
+    private static final String  TAG = "HomePageFragment";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initTitle();
         initView();
         initData();
 
@@ -156,6 +178,21 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     }
 
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        //扫一扫
+        jkxTitleLeftBtn.setVisibility(View.VISIBLE);
+
+        //标题
+        jkxTitleCenter.setText("绩时查");
+
+        //消息
+        jkxTitleRightBtn.setVisibility(View.VISIBLE);
+
+
+    }
 
     public static HomePageFragment newInstance() {
         return new HomePageFragment();
@@ -169,34 +206,427 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                 .build()
                 .inject(this);
         //
-                findPullRefreshHeader.setPtrHandler(this);
-//                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-//                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
-//                adapter.setOnLoadMoreListener(this);
-//                adapter.setEnableLoadMore(true);
-//                findRecyclerview.setAdapter(adapter);
+        findPullRefreshHeader.setPtrHandler(this);
+        //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
+        //                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
+        //                adapter.setOnLoadMoreListener(this);
+        //                adapter.setEnableLoadMore(true);
+        //                findRecyclerview.setAdapter(adapter);
 
-                mHandler = new Handler();
+        mHandler = new Handler();
+
+        tvExceptiopDesc.setTextStillTime(3000);
+        tvExceptiopDesc.setAnimTime(300);
+        tvExceptiopDesc.setOnItemClickListener(new TextViewScrollVertical.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+                /**
+                 * 跳转到指标异常详情
+                 */
+                //                Bundle bundle = new Bundle();
+                //                String id = JkxHomeView.this.targetExceptionResponse.getINDICATION().get(position).getID();
+                //                bundle.putString("id", id);
+                //                mEventCallBack.EventClick(JkxHomeFragment.EVENT_EXAMWARN, bundle);
+            }
+        });
 
     }
 
     public void initData() {
-                showJDLoadingDialog();
-//                mPresenter.getFindData();
+        showJDLoadingDialog();
+        String session_id = PrefUtils.readSESSION_ID(mContext);
 
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("SIGNIN_TYPE", "1");
+        //        mapParameters.put("USER_TYPE", "1");
+        //        mapParameters.put("MOBILE_TYPE", "1");
 
-                        hideJDLoadingDialog();
-                    }
-                }, 2000);
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "H000");
+        mapHeaders.put("SESSION_ID", session_id);
+        mPresenter.getRequestData(mapHeaders, mapParameters);
+
+        //        mHandler.postDelayed(new Runnable() {
+        //            @Override
+        //            public void run() {
+        //
+        //                hideJDLoadingDialog();
+        //            }
+        //        }, 2000);
     }
 
 
     @Override
-    public void setResponseData(ForgetPasswordResponse registerResponse) {
+    public void setResponseData(HomePageResponse homePageResponse) {
+        try {
+            String code = homePageResponse.getCode();
+            String msg = homePageResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                HomePageResponse.DataBean data = homePageResponse.getData();
+                if (data != null) {
 
+                    //未读消息
+                    setUnReadMessage(data.getI002());
+
+                    //轮播图
+                    initNewBannerLoader(data.getI004());
+                    //考核状态
+                    setPerformanceStatus(data.getH001());
+
+                    //指标异常
+                    setTargetExceptionData(data.getH003());
+
+                    //指标排行
+                    HomePageResponse.DataBean.H006Bean bean = null;
+                    if (data.getH006() != null) {
+                        bean = data.getH006().get(0);
+                    }
+                    setZhiBiao(data.getH005(), bean);
+
+                    //国考新闻
+                    setNewsData(data.getI006().getPAGE());
+
+                } else {
+                    ToastUtil.showToast(mContext, "响应数据缺少主参数");
+                }
+
+
+                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
+                //                finish();
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext, "解析数据失败:" + e.getMessage());
+            LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+
+        hideJDLoadingDialog();
+    }
+
+    /**
+     * 未读消息设置
+     *
+     * @param unReadMessage 未读消息响应数据
+     */
+    public void setUnReadMessage(HomePageResponse.DataBean.I002Bean unReadMessage) {
+        if (unReadMessage == null)
+            return;
+        int tz = unReadMessage.getWD();
+        int tx = unReadMessage.getTX();
+        int gz = unReadMessage.getYJ();
+        if (tz + tx + gz != 0) {
+            rlNewMessage.setVisibility(View.VISIBLE);
+            newMessage.setText(tz + tx + gz + "");
+            if (tz + tx + gz > 99) {
+                newMessage.setText("99+");
+            }
+        } else {
+            rlNewMessage.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    /**
+     * 轮播图
+     *
+     * @param bannerResponseList 轮播图响应数据
+     */
+    public void initNewBannerLoader(final List<HomePageResponse.DataBean.I004Bean> bannerResponseList) {
+        List<String> lists = new ArrayList<>();
+
+        for (int i = 0; i < bannerResponseList.size(); i++) {
+            lists.add(bannerResponseList.get(i).getIMAGE_URI());
+        }
+
+        banner.setmIndicatorResId(R.drawable.icon_lbd, R.drawable.icon_lbd1)
+                .setImages(lists)
+                .setImageLoader(new ImageLoader() {
+                    @Override
+                    public void displayImage(Context context, Object path, ImageView imageView) {
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.home_banner)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
+                                .dontAnimate()
+                                .fallback(R.drawable.home_banner);
+                        Glide.with(mContext)
+                                .load(path)
+                                .apply(options)
+                                .into(imageView);
+
+
+                    }
+                })
+                .setDelayTime(3000)
+                .setOnBannerListener(new OnBannerListener() {
+                    @Override
+                    public void OnBannerClick(int position) {
+
+                        /**
+                         * 跳转到进入消息详情页
+                         */
+                        Bundle bundle = new Bundle();
+                        bundle.putString("url", bannerResponseList.get(position).getNOTIFY_URI());
+                        //进入消息详情页
+                        //                        mEventCallBack.EventClick(JkxHomeFragment.EVENT_GO_BANNER, bundle);
+                    }
+                }).start();
+    }
+
+    /**
+     * 考核状态
+     *
+     * @param performanceStatusResponse 考核状态响应数据
+     */
+    private boolean isFinish;
+
+    public void setPerformanceStatus(HomePageResponse.DataBean.H001Bean performanceStatusResponse) {
+
+        tvExamName.setText(performanceStatusResponse.getEXAM_NAME());
+        tvStatusNameAndDate.setText(performanceStatusResponse.getEXAM_STAGE_NAME() + "(截止" + performanceStatusResponse.getEXAM_STAGE_END_DATE() + ")");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String time = "0";
+        if (performanceStatusResponse.getEXAM_STAGE_END_DATE() != null) {
+            time = performanceStatusResponse.getEXAM_STAGE_END_DATE();
+        }
+        Date endDate = TimeUtils.string2Date(time, dateFormat);
+        //        if (endDate == null) {
+        //            endDate = TimeUtils.getNowDate();
+        //        }
+        Date nowDate = TimeUtils.getNowDate();
+        if (endDate == null || endDate.before(nowDate)) {
+            isFinish = true;
+            llExamFinsh.setVisibility(View.VISIBLE);
+            llExamSchedule.setVisibility(View.GONE);
+        } else {
+            isFinish = false;
+            llExamFinsh.setVisibility(View.GONE);
+            llExamSchedule.setVisibility(View.VISIBLE);
+
+        }
+        if (!isFinish) {
+            long hours = TimeUtils.getTimeSpanByNow(endDate, TimeConstants.HOUR);
+            String day = (hours / 24) + "";
+            String hour = (hours % 24) + "";
+            if (day.length() > 1) {
+                String day1 = day.substring(0, 1);
+                tvDay1.setText(day1);
+                String day2 = day.substring(1, 2);
+                tvDay2.setText(day2);
+            } else {
+                tvDay1.setText("0");
+                tvDay2.setText(day);
+            }
+
+            if (hour.length() > 1) {
+                String hour1 = hour.substring(0, 1);
+                tvHour1.setText(hour1);
+                String hour2 = hour.substring(1, 2);
+                tvHour2.setText(hour2);
+            } else {
+                tvHour1.setText("0");
+                tvHour2.setText(hour);
+            }
+
+        }
+
+    }
+
+    private HomePageResponse.DataBean.H003Bean targetExceptionResponse;
+
+    /**
+     * 指标异常
+     *
+     * @param response 指标异常响应数据
+     */
+    public void setTargetExceptionData(HomePageResponse.DataBean.H003Bean response) {
+
+
+        if (response != null && response.getINDICATION() != null) {
+            this.targetExceptionResponse = response;
+            rlExamWarn.setVisibility(View.VISIBLE);
+            tvTotleExceptions.setText("指标 " + response.getINDICATION().size() + " 项异常");
+            ArrayList<String> descList = new ArrayList<>();
+            for (int i = 0; i < response.getINDICATION().size(); i++) {
+                descList.add(response.getINDICATION().get(i).getDESCRIBE());
+            }
+            tvExceptiopDesc.setTextList(descList);
+            tvExceptiopDesc.startAutoScroll();
+        } else {
+            //rl_examWarn.setVisibility(View.GONE);
+        }
+
+
+    }
+
+
+    /**
+     * 指标排行
+     * @param h005Bean 指标排行
+     * @param h006Bean 指标排行
+     */
+    public void setZhiBiao(HomePageResponse.DataBean.H005Bean h005Bean, HomePageResponse.DataBean.H006Bean h006Bean) {
+        if (h005Bean == null && h006Bean == null) {
+            // zhibiao_sort.setVisibility(View.GONE);
+        } else {
+            //zhibiao_sort.setVisibility(View.VISIBLE);
+        }
+        if (isFinish) {
+            if (h006Bean != null && h006Bean.getINDICATION_NAME() != null) {
+
+                //            tv_finshRank.setVisibility(View.VISIBLE);
+
+
+                tvFinshOld1.setVisibility(View.VISIBLE);
+
+                tvFinshOld2.setVisibility(View.VISIBLE);
+                if(!TextUtils.isEmpty(h006Bean.getINDICATION_NAME().get(3))){
+                    tvName.setText(h006Bean.getINDICATION_NAME().get(3));
+                }
+                if(!TextUtils.isEmpty(h006Bean.getINDICATION_VALUE())){
+                    tvValue.setText(h006Bean.getINDICATION_VALUE());
+                }
+                if(!TextUtils.isEmpty(h006Bean.getSAMETYPE_HOSPITAL_RANK())){
+                    tvFinshOld1.setText(h006Bean.getSAMETYPE_HOSPITAL_RANK());
+                }
+                if(!TextUtils.isEmpty(h006Bean.getPREFECTURE_HOSPITAL_RANK())){
+                    tvFinshOld2.setText(h006Bean.getPREFECTURE_HOSPITAL_RANK());
+                }
+
+
+
+
+            }
+            //            tv_rank.setVisibility(View.GONE);
+
+
+            tvChangeTotle.setVisibility(View.GONE);
+            tvChange1.setVisibility(View.GONE);
+            tvChange2.setVisibility(View.GONE);
+            tvOld1.setVisibility(View.GONE);
+            tvOld2.setVisibility(View.GONE);
+
+
+        } else {
+            if (h005Bean != null && h005Bean.getINDICATION() != null) {
+
+
+                //            tv_finshRank.setVisibility(View.GONE);
+                tvFinshOld1.setVisibility(View.GONE);
+                tvFinshOld2.setVisibility(View.GONE);
+
+                //            tv_rank.setVisibility(View.VISIBLE);
+                tvChangeTotle.setVisibility(View.VISIBLE);
+                tvChange1.setVisibility(View.VISIBLE);
+                tvChange2.setVisibility(View.VISIBLE);
+                tvOld1.setVisibility(View.VISIBLE);
+                tvOld2.setVisibility(View.VISIBLE);
+
+
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_NAME().get(3))){
+                    tvName.setText(h005Bean.getINDICATION().get(0).getINDICATION_NAME().get(3));
+                }
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_VALUE())){
+                    tvValue.setText(h005Bean.getINDICATION().get(0).getINDICATION_VALUE());
+                }
+                if(!TextUtils.isEmpty(h005Bean.getRANK_DECLINE())){
+                    tvChangeTotle.setText(h005Bean.getRANK_DECLINE());
+                }
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_RANK())){
+                    tvChange1.setText(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_RANK());
+                }
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_OLD_RANK())){
+                    tvOld1.setText(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_OLD_RANK());
+                }
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_RANK())){
+                    tvChange2.setText(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_RANK());
+                }
+                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_OLD_RANK())){
+                    tvOld2.setText(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_OLD_RANK());
+                }
+            }
+        }
+
+
+    }
+
+    public void setNewsData(List<HomePageResponse.DataBean.I006Bean.PAGEBean> list) {
+
+        RequestOptions options = new RequestOptions()
+                .error(R.drawable.home_pic1);
+
+        if(list.size()>0){
+            llNewsItem.setTag(list.get(0).getCONTENT_URI());
+            Glide.with(mContext)
+                    .load(list.get(0).getIMAGE_URI())
+                    .apply(options)
+                    .into(ivImgUrl);
+            tvTitle.setText(list.get(0).getTITLE());
+            tvCount.setText("666阅读");
+            tvTime.setText(list.get(0).getDATE());
+        }
+
+        if(list.size()>1){
+            llNewsItem1.setTag(list.get(1).getCONTENT_URI());
+            Glide.with(mContext)
+                    .load(list.get(1).getIMAGE_URI())
+                    .apply(options)
+                    .into(ivImgUrl1);
+            tvTitle1.setText(list.get(1).getTITLE());
+            tvCount1.setText("666阅读");
+            tvTime1.setText(list.get(1).getDATE());
+        }
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startAutoScroll();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopAutoScroll();
+    }
+
+    public void startAutoScroll() {
+        banner.startAutoPlay();  //新版bannner
+        if ((this.targetExceptionResponse != null) && (this.targetExceptionResponse.getINDICATION() != null)
+                && (this.targetExceptionResponse.getINDICATION() != null)) {
+
+
+            //指标异常 轮播开始
+            tvExceptiopDesc.startAutoScroll();//垂直滚动的textview
+        }
+    }
+
+    public void stopAutoScroll() {
+        banner.stopAutoPlay();//新版bannner
+        if ((this.targetExceptionResponse != null) && (this.targetExceptionResponse.getINDICATION() != null)
+                && (this.targetExceptionResponse.getINDICATION() != null)) {
+
+            //指标异常 轮播停止
+            tvExceptiopDesc.stopAutoScroll();//垂直滚动的textview
+        }
     }
 
     @Override
@@ -211,9 +641,16 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     @Override
     public void onRefreshBegin(final PtrFrameLayout frame) {
+
+        //指标异常 轮播停止
+        tvExceptiopDesc.stopAutoScroll();
+
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                //指标异常 轮播开始
+                tvExceptiopDesc.startAutoScroll();
                 frame.refreshComplete();
             }
         }, 2000);
@@ -229,12 +666,18 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             R2.id.rl_examWarn, R2.id.zhibiao_sort, R2.id.zhibiao_check, R2.id.zcjd, R2.id.tv_news_more,
             R2.id.ll_newsItem, R2.id.ll_newsItem1})
     public void onViewClicked(View view) {
+        Intent mIntent = null;
         int i = view.getId();
         if (i == R.id.jkx_title_left) {
 
         } else if (i == R.id.jkx_title_left_btn) {
+            //开启扫一扫
 
         } else if (i == R.id.jkx_title_right_btn) {
+            //我的消息
+            mIntent = new Intent(mActivity, MessageActivity.class);
+            startActivity(mIntent);
+
 
         } else if (i == R.id.ll_examSchedule) {
 
