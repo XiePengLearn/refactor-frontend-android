@@ -5,8 +5,7 @@ import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
-import com.sxjs.jd.entities.MessageWarnResponse;
+import com.sxjs.jd.entities.MessageNotificationResponse;
 
 import java.util.Map;
 
@@ -54,20 +53,59 @@ public class WarnFragmentPresenter extends BasePresenter implements WarnFragment
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getForgetPasswordData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
+
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MessageWarnResponse messageWarnResponse = gson.fromJson(response, MessageWarnResponse.class);
+                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
 
-                    mContractView.setResponseData(messageWarnResponse);
+                    mContractView.setResponseData(messageNitificationResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                mContractView.hiddenProgressDialogView();
+            }
 
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
+
+                    mContractView.setMoreData(messageNitificationResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 mContractView.hiddenProgressDialogView();
             }
 

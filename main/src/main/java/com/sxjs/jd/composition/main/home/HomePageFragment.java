@@ -164,8 +164,10 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     @Inject
     HomePagePresenter mPresenter;
-    private              Handler mHandler;
-    private static final String  TAG = "HomePageFragment";
+    private              Handler                            mHandler;
+    private static final String                             TAG = "HomePageFragment";
+    private              HomePageResponse                   homePageResponse;
+    private              HomePageResponse.DataBean.I002Bean i002;
 
     @Nullable
     @Override
@@ -259,6 +261,9 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     @Override
     public void setResponseData(HomePageResponse homePageResponse) {
+
+        this.homePageResponse = homePageResponse;
+
         try {
             String code = homePageResponse.getCode();
             String msg = homePageResponse.getMsg();
@@ -267,6 +272,9 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                 if (data != null) {
 
                     //未读消息
+
+                    HomePageResponse.DataBean.I002Bean i002 = data.getI002();
+                    this.i002 = i002;
                     setUnReadMessage(data.getI002());
 
                     //轮播图
@@ -380,8 +388,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                          * 跳转到进入消息详情页
                          */
                         //进入轮播详情页
-//                        String url = bannerResponseList.get(position).getNOTIFY_URI();
-                        String url = "https://wxpay.wxutil.com/mch/pay/h5.v2.php";
+                        String url = bannerResponseList.get(position).getNOTIFY_URI();
                         Intent intent = new Intent(mActivity, HomeWebViewActivity.class);
                         intent.putExtra("title", "详情");
                         intent.putExtra("url", url);
@@ -677,14 +684,26 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         } else if (i == R.id.jkx_title_right_btn) {
             String session_id = PrefUtils.readSESSION_ID(mContext);
             //我的消息
-            mIntent = new Intent(mActivity, MessageActivity.class);
-            startActivity(mIntent);
-//            String url = "http://114.247.234.146:8087/hospital-pa-ap-h5/#/pass-examination?ty" +
-//                    "pe=X001&year=2019&indicateDefinitionId=A1&indicateDefinitionSetId=1"+ "&sessionId=" + session_id;
-//            mIntent = new Intent(mActivity, HomeWebViewActivity.class);
-//            mIntent.putExtra("url",url );
-//            startActivity(mIntent);
 
+
+            mIntent = new Intent(mActivity, MessageActivity.class);
+            if (i002 != null) {
+                int tz = i002.getWD();
+                mIntent.putExtra("tz", tz);
+                int tx = i002.getTX();
+                mIntent.putExtra("tx", tx);
+                int gz = i002.getYJ();
+                mIntent.putExtra("gz", gz);
+
+
+            }
+
+            startActivity(mIntent);
+            //            String url = "http://114.247.234.146:8087/hospital-pa-ap-h5/#/pass-examination?ty" +
+            //                    "pe=X001&year=2019&indicateDefinitionId=A1&indicateDefinitionSetId=1"+ "&sessionId=" + session_id;
+            //            mIntent = new Intent(mActivity, MessageWebViewActivity.class);
+            //            mIntent.putExtra("url",url );
+            //            startActivity(mIntent);
 
 
         } else if (i == R.id.ll_examSchedule) {

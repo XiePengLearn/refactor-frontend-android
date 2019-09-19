@@ -1,6 +1,6 @@
 package com.sxjs.jd.composition.message.attention;
 
-import com.sxjs.jd.entities.MessageAttentionResponse;
+import com.sxjs.jd.entities.MessageNotificationResponse;
 
 import java.util.Map;
 
@@ -14,11 +14,12 @@ public interface AttentionFragmentContract {
     interface View {
 
 
-        void setResponseData(MessageAttentionResponse registerResponse);
+        void setResponseData(MessageNotificationResponse messageNotificationResponse);
 
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
+        void setMoreData(MessageNotificationResponse messageNotificationResponse);
     }
 
     interface Presenter {
@@ -31,6 +32,6 @@ public interface AttentionFragmentContract {
         Map getData();
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
-
+        void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

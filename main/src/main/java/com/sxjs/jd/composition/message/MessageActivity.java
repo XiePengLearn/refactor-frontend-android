@@ -1,5 +1,6 @@
 package com.sxjs.jd.composition.message;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,12 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     TabLayout        tabLayout;
     @BindView(R2.id.jkx_viewpage)
     ViewPager        jkxViewpage;
+    @BindView(R2.id.new_message1)
+    TextView         newMessage1;
+    @BindView(R2.id.new_message2)
+    TextView         newMessage2;
+    @BindView(R2.id.new_message3)
+    TextView         newMessage3;
 
 
     private              String        mXinGeToken;
@@ -73,6 +80,10 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     List<Fragment> fragments;
     private MessageAdapter adapter;
     String[] tabTitle = {"通知", "提醒", "关注"};
+    private Intent mIntent;
+    private int mTz;
+    private int mTx;
+    private int mGz;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +91,30 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         setContentView(R.layout.activity_message);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
+
+        mIntent = getIntent();
+        mTz = mIntent.getIntExtra("tz", 0);
+        if(mTz>0){
+            newMessage1.setVisibility(View.VISIBLE);
+            newMessage1.setText(""+mTz);
+        }else {
+            newMessage1.setVisibility(View.INVISIBLE);
+        }
+        mTx = mIntent.getIntExtra("tx", 0);
+        if(mTx>0){
+            newMessage2.setVisibility(View.VISIBLE);
+            newMessage2.setText(""+mTx);
+        }else {
+            newMessage2.setVisibility(View.INVISIBLE);
+        }
+        mGz = mIntent.getIntExtra("gz", 0);
+        if(mGz>0){
+            newMessage3.setVisibility(View.VISIBLE);
+            newMessage3.setText(""+mGz);
+        }else {
+            newMessage3.setVisibility(View.INVISIBLE);
+        }
+
         initTitle();
         initView();
         initDataFragment();
@@ -98,6 +133,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         fragments.add(attentionFragment);
         adapter = new MessageAdapter(getSupportFragmentManager(), fragments, tabTitle);
         jkxViewpage.setAdapter(adapter);
+        jkxViewpage.setOffscreenPageLimit(0);
         tabLayout.setupWithViewPager(jkxViewpage);
     }
 
@@ -112,7 +148,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         jkxTitleCenter.setText("我的消息");
 
         //消息
-//        jkxTitleRightBtn.setVisibility(View.VISIBLE);
+        //        jkxTitleRightBtn.setVisibility(View.VISIBLE);
 
 
     }

@@ -51,6 +51,7 @@
                     android:paddingRight="@dimen/x10"
                     android:singleLine="true"
                     android:text=""
+                    android:inputType="phone"
                     android:textColor="#333333"
                     android:textColorHint="#dddddd"
                     android:textCursorDrawable="@drawable/text_cursor"

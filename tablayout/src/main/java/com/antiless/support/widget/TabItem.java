@@ -51,6 +51,7 @@ public final class TabItem extends View {
                 R.styleable.TabItem);
         mText = a.getText(R.styleable.TabItem_android_text);
         mIcon = a.getDrawable(R.styleable.TabItem_android_icon);
+//        mIcon = a.getDrawable();
         mCustomLayout = a.getResourceId(R.styleable.TabItem_android_layout, 0);
         a.recycle();
     }

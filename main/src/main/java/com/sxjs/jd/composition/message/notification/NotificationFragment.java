@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,6 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.composition.main.unused.findfragment.FindsAdapter;
-import com.sxjs.jd.entities.FindsBean;
 import com.sxjs.jd.entities.MessageNotificationResponse;
 
 import java.util.HashMap;
@@ -59,43 +56,30 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
     private              String                      mSession_id;
     private              MessageNotificationResponse messageNotificationResponse;
     private              Dialog                      dialog;
-    private              NotificationAdapter                adapter;
+    private              NotificationAdapter         adapter;
+    private              View                        mView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        Bundle arguments = getArguments();
+        if (null == mView) {
+            mView = inflater.inflate(R.layout.fragment_notification, container, false);
+            unbinder = ButterKnife.bind(this, mView);
+            Bundle arguments = getArguments();
 
-        initView();
-
-        if (!mHasLoadedOnce && messageNotificationResponse == null) {
-            Log.i("TestData", "FoundFragment 加载请求网络数据");
-            //TO-DO 执行网络数据请求
-            mHasLoadedOnce = true;
-
+            initView();
             initData();
+        }else {
+            unbinder = ButterKnife.bind(this, mView);
         }
 
-
-        return view;
+        return mView;
 
     }
 
-    private boolean mHasLoadedOnce = false;// 页面为false没有加载过 ,页面为true已经加载过
 
-    //    @Override
-    //    public void setUserVisibleHint(boolean isVisibleToUser) {
-    //        super.setUserVisibleHint(isVisibleToUser);
-    //        if (isVisibleToUser && !mHasLoadedOnce && messageNitificationResponse == null) {
-    //            Log.i("TestData", "FoundFragment 加载请求网络数据");
-    //            //TO-DO 执行网络数据请求
-    //            mHasLoadedOnce = true;
-    //            mHandler = new Handler();
-    //            initData();
-    //        }
-    //    }
+
+
 
     public static NotificationFragment newInstance() {
         NotificationFragment quicklyFragment = new NotificationFragment();
@@ -119,7 +103,8 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
         findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
         adapter = new NotificationAdapter(R.layout.item_notification_recyclerview);
         adapter.setOnLoadMoreListener(this);
-        adapter.setEnableLoadMore(true);
+        adapter.setEnableLoadMore(false);
+        adapter.loadMoreComplete();
         findRecyclerview.setAdapter(adapter);
 
 
@@ -128,8 +113,6 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
     public void initData() {
 
 
-
-        showJDLoadingDialog();
         String session_id = PrefUtils.readSESSION_ID(mContext);
 
         Map<String, Object> mapParameters = new HashMap<>(1);
@@ -152,6 +135,8 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
             String msg = messageNotificationResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
                 LogUtil.e(TAG, "SESSION_ID: " + messageNotificationResponse.getData());
+                List<MessageNotificationResponse.DataBean> data = adapter.getData();
+                data.clear();
                 adapter.addData(messageNotificationResponse.getData());
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
@@ -201,11 +186,13 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 //                finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                adapter.loadMoreComplete();
                 //SESSION_ID过期或者报错  要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
 
                 mActivity.finish();
             } else {
+                adapter.loadMoreComplete();
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(mContext, msg);
                 }
@@ -214,6 +201,7 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
 
 
         } catch (Exception e) {
+            adapter.loadMoreComplete();
             ToastUtil.showToast(mContext, "解析数据失败");
         }
     }
@@ -223,6 +211,16 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
+                String session_id = PrefUtils.readSESSION_ID(mContext);
+
+                Map<String, Object> mapParameters = new HashMap<>(1);
+                mapParameters.put("MESSAGE_TYPE", "1");
+
+                Map<String, String> mapHeaders = new HashMap<>(2);
+                mapHeaders.put("ACTION", "I001");
+                mapHeaders.put("SESSION_ID", session_id);
+
+                mPresenter.getRequestData(mapHeaders, mapParameters);
                 frame.refreshComplete();
             }
         }, 2000);
@@ -238,5 +236,22 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
     @Override
     public void onLoadMoreRequested() {
 
+
+        findRecyclerview.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.loadMoreComplete();
+                //                String session_id = PrefUtils.readSESSION_ID(mContext);
+                //
+                //                Map<String, Object> mapParameters = new HashMap<>(1);
+                //                mapParameters.put("MESSAGE_TYPE", "1");
+                //
+                //                Map<String, String> mapHeaders = new HashMap<>(2);
+                //                mapHeaders.put("ACTION", "I001");
+                //                mapHeaders.put("SESSION_ID", session_id);
+                //
+                //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
+            }
+        }, 2000);
     }
 }

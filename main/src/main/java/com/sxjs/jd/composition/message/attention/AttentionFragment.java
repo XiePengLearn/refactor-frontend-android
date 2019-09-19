@@ -1,16 +1,19 @@
 package com.sxjs.jd.composition.message.attention;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
@@ -21,7 +24,11 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.entities.MessageAttentionResponse;
+import com.sxjs.jd.entities.MessageNotificationResponse;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -33,7 +40,7 @@ import butterknife.ButterKnife;
  * @Date: 2019/9/15 16:50
  * @Description:
  */
-public class AttentionFragment extends BaseFragment implements AttentionFragmentContract.View, PtrHandler {
+public class AttentionFragment extends BaseFragment implements AttentionFragmentContract.View, PtrHandler, BaseQuickAdapter.RequestLoadMoreListener {
 
 
     @Inject
@@ -41,46 +48,38 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
 
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView findPullRefreshHeader;
+    @BindView(R2.id.find_recyclerview)
+    RecyclerView findRecyclerview;
     private Handler mHandler;
 
-    private static final String                   TAG = "MessageActivity";
-    private              String                   mSession_id;
-    private              MessageAttentionResponse attentionResponse;
-
+    private static final String                      TAG = "MessageActivity";
+    private              String                      mSession_id;
+    private              MessageNotificationResponse messageNotificationResponse;
+    private              Dialog                      dialog;
+    private              AttentionAdapter            adapter;
+    private              View                        mView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attention, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        Bundle arguments = getArguments();
+        if (null == mView) {
+            mView = inflater.inflate(R.layout.fragment_attention, container, false);
+            unbinder = ButterKnife.bind(this, mView);
+            Bundle arguments = getArguments();
 
-        initView();
-        if (!mHasLoadedOnce && attentionResponse == null) {
-            Log.i("TestData", "FoundFragment 加载请求网络数据");
-            //TO-DO 执行网络数据请求
-            mHasLoadedOnce = true;
-
+            initView();
             initData();
+        }else {
+            unbinder = ButterKnife.bind(this, mView);
         }
 
-        return view;
+        return mView;
 
     }
 
-    private boolean mHasLoadedOnce = false;// 页面为false没有加载过 ,页面为true已经加载过
 
-    //    @Override
-    //    public void setUserVisibleHint(boolean isVisibleToUser) {
-    //        super.setUserVisibleHint(isVisibleToUser);
-    //        if (isVisibleToUser && !mHasLoadedOnce && attentionResponse == null) {
-    //            Log.i("TestData", "FoundFragment 加载请求网络数据");
-    //            //TO-DO 执行网络数据请求
-    //            mHasLoadedOnce = true;
-    //
-    //            initData();
-    //        }
-    //    }
+
+
 
     public static AttentionFragment newInstance() {
         AttentionFragment quicklyFragment = new AttentionFragment();
@@ -101,38 +100,44 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
                 .inject(this);
         //
         findPullRefreshHeader.setPtrHandler(this);
-        //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-        //                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
-        //                adapter.setOnLoadMoreListener(this);
-        //                adapter.setEnableLoadMore(true);
-        //                findRecyclerview.setAdapter(adapter);
+        findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
+        adapter = new AttentionAdapter(R.layout.item_notification_recyclerview);
+        adapter.setOnLoadMoreListener(this);
+        adapter.setEnableLoadMore(false);
+        adapter.loadMoreComplete();
+        findRecyclerview.setAdapter(adapter);
 
 
     }
 
     public void initData() {
-        showJDLoadingDialog();
-        //        mPresenter.getFindData();
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
 
-                hideJDLoadingDialog();
-            }
-        }, 2000);
+        String session_id = PrefUtils.readSESSION_ID(mContext);
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        mapParameters.put("MESSAGE_TYPE", "3");
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "I001");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getRequestData(mapHeaders, mapParameters);
     }
 
 
     @Override
-    public void setResponseData(MessageAttentionResponse attentionResponse) {
-        this.attentionResponse = attentionResponse;
-        try {
-            String code = attentionResponse.getCode();
-            String msg = attentionResponse.getMsg();
-            if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + attentionResponse.getData());
+    public void setResponseData(MessageNotificationResponse messageNotificationResponse) {
 
+        this.messageNotificationResponse = messageNotificationResponse;
+        try {
+            String code = messageNotificationResponse.getCode();
+            String msg = messageNotificationResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "SESSION_ID: " + messageNotificationResponse.getData());
+                List<MessageNotificationResponse.DataBean> data = adapter.getData();
+                data.clear();
+                adapter.addData(messageNotificationResponse.getData());
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 //                finish();
@@ -165,10 +170,57 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     }
 
     @Override
+    public void setMoreData(MessageNotificationResponse moreDate) {
+
+        try {
+            String code = moreDate.getCode();
+            String msg = moreDate.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
+                List<MessageNotificationResponse.DataBean> data = moreDate.getData();
+                for (int i = 0; i < data.size(); i++) {
+                    adapter.getData().add(data.get(i));
+                }
+
+                adapter.loadMoreComplete();
+                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
+                //                finish();
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                adapter.loadMoreComplete();
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+            } else {
+                adapter.loadMoreComplete();
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            adapter.loadMoreComplete();
+            ToastUtil.showToast(mContext, "解析数据失败");
+        }
+    }
+
+    @Override
     public void onRefreshBegin(final PtrFrameLayout frame) {
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
+                String session_id = PrefUtils.readSESSION_ID(mContext);
+
+                Map<String, Object> mapParameters = new HashMap<>(1);
+                mapParameters.put("MESSAGE_TYPE", "3");
+
+                Map<String, String> mapHeaders = new HashMap<>(2);
+                mapHeaders.put("ACTION", "I001");
+                mapHeaders.put("SESSION_ID", session_id);
+
+                mPresenter.getRequestData(mapHeaders, mapParameters);
                 frame.refreshComplete();
             }
         }, 2000);
@@ -181,4 +233,25 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     }
 
 
+    @Override
+    public void onLoadMoreRequested() {
+
+
+        findRecyclerview.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.loadMoreComplete();
+                //                String session_id = PrefUtils.readSESSION_ID(mContext);
+                //
+                //                Map<String, Object> mapParameters = new HashMap<>(1);
+                //                mapParameters.put("MESSAGE_TYPE", "3");
+                //
+                //                Map<String, String> mapHeaders = new HashMap<>(2);
+                //                mapHeaders.put("ACTION", "I001");
+                //                mapHeaders.put("SESSION_ID", session_id);
+                //
+                //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
+            }
+        }, 2000);
+    }
 }

@@ -519,6 +519,7 @@ public class TabLayout extends HorizontalScrollView {
             tab.setText(item.mText);
         }
         if (item.mIcon != null) {
+
             tab.setIcon(item.mIcon);
         }
         if (item.mCustomLayout != 0) {

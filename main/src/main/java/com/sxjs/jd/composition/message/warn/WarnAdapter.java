@@ -1,12 +1,9 @@
-package com.sxjs.jd.composition.message.notification;
+package com.sxjs.jd.composition.message.warn;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.TimeUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
@@ -21,9 +18,9 @@ import com.sxjs.jd.entities.MessageNotificationResponse;
  * Created by admin on 2017/3/22.
  */
 
-public class NotificationAdapter extends BaseQuickAdapter<MessageNotificationResponse.DataBean, BaseViewHolder> {
+public class WarnAdapter extends BaseQuickAdapter<MessageNotificationResponse.DataBean, BaseViewHolder> {
 
-    public NotificationAdapter(int layoutResId) {
+    public WarnAdapter(int layoutResId) {
         super(layoutResId);
     }
 

@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.html.homeweb;
+package com.sxjs.jd.composition.html.messagedetails;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,14 +16,13 @@ import com.sxjs.common.util.statusbar.StatusBarUtil;
 import com.sxjs.common.view.X5WebView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeWebViewActivity extends BaseActivity {
+public class MessageWebViewActivity extends BaseActivity {
 
     @BindView(R2.id.fake_status_bar)
     View           fakeStatusBar;
