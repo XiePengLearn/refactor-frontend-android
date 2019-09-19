@@ -54,6 +54,9 @@ public class DialogUtil {
      * @return
      */
     public static Dialog createJDLoadingDialog(Activity context, DialogInterface.OnCancelListener listener) {
+        if(context == null){
+            return null;
+        }
         final Dialog dialog = new Dialog(context , R.style.NoBackGroundDialog);
         dialog.show();
         dialog.setCanceledOnTouchOutside(false);

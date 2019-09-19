@@ -57,7 +57,7 @@ public class NotificationAdapter extends BaseQuickAdapter<MessageNotificationRes
         helper.getView(R.id.ll_newsContainer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String session_id = PrefUtils.readSESSION_ID(mContext);
+                String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
                 String notifyUri = info.getNOTIFY_URI();
 
                 String url = notifyUri + "&sessionId=" + session_id;

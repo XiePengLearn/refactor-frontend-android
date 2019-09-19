@@ -70,7 +70,7 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
 
     public void initView() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext);
+        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerQuicklyFragmentComponent.builder()
                 .appComponent(getAppComponent())

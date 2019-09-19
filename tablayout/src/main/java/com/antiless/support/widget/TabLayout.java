@@ -336,7 +336,7 @@ public class TabLayout extends HorizontalScrollView {
                 android.support.v7.appcompat.R.styleable.TextAppearance);
         try {
 //            mTabTextSize = ta.getDimensionPixelSize(android.support.v7.appcompat.R.styleable.TextAppearance_android_textSize, 0);
-            mTabTextSize = dpToPx(18);
+            mTabTextSize = dpToPx(16);
             mTabTextColors = ta.getColorStateList(
                     android.support.v7.appcompat.R.styleable.TextAppearance_android_textColor);
         } finally {

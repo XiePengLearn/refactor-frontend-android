@@ -238,8 +238,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     }
 
     public void initData() {
-        showJDLoadingDialog();
-        String session_id = PrefUtils.readSESSION_ID(mContext);
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         Map<String, Object> mapParameters = new HashMap<>(1);
 
@@ -321,7 +320,6 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
 
-        hideJDLoadingDialog();
     }
 
     /**
@@ -682,7 +680,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             //开启扫一扫
 
         } else if (i == R.id.jkx_title_right_btn) {
-            String session_id = PrefUtils.readSESSION_ID(mContext);
+            String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
             //我的消息
 
 
@@ -699,11 +697,6 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             }
 
             startActivity(mIntent);
-            //            String url = "http://114.247.234.146:8087/hospital-pa-ap-h5/#/pass-examination?ty" +
-            //                    "pe=X001&year=2019&indicateDefinitionId=A1&indicateDefinitionSetId=1"+ "&sessionId=" + session_id;
-            //            mIntent = new Intent(mActivity, MessageWebViewActivity.class);
-            //            mIntent.putExtra("url",url );
-            //            startActivity(mIntent);
 
 
         } else if (i == R.id.ll_examSchedule) {

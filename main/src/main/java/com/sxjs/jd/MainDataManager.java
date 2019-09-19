@@ -191,6 +191,33 @@ public class MainDataManager extends BaseDataManager {
                 (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
 
     }
+    /**
+     * 获取未读消息关注模块数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getNoReadMessageData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
+     * 获取考中模块数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getExamMiddleData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MIDDLE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
 
 
 

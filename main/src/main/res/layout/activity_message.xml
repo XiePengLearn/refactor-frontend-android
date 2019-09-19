@@ -112,7 +112,9 @@
             app:indicatorStartColor="#2297FF"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable"
-            app:tabSelectedTextColor="#2297FF"></com.antiless.support.widget.TabLayout>
+            app:tabSelectedTextColor="#2297FF" />
+
+
     </RelativeLayout>
 
     <!-- <com.kpi.client.view.CustomViewPager

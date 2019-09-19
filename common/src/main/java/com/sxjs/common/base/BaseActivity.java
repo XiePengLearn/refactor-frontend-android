@@ -90,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (loadingDialog == null)
             loadingDialog = DialogUtil.createJDLoadingDialog(this, null);
-        if (!loadingDialog.isShowing()) {
+        if (loadingDialog != null &&!loadingDialog.isShowing()) {
             loadingDialog.show();
         }
 

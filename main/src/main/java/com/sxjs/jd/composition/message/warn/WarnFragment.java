@@ -91,7 +91,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext);
+        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerWarnFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -113,7 +113,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     public void initData() {
 
 
-        String session_id = PrefUtils.readSESSION_ID(mContext);
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("MESSAGE_TYPE", "2");
@@ -211,7 +211,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                String session_id = PrefUtils.readSESSION_ID(mContext);
+                String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
                 Map<String, Object> mapParameters = new HashMap<>(1);
                 mapParameters.put("MESSAGE_TYPE", "2");

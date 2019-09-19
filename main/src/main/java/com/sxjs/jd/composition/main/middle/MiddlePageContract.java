@@ -1,6 +1,8 @@
 package com.sxjs.jd.composition.main.middle;
 
+import com.sxjs.jd.entities.ExamMiddleResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.UnReadMessageResponse;
 
 import java.util.Map;
 
@@ -14,7 +16,8 @@ public interface MiddlePageContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(UnReadMessageResponse unReadMessageResponse);
+        void setExamMiddleData(ExamMiddleResponse unReadMessageResponse);
 
         void showProgressDialogView();
 
@@ -31,6 +34,7 @@ public interface MiddlePageContract {
         Map getData();
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getExamMiddleData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }
