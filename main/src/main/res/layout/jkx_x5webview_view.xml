@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y1"
+        android:layout_gravity="top"
+        android:progressDrawable="@drawable/progress_style"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/wuneirong2x"
+            android:drawablePadding="@dimen/x10"
+            android:gravity="center"
+            android:text="暂无法访问"
+            android:textColor="#333333"
+            android:textSize="@dimen/x15" />
+
+        <com.sxjs.common.view.X5WebView
+            android:id="@+id/webView"
+            style="@style/scrollbar_style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+</LinearLayout>

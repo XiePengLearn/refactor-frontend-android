@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.message.notification;
 
-import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.FindsBean;
+import com.sxjs.jd.entities.MessageNotificationResponse;
 
 import java.util.Map;
 
@@ -14,11 +15,12 @@ public interface NotificationFragmentContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(MessageNotificationResponse messageNotificationResponse);
 
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
+        void setMoreData(MessageNotificationResponse messageNotificationResponse);
     }
 
     interface Presenter {
@@ -31,6 +33,6 @@ public interface NotificationFragmentContract {
         Map getData();
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
-
+        void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

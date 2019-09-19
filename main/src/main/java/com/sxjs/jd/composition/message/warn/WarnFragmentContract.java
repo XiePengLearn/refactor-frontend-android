@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.message.warn;
 
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageWarnResponse;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public interface WarnFragmentContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(MessageWarnResponse messageWarnResponse);
 
         void showProgressDialogView();
 

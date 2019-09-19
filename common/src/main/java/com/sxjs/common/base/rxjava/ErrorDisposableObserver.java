@@ -18,5 +18,8 @@ public abstract class ErrorDisposableObserver<T> extends DisposableObserver<T> {
         if(e instanceof NoNetWorkException){
             Toast.makeText(GlobalAppComponent.getAppComponent().getContext(), "网络连接失败，请重试！", Toast.LENGTH_SHORT).show();
         }
+//        else if(e instanceof ){
+//
+//        }
     }
 }

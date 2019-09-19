@@ -146,6 +146,5 @@ dependencies {
     //#信鸽结束
     //#分包
     implementation 'com.android.support:multidex:1.0.3'
-    //#x5内核
-    api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
+
 }

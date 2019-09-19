@@ -66,6 +66,7 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行

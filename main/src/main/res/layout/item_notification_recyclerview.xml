@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y10"
+        android:background="@drawable/bg_shap_button_17"
+        android:padding="@dimen/x2"
+        android:text="今天08：08"
+        android:textColor="#ffffff"
+        android:textSize="@dimen/x11" />
+
+    <LinearLayout
+        android:id="@+id/ll_newsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x10"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_marginTop="@dimen/y10"
+        android:background="@drawable/bg_shap_button_18"
+        android:orientation="vertical"
+        android:padding="@dimen/x10">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:text="国家卫健委将启动2019年度三级公立医院"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginTop="@dimen/y8"
+            android:background="#E5E5E5" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginTop="@dimen/y8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/news_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/x15"
+                android:background="@drawable/message_icon"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="通知正文，最多显示两行，过多则点击进去查"
+                android:textColor="#626262"
+                android:textSize="@dimen/x13" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -38,6 +38,7 @@
             android:layout_gravity="center_horizontal"
             app:tabMode="scrollable"
             app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="#2297FF"
             app:indicatorStartColor="#2297FF"
             app:indicatorEndColor="#2297FF"
             app:indicatorMarginStart="20dp"
@@ -55,7 +56,6 @@
         android:id="@+id/jkx_viewpage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
         android:background="#ddd"
         />
 

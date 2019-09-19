@@ -6,6 +6,7 @@ import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageWarnResponse;
 
 import java.util.Map;
 
@@ -60,12 +61,14 @@ public class WarnFragmentPresenter extends BasePresenter implements WarnFragment
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    ForgetPasswordResponse forgetPasswordResponse = gson.fromJson(response, ForgetPasswordResponse.class);
+                    MessageWarnResponse messageWarnResponse = gson.fromJson(response, MessageWarnResponse.class);
 
-                    mContractView.setResponseData(forgetPasswordResponse);
+                    mContractView.setResponseData(messageWarnResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行

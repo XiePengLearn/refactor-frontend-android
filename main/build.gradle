@@ -41,15 +41,10 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
-
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.arouterCompilerVersion"
-
-
     api project(':app_common')
     implementation project(path: ':banner')
     implementation project(path: ':tablayout')
-
-
 }

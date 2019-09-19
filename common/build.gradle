@@ -34,30 +34,36 @@ dependencies {
     })
     api "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
+
     //retrofit
     api "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     api "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
     api "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
     api "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
     api "com.google.code.gson:gson:$rootProject.gsonVersion"
+
     //rxJava
     api "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     api "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+
     //dagger
     api "com.google.dagger:dagger:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     //ButterKnife
     api "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+
     //design
     api "com.android.support:design:$rootProject.supportLibraryVersion"
 
     //leak
-    debugApi 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugApi 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseApi 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+
     //fresco
     api "com.facebook.fresco:fresco:$rootProject.frescoVersion"
+
     // RunTimePermissionRequest
     api "pub.devrel:easypermissions:$rootProject.easypermissionVersion"
 
@@ -68,11 +74,14 @@ dependencies {
     api "com.alibaba:arouter-api:$rootProject.arouterVersion"
     annotationProcessor "com.alibaba:arouter-compiler:$rootProject.arouterCompilerVersion"
 
-//图片加载控件
+    //图片加载控件
     api 'com.blankj:utilcode:1.25.5'
     api 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.3'
 
     //eventbus
-//    api 'org.greenrobot:eventbus:3.1.1'
 
+    //    api 'org.greenrobot:eventbus:3.1.1'
+
+    //#x5内核
+    api files('libs/tbs_sdk_thirdapp_v4.3.0.1072_43646_sharewithdownloadwithfile_withoutGame_obfs_20190429_175122.jar')
 }

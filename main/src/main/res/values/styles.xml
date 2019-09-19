@@ -15,4 +15,9 @@
         <item name="android:textSize">8dp</item>
     </style>
 
+    <style name="scrollbar_style">
+        <item name="android:scrollbarSize">3dp</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbarThumbVertical">@color/dark_gray</item>
+    </style>
 </resources>

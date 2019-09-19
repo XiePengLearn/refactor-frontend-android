@@ -151,6 +151,47 @@ public class MainDataManager extends BaseDataManager {
 
     }
 
+    /**
+     * 获取消息通知模块
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getMessageNotifitionData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+    /**
+     * 获取消息提醒模块
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getMessageWarnData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
+     * 获取消息关注模块
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getMessageAttentionData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
 
 
     public List<String> getTypeOfNameData() {

@@ -6,6 +6,7 @@ import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageAttentionResponse;
 
 import java.util.Map;
 
@@ -60,12 +61,14 @@ public class AttentionFragmentPresenter extends BasePresenter implements Attenti
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    ForgetPasswordResponse forgetPasswordResponse = gson.fromJson(response, ForgetPasswordResponse.class);
+                    MessageAttentionResponse messageAttentionResponse = gson.fromJson(response, MessageAttentionResponse.class);
 
-                    mContractView.setResponseData(forgetPasswordResponse);
+                    mContractView.setResponseData(messageAttentionResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行

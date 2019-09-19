@@ -1,6 +1,6 @@
 package com.sxjs.jd.composition.message.attention;
 
-import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageAttentionResponse;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ public interface AttentionFragmentContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(MessageAttentionResponse registerResponse);
 
         void showProgressDialogView();
 

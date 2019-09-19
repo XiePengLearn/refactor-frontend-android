@@ -15,8 +15,9 @@
 
         <TextView
             android:id="@+id/jkx_title_left"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:padding="10dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x15"

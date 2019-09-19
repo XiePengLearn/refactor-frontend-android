@@ -39,7 +39,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/quicklyActivity/quicklyActivity")
+@Route(path = "/messageActivity/messageActivity")
 public class MessageActivity extends BaseActivity implements MessageContract.View {
     @Inject
     MessagePresenter presenter;

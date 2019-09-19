@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,7 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.composition.main.unused.quicklyfragment.DaggerQuicklyFragmentComponent;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageAttentionResponse;
 
 import javax.inject.Inject;
 
@@ -43,23 +43,44 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     JDHeaderView findPullRefreshHeader;
     private Handler mHandler;
 
-    private static final String TAG = "MessageActivity";
-    private              String mSession_id;
+    private static final String                   TAG = "MessageActivity";
+    private              String                   mSession_id;
+    private              MessageAttentionResponse attentionResponse;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quickly, container, false);
+        View view = inflater.inflate(R.layout.fragment_attention, container, false);
         unbinder = ButterKnife.bind(this, view);
         Bundle arguments = getArguments();
 
         initView();
-        initData();
+        if (!mHasLoadedOnce && attentionResponse == null) {
+            Log.i("TestData", "FoundFragment 加载请求网络数据");
+            //TO-DO 执行网络数据请求
+            mHasLoadedOnce = true;
+
+            initData();
+        }
 
         return view;
 
     }
 
+    private boolean mHasLoadedOnce = false;// 页面为false没有加载过 ,页面为true已经加载过
+
+    //    @Override
+    //    public void setUserVisibleHint(boolean isVisibleToUser) {
+    //        super.setUserVisibleHint(isVisibleToUser);
+    //        if (isVisibleToUser && !mHasLoadedOnce && attentionResponse == null) {
+    //            Log.i("TestData", "FoundFragment 加载请求网络数据");
+    //            //TO-DO 执行网络数据请求
+    //            mHasLoadedOnce = true;
+    //
+    //            initData();
+    //        }
+    //    }
 
     public static AttentionFragment newInstance() {
         AttentionFragment quicklyFragment = new AttentionFragment();
@@ -70,7 +91,7 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     }
 
     public void initView() {
-
+        mHandler = new Handler();
         mSession_id = PrefUtils.readSESSION_ID(mContext);
 
         DaggerAttentionFragmentComponent.builder()
@@ -86,13 +107,12 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
         //                adapter.setEnableLoadMore(true);
         //                findRecyclerview.setAdapter(adapter);
 
-        mHandler = new Handler();
 
     }
 
     public void initData() {
         showJDLoadingDialog();
-        //                mPresenter.getFindData();
+        //        mPresenter.getFindData();
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -105,12 +125,13 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
 
 
     @Override
-    public void setResponseData(ForgetPasswordResponse loginResponse) {
+    public void setResponseData(MessageAttentionResponse attentionResponse) {
+        this.attentionResponse = attentionResponse;
         try {
-            String code = loginResponse.getCode();
-            String msg = loginResponse.getMsg();
+            String code = attentionResponse.getCode();
+            String msg = attentionResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData());
+                LogUtil.e(TAG, "SESSION_ID: " + attentionResponse.getData());
 
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);

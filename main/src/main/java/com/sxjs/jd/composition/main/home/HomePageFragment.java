@@ -35,6 +35,8 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.html.homeweb.HomeWebActivity;
+import com.sxjs.jd.composition.html.homeweb.HomeWebViewActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
 import com.sxjs.jd.entities.HomePageResponse;
 import com.youth.banner.Banner;
@@ -238,13 +240,11 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         String session_id = PrefUtils.readSESSION_ID(mContext);
 
         Map<String, Object> mapParameters = new HashMap<>(1);
-        //        mapParameters.put("SIGNIN_TYPE", "1");
-        //        mapParameters.put("USER_TYPE", "1");
-        //        mapParameters.put("MOBILE_TYPE", "1");
 
         Map<String, String> mapHeaders = new HashMap<>(2);
         mapHeaders.put("ACTION", "H000");
         mapHeaders.put("SESSION_ID", session_id);
+
         mPresenter.getRequestData(mapHeaders, mapParameters);
 
         //        mHandler.postDelayed(new Runnable() {
@@ -379,10 +379,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                         /**
                          * 跳转到进入消息详情页
                          */
-                        Bundle bundle = new Bundle();
-                        bundle.putString("url", bannerResponseList.get(position).getNOTIFY_URI());
-                        //进入消息详情页
-                        //                        mEventCallBack.EventClick(JkxHomeFragment.EVENT_GO_BANNER, bundle);
+                        //进入轮播详情页
+//                        String url = bannerResponseList.get(position).getNOTIFY_URI();
+                        String url = "https://wxpay.wxutil.com/mch/pay/h5.v2.php";
+                        Intent intent = new Intent(mActivity, HomeWebViewActivity.class);
+                        intent.putExtra("title", "详情");
+                        intent.putExtra("url", url);
+                        startActivity(intent);
+
                     }
                 }).start();
     }
@@ -477,6 +481,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     /**
      * 指标排行
+     *
      * @param h005Bean 指标排行
      * @param h006Bean 指标排行
      */
@@ -495,20 +500,18 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                 tvFinshOld1.setVisibility(View.VISIBLE);
 
                 tvFinshOld2.setVisibility(View.VISIBLE);
-                if(!TextUtils.isEmpty(h006Bean.getINDICATION_NAME().get(3))){
+                if (!TextUtils.isEmpty(h006Bean.getINDICATION_NAME().get(3))) {
                     tvName.setText(h006Bean.getINDICATION_NAME().get(3));
                 }
-                if(!TextUtils.isEmpty(h006Bean.getINDICATION_VALUE())){
+                if (!TextUtils.isEmpty(h006Bean.getINDICATION_VALUE())) {
                     tvValue.setText(h006Bean.getINDICATION_VALUE());
                 }
-                if(!TextUtils.isEmpty(h006Bean.getSAMETYPE_HOSPITAL_RANK())){
+                if (!TextUtils.isEmpty(h006Bean.getSAMETYPE_HOSPITAL_RANK())) {
                     tvFinshOld1.setText(h006Bean.getSAMETYPE_HOSPITAL_RANK());
                 }
-                if(!TextUtils.isEmpty(h006Bean.getPREFECTURE_HOSPITAL_RANK())){
+                if (!TextUtils.isEmpty(h006Bean.getPREFECTURE_HOSPITAL_RANK())) {
                     tvFinshOld2.setText(h006Bean.getPREFECTURE_HOSPITAL_RANK());
                 }
-
-
 
 
             }
@@ -538,25 +541,25 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                 tvOld2.setVisibility(View.VISIBLE);
 
 
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_NAME().get(3))){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_NAME().get(3))) {
                     tvName.setText(h005Bean.getINDICATION().get(0).getINDICATION_NAME().get(3));
                 }
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_VALUE())){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getINDICATION_VALUE())) {
                     tvValue.setText(h005Bean.getINDICATION().get(0).getINDICATION_VALUE());
                 }
-                if(!TextUtils.isEmpty(h005Bean.getRANK_DECLINE())){
+                if (!TextUtils.isEmpty(h005Bean.getRANK_DECLINE())) {
                     tvChangeTotle.setText(h005Bean.getRANK_DECLINE());
                 }
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_RANK())){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_RANK())) {
                     tvChange1.setText(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_RANK());
                 }
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_OLD_RANK())){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_OLD_RANK())) {
                     tvOld1.setText(h005Bean.getINDICATION().get(0).getSAMETYPE_HOSPITAL_OLD_RANK());
                 }
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_RANK())){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_RANK())) {
                     tvChange2.setText(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_RANK());
                 }
-                if(!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_OLD_RANK())){
+                if (!TextUtils.isEmpty(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_OLD_RANK())) {
                     tvOld2.setText(h005Bean.getINDICATION().get(0).getPREFECTURE_HOSPITAL_OLD_RANK());
                 }
             }
@@ -570,7 +573,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         RequestOptions options = new RequestOptions()
                 .error(R.drawable.home_pic1);
 
-        if(list.size()>0){
+        if (list.size() > 0) {
             llNewsItem.setTag(list.get(0).getCONTENT_URI());
             Glide.with(mContext)
                     .load(list.get(0).getIMAGE_URI())
@@ -581,7 +584,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             tvTime.setText(list.get(0).getDATE());
         }
 
-        if(list.size()>1){
+        if (list.size() > 1) {
             llNewsItem1.setTag(list.get(1).getCONTENT_URI());
             Glide.with(mContext)
                     .load(list.get(1).getIMAGE_URI())
@@ -641,19 +644,17 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     @Override
     public void onRefreshBegin(final PtrFrameLayout frame) {
-
         //指标异常 轮播停止
         tvExceptiopDesc.stopAutoScroll();
-
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                initData();
                 //指标异常 轮播开始
                 tvExceptiopDesc.startAutoScroll();
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 800);
     }
 
     @Override
@@ -674,9 +675,16 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             //开启扫一扫
 
         } else if (i == R.id.jkx_title_right_btn) {
+            String session_id = PrefUtils.readSESSION_ID(mContext);
             //我的消息
             mIntent = new Intent(mActivity, MessageActivity.class);
             startActivity(mIntent);
+//            String url = "http://114.247.234.146:8087/hospital-pa-ap-h5/#/pass-examination?ty" +
+//                    "pe=X001&year=2019&indicateDefinitionId=A1&indicateDefinitionSetId=1"+ "&sessionId=" + session_id;
+//            mIntent = new Intent(mActivity, HomeWebViewActivity.class);
+//            mIntent.putExtra("url",url );
+//            startActivity(mIntent);
+
 
 
         } else if (i == R.id.ll_examSchedule) {

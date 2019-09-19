@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.main.unused.quicklyfragment.DaggerQuicklyFragmentComponent;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageWarnResponse;
 
 import javax.inject.Inject;
 
@@ -43,23 +45,43 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     JDHeaderView findPullRefreshHeader;
     private Handler mHandler;
 
-    private static final String TAG = "MessageActivity";
-    private              String mSession_id;
+    private static final String              TAG = "MessageActivity";
+    private              String              mSession_id;
+    private              MessageWarnResponse messageWarnResponse;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quickly, container, false);
+        View view = inflater.inflate(R.layout.fragment_warn, container, false);
         unbinder = ButterKnife.bind(this, view);
         Bundle arguments = getArguments();
 
         initView();
-        initData();
+        if ( !mHasLoadedOnce && messageWarnResponse == null) {
+            Log.i("TestData", "FoundFragment 加载请求网络数据");
+            //TO-DO 执行网络数据请求
+            mHasLoadedOnce = true;
+            mHandler = new Handler();
+            initData();
+        }
 
         return view;
 
     }
 
+    private boolean mHasLoadedOnce = false;// 页面为false没有加载过 ,页面为true已经加载过
+
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser && !mHasLoadedOnce && messageWarnResponse == null) {
+//            Log.i("TestData", "FoundFragment 加载请求网络数据");
+//            //TO-DO 执行网络数据请求
+//            mHasLoadedOnce = true;
+//
+//            initData();
+//        }
+//    }
 
     public static WarnFragment newInstance() {
         WarnFragment quicklyFragment = new WarnFragment();
@@ -70,7 +92,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     }
 
     public void initView() {
-
+        mHandler = new Handler();
         mSession_id = PrefUtils.readSESSION_ID(mContext);
 
         DaggerWarnFragmentComponent.builder()
@@ -86,7 +108,6 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
         //                adapter.setEnableLoadMore(true);
         //                findRecyclerview.setAdapter(adapter);
 
-        mHandler = new Handler();
 
     }
 
@@ -105,12 +126,13 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
 
 
     @Override
-    public void setResponseData(ForgetPasswordResponse loginResponse) {
+    public void setResponseData(MessageWarnResponse messageWarnResponse) {
+        this.messageWarnResponse = messageWarnResponse;
         try {
-            String code = loginResponse.getCode();
-            String msg = loginResponse.getMsg();
+            String code = messageWarnResponse.getCode();
+            String msg = messageWarnResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData());
+                LogUtil.e(TAG, "SESSION_ID: " + messageWarnResponse.getData());
 
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);

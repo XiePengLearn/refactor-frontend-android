@@ -21,13 +21,13 @@ import okhttp3.ResponseBody;
  */
 public class QuicklyPresenter extends BasePresenter implements QuicklyContract.Presenter {
     private              MainDataManager      mDataManager;
-    private              QuicklyContract.View mLoginView;
+    private              QuicklyContract.View mContractView;
     private static final String               TAG = "MainPresenter";
 
     @Inject
     public QuicklyPresenter(MainDataManager mDataManager, QuicklyContract.View view) {
         this.mDataManager = mDataManager;
-        this.mLoginView = view;
+        this.mContractView = view;
 
     }
 
@@ -50,7 +50,7 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
 
     @Override
     public void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
-        mLoginView.showProgressDialogView();
+        mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
@@ -62,17 +62,18 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
                     Gson gson = new Gson();
                     LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
 
-                    mLoginView.setLoginData(loginResponse);
+                    mContractView.setLoginData(loginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                mContractView.hiddenProgressDialogView();
             }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
             @Override
             public void onError(Throwable e) {
                 super.onError(e);
-                mLoginView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
             }
 
             @Override
@@ -80,7 +81,7 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
                 long completeRequestTime = System.currentTimeMillis();
                 long useTime = completeRequestTime - beforeRequestTime;
                 LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
-                mLoginView.hiddenProgressDialogView();
+                mContractView.hiddenProgressDialogView();
             }
         });
         addDisposabe(disposable);
