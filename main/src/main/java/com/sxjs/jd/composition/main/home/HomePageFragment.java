@@ -169,19 +169,36 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     private              HomePageResponse                   homePageResponse;
     private              HomePageResponse.DataBean.I002Bean i002;
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_home_page, container, false);
+//        unbinder = ButterKnife.bind(this, view);
+//        initTitle();
+//        initView();
+//        initData();
+//
+//        return view;
+//
+//    }
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void initEvent() {
+
         initTitle();
         initView();
         initData();
-
-        return view;
+    }
+    @Override
+    public void onLazyLoad() {
 
     }
-
     /**
      * 初始化title
      */

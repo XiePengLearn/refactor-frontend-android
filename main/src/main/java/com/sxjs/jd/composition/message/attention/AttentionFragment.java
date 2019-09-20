@@ -59,26 +59,48 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     private              AttentionAdapter            adapter;
     private              View                        mView;
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        if (null == mView) {
+//            mView = inflater.inflate(R.layout.fragment_attention, container, false);
+//            unbinder = ButterKnife.bind(this, mView);
+//            Bundle arguments = getArguments();
+//
+//            initView();
+//            initData();
+//        } else {
+//            unbinder = ButterKnife.bind(this, mView);
+//        }
+//
+//        return mView;
+//
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null == mView) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
             mView = inflater.inflate(R.layout.fragment_attention, container, false);
             unbinder = ButterKnife.bind(this, mView);
             Bundle arguments = getArguments();
 
-            initView();
-            initData();
-        }else {
-            unbinder = ButterKnife.bind(this, mView);
-        }
+
 
         return mView;
+    }
+
+    @Override
+    public void initEvent() {
+
+
 
     }
 
-
-
+    @Override
+    public void onLazyLoad() {
+        initView();
+        initData();
+    }
 
 
     public static AttentionFragment newInstance() {

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sxjs.common.base.BaseActivity;
+import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.statusbar.StatusBarUtil;
 import com.sxjs.common.view.X5WebView;
 import com.sxjs.jd.R;
@@ -60,6 +61,13 @@ public class MessageWebViewActivity extends BaseActivity {
         unbinder = ButterKnife.bind(this);
         mIntent = getIntent();
         mWebUrl = mIntent.getStringExtra("url");
+
+        LogUtil.e(TAG,"========mWebUrl========="+mWebUrl);
+        if(TextUtils.isEmpty(mWebUrl)){
+            webView.setVisibility(View.GONE);
+        }else {
+            webView.setVisibility(View.VISIBLE);
+        }
         mTitle = mIntent.getStringExtra("title");
         initTitle(mTitle);
         initView();

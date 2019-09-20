@@ -133,7 +133,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         fragments.add(attentionFragment);
         adapter = new MessageAdapter(getSupportFragmentManager(), fragments, tabTitle);
         jkxViewpage.setAdapter(adapter);
-        jkxViewpage.setOffscreenPageLimit(0);
+        jkxViewpage.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(jkxViewpage);
     }
 

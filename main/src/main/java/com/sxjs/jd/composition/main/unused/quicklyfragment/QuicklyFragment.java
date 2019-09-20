@@ -45,21 +45,40 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     private static final String TAG = "MessageActivity";
     private              String mSession_id;
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_quickly, container, false);
+//        unbinder = ButterKnife.bind(this, view);
+//        Bundle arguments = getArguments();
+//
+//        initView();
+//        initData();
+//
+//        return view;
+//
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quickly, container, false);
         unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void initEvent() {
+
         Bundle arguments = getArguments();
 
         initView();
         initData();
 
-        return view;
+    }
+    @Override
+    public void onLazyLoad() {
 
     }
-
-
     public static QuicklyFragment newInstance() {
         QuicklyFragment quicklyFragment = new QuicklyFragment();
         Bundle bundle = new Bundle();

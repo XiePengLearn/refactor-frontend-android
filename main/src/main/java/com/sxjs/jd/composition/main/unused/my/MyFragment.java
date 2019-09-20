@@ -13,6 +13,8 @@ import com.example.app_common.service.ITestService;
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.jd.R;
 
+import butterknife.ButterKnife;
+
 /**
  * @author xiepeng
  * @date 2018/12/1
@@ -31,7 +33,20 @@ public class MyFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_my, container, false);
     }
+    @Override
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my, container, false);
+    }
 
+    @Override
+    public void initEvent() {
+
+
+    }
+    @Override
+    public void onLazyLoad() {
+
+    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

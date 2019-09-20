@@ -59,26 +59,46 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     private              WarnAdapter                 adapter;
     private              View                        mView;
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null == mView) {
-            mView = inflater.inflate(R.layout.fragment_warn, container, false);
-            unbinder = ButterKnife.bind(this, mView);
-            Bundle arguments = getArguments();
+    //    @Nullable
+    //    @Override
+    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //        if (null == mView) {
+    //            mView = inflater.inflate(R.layout.fragment_warn, container, false);
+    //            unbinder = ButterKnife.bind(this, mView);
+    //            Bundle arguments = getArguments();
+    //
+    //            initView();
+    //            initData();
+    //        }else {
+    //            unbinder = ButterKnife.bind(this, mView);
+    //        }
+    //
+    //        return mView;
+    //
+    //    }
 
-            initView();
-            initData();
-        }else {
-            unbinder = ButterKnife.bind(this, mView);
-        }
+    @Override
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
+        mView = inflater.inflate(R.layout.fragment_warn, container, false);
+        unbinder = ButterKnife.bind(this, mView);
+        Bundle arguments = getArguments();
+
 
         return mView;
+    }
+
+    @Override
+    public void initEvent() {
+
 
     }
 
-
-
+    @Override
+    public void onLazyLoad() {
+        initView();
+        initData();
+    }
 
 
     public static WarnFragment newInstance() {

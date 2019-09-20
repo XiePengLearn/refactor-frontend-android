@@ -2,6 +2,7 @@ package com.sxjs.jd.composition.main.unused.homefragment;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,14 +62,30 @@ public class MainHomeFragment extends BaseFragment implements JDHeaderView.Refre
 
 
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        rootView = inflater.inflate(R.layout.fragment_recycle, container, false);
+//        initBase();
+//        unbinder = ButterKnife.bind(this, rootView);
+//        return rootView;
+//    }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_recycle, container, false);
-        initBase();
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_recycle, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
+    @Override
+    public void initEvent() {
+
+        initBase();
+
+    }
+    @Override
+    public void onLazyLoad() {
+
+    }
     /**
      * 初始化下拉刷新及滚动距离title发生的改变
      */

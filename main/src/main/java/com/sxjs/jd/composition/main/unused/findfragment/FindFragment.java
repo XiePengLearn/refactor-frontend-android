@@ -37,18 +37,35 @@ public class FindFragment extends BaseFragment implements FindContract.View, Ptr
     private FindsAdapter adapter;
     private Handler      mHandler;
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_find, container, false);
+//        unbinder = ButterKnife.bind(this, view);
+//        initView();
+//        initData();
+//
+//        return view;
+//
+//    }
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_find, container, false);
         unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void initEvent() {
+
         initView();
         initData();
 
-        return view;
+    }
+    @Override
+    public void onLazyLoad() {
 
     }
-
     public static FindFragment newInstance() {
         return new FindFragment();
     }

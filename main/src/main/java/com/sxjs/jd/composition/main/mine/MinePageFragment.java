@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.widget.headerview.JDHeaderView;
 import com.sxjs.common.widget.pulltorefresh.PtrFrameLayout;
 import com.sxjs.common.widget.pulltorefresh.PtrHandler;
@@ -20,6 +21,9 @@ import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -105,19 +109,36 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     JDHeaderView      findPullRefreshHeader;
     private Handler mHandler;
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_mine_page, container, false);
+//        unbinder = ButterKnife.bind(this, view);
+//        initView();
+//        initData();
+//
+//        return view;
+//
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine_page, container, false);
         unbinder = ButterKnife.bind(this, view);
+        return view;
+    }
+
+    @Override
+    public void initEvent() {
+
         initView();
         initData();
 
-        return view;
+    }
+    @Override
+    public void onLazyLoad() {
 
     }
-
-
     public static MinePageFragment newInstance() {
         return new MinePageFragment();
     }

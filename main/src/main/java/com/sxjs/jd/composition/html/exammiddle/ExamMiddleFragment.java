@@ -34,21 +34,44 @@ public class ExamMiddleFragment extends BaseFragment {
     private       String mWebUrl;
     private       View   mView;
 
-    @Nullable
+    //    @Nullable
+    //    @Override
+    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //
+    //
+    //
+    //
+    //        return mView;
+    //
+    //    }
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_exam_middle, container, false);
         unbinder = ButterKnife.bind(this, mView);
+        return mView;
+    }
 
+    @Override
+    public void initEvent() {
+    }
+
+    @Override
+    public void onLazyLoad() {
         mArguments = getArguments();
         mWebUrl = mArguments.getString(mUrlDataKey);
-
         initView();
-
-
-        return mView;
-
     }
+
+
+    //    @Override
+    //    protected void lazyLoad() {
+    //        super.lazyLoad();
+    //
+    //
+    //
+    //    }
 
     private void initView() {
 

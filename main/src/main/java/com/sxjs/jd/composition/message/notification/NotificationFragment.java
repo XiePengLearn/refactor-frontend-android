@@ -59,26 +59,45 @@ public class NotificationFragment extends BaseFragment implements NotificationFr
     private              NotificationAdapter         adapter;
     private              View                        mView;
 
-    @Nullable
+    //    @Nullable
+    //    @Override
+    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //        if (null == mView) {
+    //            mView = inflater.inflate(R.layout.fragment_notification, container, false);
+    //            unbinder = ButterKnife.bind(this, mView);
+    //            Bundle arguments = getArguments();
+    //
+    //            initView();
+    //            initData();
+    //        }else {
+    //            unbinder = ButterKnife.bind(this, mView);
+    //        }
+    //
+    //        return mView;
+    //
+    //    }
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (null == mView) {
-            mView = inflater.inflate(R.layout.fragment_notification, container, false);
-            unbinder = ButterKnife.bind(this, mView);
-            Bundle arguments = getArguments();
+    public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-            initView();
-            initData();
-        }else {
-            unbinder = ButterKnife.bind(this, mView);
-        }
+        mView = inflater.inflate(R.layout.fragment_notification, container, false);
+        unbinder = ButterKnife.bind(this, mView);
+        Bundle arguments = getArguments();
+
 
         return mView;
+    }
+
+    @Override
+    public void initEvent() {
+
 
     }
 
-
-
+    @Override
+    public void onLazyLoad() {
+        initView();
+        initData();
+    }
 
 
     public static NotificationFragment newInstance() {
