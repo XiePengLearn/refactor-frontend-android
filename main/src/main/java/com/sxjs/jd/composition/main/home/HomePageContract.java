@@ -1,5 +1,6 @@
 package com.sxjs.jd.composition.main.home;
 
+import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.HomePageResponse;
 import com.sxjs.jd.entities.RegisterCodeResponse;
@@ -17,6 +18,7 @@ public interface HomePageContract {
 
 
         void setResponseData(HomePageResponse homePageResponse);
+        void setResponseUpdateData(AppUpdateResponse appUpdateResponse);
 
         void showProgressDialogView();
 
@@ -33,6 +35,7 @@ public interface HomePageContract {
         Map getData();
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getRequestUpdateData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }

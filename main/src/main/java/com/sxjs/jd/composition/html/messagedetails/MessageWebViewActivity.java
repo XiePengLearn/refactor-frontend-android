@@ -63,7 +63,7 @@ public class MessageWebViewActivity extends BaseActivity {
         mWebUrl = mIntent.getStringExtra("url");
 
         LogUtil.e(TAG,"========mWebUrl========="+mWebUrl);
-        if(TextUtils.isEmpty(mWebUrl)){
+        if(TextUtils.isEmpty(mWebUrl)||!mWebUrl.startsWith("http")){
             webView.setVisibility(View.GONE);
         }else {
             webView.setVisibility(View.VISIBLE);

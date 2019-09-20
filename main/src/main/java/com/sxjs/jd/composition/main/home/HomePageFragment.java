@@ -1,12 +1,16 @@
 package com.sxjs.jd.composition.main.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.constant.TimeConstants;
@@ -38,6 +43,7 @@ import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.html.homeweb.HomeWebActivity;
 import com.sxjs.jd.composition.html.homeweb.HomeWebViewActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
+import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.HomePageResponse;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -56,6 +62,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import constacne.UiType;
+import listener.Md5CheckResultListener;
+import listener.UpdateDownloadListener;
+import model.UiConfig;
+import model.UpdateConfig;
+import update.UpdateAppUtils;
 
 /**
  * @Auther: xp
@@ -168,19 +180,20 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     private static final String                             TAG = "HomePageFragment";
     private              HomePageResponse                   homePageResponse;
     private              HomePageResponse.DataBean.I002Bean i002;
+    private              AppUpdateResponse                  appUpdateResponse;
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_home_page, container, false);
-//        unbinder = ButterKnife.bind(this, view);
-//        initTitle();
-//        initView();
-//        initData();
-//
-//        return view;
-//
-//    }
+    //    @Nullable
+    //    @Override
+    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //        View view = inflater.inflate(R.layout.fragment_home_page, container, false);
+    //        unbinder = ButterKnife.bind(this, view);
+    //        initTitle();
+    //        initView();
+    //        initData();
+    //
+    //        return view;
+    //
+    //    }
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
@@ -194,11 +207,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         initTitle();
         initView();
         initData();
+        initUpdateData();
     }
+
     @Override
     public void onLazyLoad() {
 
     }
+
     /**
      * 初始化title
      */
@@ -274,6 +290,19 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         //        }, 2000);
     }
 
+    public void initUpdateData() {
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "CM004");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getRequestUpdateData(mapHeaders, mapParameters);
+
+
+    }
 
     @Override
     public void setResponseData(HomePageResponse homePageResponse) {
@@ -333,17 +362,152 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:" + e.getMessage());
+            ToastUtil.showToast(mContext, "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
 
     }
+
+    @Override
+    public void setResponseUpdateData(AppUpdateResponse appUpdateResponse) {
+        this.appUpdateResponse = appUpdateResponse;
+
+        try {
+            String code = appUpdateResponse.getCode();
+            String msg = appUpdateResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                isUpDataVersion(appUpdateResponse);
+
+
+                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
+                //                finish();
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext, "解析数据失败:");
+            LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+
+    /**
+     * 判断是否更新
+     */
+    public void isUpDataVersion(AppUpdateResponse data) {
+
+        if (data == null || data.getData().getVersionCode() == null) {
+
+            return;
+        }
+
+
+        int newVerCode = Integer.parseInt(data.getData().getVersionCode()); // 检测是否有新的安装包更新
+        int oldVerCode = getVerCode();
+        if (newVerCode > oldVerCode) {
+            int lAvIsMajor = Integer.parseInt(data.getData().getFlag());
+            openDownLoadDialog(data.getData().getUrl(), data.getData().getUpdateTip(), lAvIsMajor);
+            //            return;
+        }
+
+
+    }
+
+    public int getVerCode() {
+
+
+        int versioncode;
+        try {
+            // ---get the package info---
+            PackageManager pm = mActivity.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(mActivity.getPackageName(), 0);
+            versioncode = pi.versionCode;
+
+        } catch (Exception e) {
+            Log.e("VersionInfo", "Exception", e);
+            versioncode = -1;
+        }
+        return versioncode;
+
+
+    }
+
+    /**
+     * 弹出更新Dialog
+     */
+    private void openDownLoadDialog(String apkUrl, String updateContent, int flag) {
+        UpdateConfig updateConfig = new UpdateConfig();
+        updateConfig.setCheckWifi(true);
+        updateConfig.setNeedCheckMd5(true);
+        if (flag == 1) {
+            updateConfig.setForce(true);   //flag == 1 强制更新
+        } else {
+            updateConfig.setForce(false);  //flag == 1 非强制更新
+        }
+
+        updateConfig.setNotifyImgRes(R.drawable.notification_logo_72);
+
+        UiConfig uiConfig = new UiConfig();
+        uiConfig.setUiType(UiType.PLENTIFUL);
+
+        UpdateAppUtils
+                .getInstance()
+                .apkUrl(apkUrl)
+                .updateTitle("系统提示")
+                .updateContent(updateContent + "\n          点击立即更新会在后台下载,下载完成会自动提示安装!")
+                .uiConfig(uiConfig)
+                .updateConfig(updateConfig)
+
+                .setMd5CheckResultListener(new Md5CheckResultListener() {
+                    @Override
+                    public void onResult(boolean result) {
+
+                    }
+                })
+                .setUpdateDownloadListener(new UpdateDownloadListener() {
+                    @Override
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onDownload(int progress) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        ToastUtil.showToast(mContext, "下载完成");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                })
+
+                .update();
+
+    }
+
 
     /**
      * 未读消息设置
      *
      * @param unReadMessage 未读消息响应数据
      */
+    @SuppressLint("SetTextI18n")
     public void setUnReadMessage(HomePageResponse.DataBean.I002Bean unReadMessage) {
         if (unReadMessage == null)
             return;
@@ -420,6 +584,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
      */
     private boolean isFinish;
 
+    @SuppressLint("SetTextI18n")
     public void setPerformanceStatus(HomePageResponse.DataBean.H001Bean performanceStatusResponse) {
 
         tvExamName.setText(performanceStatusResponse.getEXAM_NAME());
@@ -480,6 +645,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
      *
      * @param response 指标异常响应数据
      */
+    @SuppressLint("SetTextI18n")
     public void setTargetExceptionData(HomePageResponse.DataBean.H003Bean response) {
 
 
@@ -590,6 +756,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void setNewsData(List<HomePageResponse.DataBean.I006Bean.PAGEBean> list) {
 
         RequestOptions options = new RequestOptions()

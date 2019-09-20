@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <RelativeLayout
-        android:layout_marginTop="50dp"
-        android:background="@color/no_network_bg"
+        android:layout_marginTop="20dp"
+        android:background="@color/text_blue"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <TextView
