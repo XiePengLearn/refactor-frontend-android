@@ -3,7 +3,9 @@ package com.sxjs.jd.composition.main.home;
 import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.HomePageResponse;
+import com.sxjs.jd.entities.PolicyElucidationResponse;
 import com.sxjs.jd.entities.RegisterCodeResponse;
+import com.sxjs.jd.entities.UserResearchResponse;
 
 import java.util.Map;
 
@@ -19,6 +21,8 @@ public interface HomePageContract {
 
         void setResponseData(HomePageResponse homePageResponse);
         void setResponseUpdateData(AppUpdateResponse appUpdateResponse);
+        void setResponsePolicyElucidationData(PolicyElucidationResponse policyElucidationResponse);
+        void setUserResearchData(UserResearchResponse userResearchResponse);
 
         void showProgressDialogView();
 
@@ -36,6 +40,8 @@ public interface HomePageContract {
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
         void getRequestUpdateData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getRequestPolicyElucidationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getUserResearchData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }

@@ -103,7 +103,7 @@ public class MainDataManager extends BaseDataManager {
      * @param consumer      consumer
      * @return Disposable
      */
-    public Disposable getRegisretData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+    public Disposable getRegisterData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
 
@@ -161,6 +161,34 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getAppUpdateData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + GENERAL_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
+     * 获取政策解读数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getPolicyElucidationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
+     * 获取用户调研数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getUserResearchData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
 
     }
     /**
@@ -242,6 +270,21 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getExamMiddleKpiReportData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + MIDDLE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+
+    /**
+     * 获取国考快讯新闻列表模块数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getNationExamNewsItemData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + MESSAGE_DIR, mapParameters, mapHeaders), consumer);
 
     }
 

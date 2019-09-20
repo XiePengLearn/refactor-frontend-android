@@ -3,6 +3,7 @@ package com.sxjs.jd.composition.html.messagedetails;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -22,6 +23,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MessageWebViewActivity extends BaseActivity {
 
@@ -62,10 +64,10 @@ public class MessageWebViewActivity extends BaseActivity {
         mIntent = getIntent();
         mWebUrl = mIntent.getStringExtra("url");
 
-        LogUtil.e(TAG,"========mWebUrl========="+mWebUrl);
-        if(TextUtils.isEmpty(mWebUrl)||!mWebUrl.startsWith("http")){
+        LogUtil.e(TAG, "========mWebUrl=========" + mWebUrl);
+        if (TextUtils.isEmpty(mWebUrl) || !mWebUrl.startsWith("http")) {
             webView.setVisibility(View.GONE);
-        }else {
+        } else {
             webView.setVisibility(View.VISIBLE);
         }
         mTitle = mIntent.getStringExtra("title");
@@ -95,6 +97,20 @@ public class MessageWebViewActivity extends BaseActivity {
 
     }
 
+    @OnClick(R2.id.jkx_title_left)
+    public void onViewClicked() {
+        goBack();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_UP
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            goBack();
+        }
+        return false;
+    }
+
     class MyWebChromClient extends WebChromeClient {
 
         @Override
@@ -114,14 +130,13 @@ public class MessageWebViewActivity extends BaseActivity {
             if (title.contains("404")) {
                 webView.setVisibility(View.GONE);
             } else {
-//                jkxTitleCenter.setText(title);
+                webView.setVisibility(View.VISIBLE);
             }
         }
     }
 
     @Override
     protected void onDestroy() {
-
 
 
         try {
@@ -135,13 +150,13 @@ public class MessageWebViewActivity extends BaseActivity {
                 webView.destroy();
                 webView = null;
 
-//                webView.stopLoading();
-//                webView.removeAllViewsInLayout();
-//                webView.removeAllViews();
-//                webView.setWebViewClient(null);
-//                CookieSyncManager.getInstance().stopSync();
-//                webView.destroy();
-//                webView = null;
+                //                webView.stopLoading();
+                //                webView.removeAllViewsInLayout();
+                //                webView.removeAllViews();
+                //                webView.setWebViewClient(null);
+                //                CookieSyncManager.getInstance().stopSync();
+                //                webView.destroy();
+                //                webView = null;
             }
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -150,4 +165,10 @@ public class MessageWebViewActivity extends BaseActivity {
         }
     }
 
+    public void goBack() {
+        if (webView.canGoBack())
+            webView.goBack();
+        else
+            finish();
+    }
 }

@@ -42,7 +42,7 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     JDHeaderView findPullRefreshHeader;
     private Handler mHandler;
 
-    private static final String TAG = "MessageActivity";
+    private static final String TAG = "NationExamActivity";
     private              String mSession_id;
 
 //    @Nullable

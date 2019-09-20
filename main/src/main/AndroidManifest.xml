@@ -46,7 +46,9 @@
             android:name=".composition.html.messagedetails.MessageWebViewActivity"
             android:screenOrientation="portrait" />
 
-
+        <activity
+            android:name=".composition.nationexam.NationExamActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".composition.html.homeweb.HomeWebActivity"
             android:screenOrientation="portrait" /> <!-- 配置APP ID -->

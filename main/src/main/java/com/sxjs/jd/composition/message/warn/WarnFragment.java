@@ -52,7 +52,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     RecyclerView findRecyclerview;
     private Handler mHandler;
 
-    private static final String                      TAG = "MessageActivity";
+    private static final String                      TAG = "NationExamActivity";
     private              String                      mSession_id;
     private              MessageNotificationResponse messageNotificationResponse;
     private              Dialog                      dialog;

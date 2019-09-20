@@ -73,7 +73,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
 
 
     private              String        mXinGeToken;
-    private static final String        TAG = "MessageActivity";
+    private static final String        TAG = "NationExamActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
 

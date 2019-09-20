@@ -42,9 +42,13 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.html.homeweb.HomeWebActivity;
 import com.sxjs.jd.composition.html.homeweb.HomeWebViewActivity;
+import com.sxjs.jd.composition.html.messagedetails.MessageWebViewActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
+import com.sxjs.jd.composition.nationexam.NationExamActivity;
 import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.HomePageResponse;
+import com.sxjs.jd.entities.PolicyElucidationResponse;
+import com.sxjs.jd.entities.UserResearchResponse;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
@@ -181,6 +185,8 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     private              HomePageResponse                   homePageResponse;
     private              HomePageResponse.DataBean.I002Bean i002;
     private              AppUpdateResponse                  appUpdateResponse;
+    private              PolicyElucidationResponse          policyElucidationResponse;
+    private              UserResearchResponse               userResearchResponse;
 
     //    @Nullable
     //    @Override
@@ -206,8 +212,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
         initTitle();
         initView();
+        //初始化首页数据
         initData();
+
+        //初始化用户更新数据
         initUpdateData();
+
+        //初始化用户调研数据
+        initUserResearchData();
     }
 
     @Override
@@ -304,6 +316,32 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
     }
 
+    public void initPolicyElucidationData() {
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "I007");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getRequestPolicyElucidationData(mapHeaders, mapParameters);
+
+
+    }
+    public void initUserResearchData() {
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "S013");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getUserResearchData(mapHeaders, mapParameters);
+
+
+    }
     @Override
     public void setResponseData(HomePageResponse homePageResponse) {
 
@@ -381,6 +419,109 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 //                finish();
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext, "解析数据失败:");
+            LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setResponsePolicyElucidationData(PolicyElucidationResponse policyElucidationResponse) {
+        this.policyElucidationResponse = policyElucidationResponse;
+
+        try {
+            String code = policyElucidationResponse.getCode();
+            String msg = policyElucidationResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                String session_id = PrefUtils.readSESSION_ID(mContext);
+                List<PolicyElucidationResponse.DataBean> data = policyElucidationResponse.getData();
+                if (data != null) {
+                    if (data.size() > 0) {
+                        String policyUri = data.get(0).getURI();
+                        String url;
+                        if (!TextUtils.isEmpty(policyUri)) {
+                            url = policyUri;
+                        } else {
+                            url = "";
+                        }
+
+                        Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+                        intent.putExtra("title", "详情");
+                        intent.putExtra("url", url);
+                        mActivity.startActivity(intent);
+                    } else {
+                        ToastUtil.showToast(mContext.getApplicationContext(), "暂无数据");
+                    }
+                } else {
+                    ToastUtil.showToast(mContext.getApplicationContext(), "暂无数据");
+                }
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext, "解析数据失败:");
+            LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setUserResearchData(UserResearchResponse userResearchResponse) {
+        this.userResearchResponse = userResearchResponse;
+
+        try {
+            String code = userResearchResponse.getCode();
+            String msg = userResearchResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                String session_id = PrefUtils.readSESSION_ID(mContext);
+                UserResearchResponse.DataBean data = userResearchResponse.getData();
+
+                if (data != null) {
+
+                    String userResearchUrl = data.getSURVEY_ADDRESS();
+                    String survey_id = data.getSURVEY_ID();
+                    if (survey_id.equals("1")) {
+                        String url;
+                        if (!TextUtils.isEmpty(userResearchUrl)) {
+                            url = userResearchUrl + "&sessionId=" + session_id;
+                        } else {
+                            url = "";
+                        }
+
+                        Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+                        intent.putExtra("title", "详情");
+                        intent.putExtra("url", url);
+                        mActivity.startActivity(intent);
+                    }
+
+
+                } else {
+                    ToastUtil.showToast(mContext.getApplicationContext(), "暂无数据");
+                }
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
                 //SESSION_ID为空别的页面 要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
@@ -892,13 +1033,20 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         } else if (i == R.id.zhibiao_check) {
 
         } else if (i == R.id.zcjd) {
-
+            //政策解读
+            initPolicyElucidationData();
         } else if (i == R.id.tv_news_more) {
 
+            //国考快讯更多
+            mIntent = new Intent(mActivity, NationExamActivity.class);
+
+
+            startActivity(mIntent);
         } else if (i == R.id.ll_newsItem) {
 
         } else if (i == R.id.ll_newsItem1) {
 
         }
+
     }
 }

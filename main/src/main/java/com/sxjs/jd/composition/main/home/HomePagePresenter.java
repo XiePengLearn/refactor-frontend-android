@@ -8,6 +8,8 @@ import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.HomePageResponse;
+import com.sxjs.jd.entities.PolicyElucidationResponse;
+import com.sxjs.jd.entities.UserResearchResponse;
 
 import java.util.Map;
 
@@ -103,6 +105,82 @@ public class HomePagePresenter extends BasePresenter implements HomePageContract
                     AppUpdateResponse appUpdateResponse = gson.fromJson(response, AppUpdateResponse.class);
 
                     mContractView.setResponseUpdateData(appUpdateResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getRequestPolicyElucidationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getPolicyElucidationData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    PolicyElucidationResponse policyElucidationResponse = gson.fromJson(response, PolicyElucidationResponse.class);
+
+                    mContractView.setResponsePolicyElucidationData(policyElucidationResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getUserResearchData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getUserResearchData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    UserResearchResponse userResearchResponse = gson.fromJson(response, UserResearchResponse.class);
+
+                    mContractView.setUserResearchData(userResearchResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

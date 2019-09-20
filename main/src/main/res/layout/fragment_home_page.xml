@@ -511,11 +511,12 @@
 
                     <TextView
                         android:id="@+id/tv_news_more"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/x80"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/x5"
+                        android:layout_marginEnd="@dimen/x5"
+                        android:gravity="right"
                         android:text="更多"
                         android:textColor="#087AE7"
                         android:textSize="@dimen/x13" />

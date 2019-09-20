@@ -53,7 +53,7 @@ public class RegisterPresenter extends BasePresenter implements RegisterContract
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mLoginView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getRegisretData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getRegisterData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {

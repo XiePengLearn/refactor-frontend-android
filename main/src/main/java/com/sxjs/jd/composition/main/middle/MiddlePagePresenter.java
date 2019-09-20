@@ -137,7 +137,7 @@ public class MiddlePagePresenter extends BasePresenter implements MiddlePageCont
     public void getExamMiddleKpiReportData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getExamMiddleData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getExamMiddleKpiReportData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {

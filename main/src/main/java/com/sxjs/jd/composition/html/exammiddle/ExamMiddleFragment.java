@@ -144,4 +144,6 @@ public class ExamMiddleFragment extends BaseFragment {
             super.onDestroyView();
         }
     }
+
+
 }

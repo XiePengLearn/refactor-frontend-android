@@ -64,7 +64,7 @@ public class HomeWebActivity extends BaseActivity implements HomeWebContract.Vie
 
 
     private              String        mXinGeToken;
-    private static final String        TAG = "MessageActivity";
+    private static final String        TAG = "NationExamActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
     private Intent mIntent;

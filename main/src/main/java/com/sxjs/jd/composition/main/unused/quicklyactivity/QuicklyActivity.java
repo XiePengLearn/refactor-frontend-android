@@ -48,7 +48,7 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
 
 
     private              String        mXinGeToken;
-    private static final String        TAG                   = "MessageActivity";
+    private static final String        TAG                   = "NationExamActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
 
