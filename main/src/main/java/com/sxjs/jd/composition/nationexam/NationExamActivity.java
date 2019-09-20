@@ -24,9 +24,11 @@ import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.html.exammiddle.ExamMiddleFragment;
+import com.sxjs.jd.composition.main.unused.findfragment.FindFragment;
 import com.sxjs.jd.composition.message.attention.AttentionFragment;
 import com.sxjs.jd.composition.message.notification.NotificationFragment;
 import com.sxjs.jd.composition.message.warn.WarnFragment;
+import com.sxjs.jd.composition.nationexam.DetailsPage.NewsItemDetailsFragment;
 import com.sxjs.jd.entities.NewsItemListResponse;
 
 import java.util.ArrayList;
@@ -106,13 +108,14 @@ public class NationExamActivity extends BaseActivity implements NationExamContra
         fragments.clear();
 
         for (int i = 0; i < mTabTitle.size(); i++) {
-            ExamMiddleFragment examMiddleFragment = ExamMiddleFragment.newInstance(mTabId.get(i));
+            NewsItemDetailsFragment examMiddleFragment = NewsItemDetailsFragment.newInstance(mTabId.get(i));
+//            FindFragment examMiddleFragment = FindFragment.newInstance();
             fragments.add(examMiddleFragment);
         }
 
         adapter = new NationExamAdapter(getSupportFragmentManager(), fragments, mTabTitle);
         jkxViewpage.setAdapter(adapter);
-        jkxViewpage.setOffscreenPageLimit(2);
+        jkxViewpage.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(jkxViewpage);
     }
 

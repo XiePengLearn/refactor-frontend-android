@@ -12,19 +12,19 @@ import dagger.Provides;
  */
 
 @Module
-public class NotificationFragmentModule {
+public class NewsItemDetailsFragmentModule {
 
-    private NotificationFragmentContract.View view;
+    private NewsItemDetailsFragmentContract.View view;
 
     private MainDataManager mainDataManager;
 
-    public NotificationFragmentModule(NotificationFragmentContract.View  view, MainDataManager mainDataManager) {
+    public NewsItemDetailsFragmentModule(NewsItemDetailsFragmentContract.View  view, MainDataManager mainDataManager) {
         this.view = view;
         this.mainDataManager = mainDataManager;
     }
 
     @Provides
-    NotificationFragmentContract.View providerMainContractView(){
+    NewsItemDetailsFragmentContract.View providerMainContractView(){
         return view;
     }
 

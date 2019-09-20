@@ -6,6 +6,7 @@ import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.MessageNotificationResponse;
+import com.sxjs.jd.entities.NewsListResponse;
 
 import java.util.Map;
 
@@ -19,14 +20,14 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/15 16:53
  * @Description:
  */
-public class NotificationFragmentPresenter extends BasePresenter implements NotificationFragmentContract.Presenter {
+public class NewsItemDetailsFragmentPresenter extends BasePresenter implements NewsItemDetailsFragmentContract.Presenter {
 
     private MainDataManager mDataManager;
 
-    private NotificationFragmentContract.View mContractView;
-    private static  final String              TAG = "MiddlePagePresenter";
+    private NewsItemDetailsFragmentContract.View mContractView;
+    private static  final String                 TAG = "MiddlePagePresenter";
     @Inject
-    public NotificationFragmentPresenter(MainDataManager mDataManager, NotificationFragmentContract.View view) {
+    public NewsItemDetailsFragmentPresenter(MainDataManager mDataManager, NewsItemDetailsFragmentContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -53,7 +54,7 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getNewsItemPageDetailsData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
 
@@ -61,9 +62,9 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
+                    NewsListResponse newsListResponse = gson.fromJson(response, NewsListResponse.class);
 
-                    mContractView.setResponseData(messageNitificationResponse);
+                    mContractView.setResponseData(newsListResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -92,7 +93,7 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
     public void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getNationExamNewsListData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
 
@@ -100,9 +101,9 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
+                    NewsListResponse newsListResponse = gson.fromJson(response, NewsListResponse.class);
 
-                    mContractView.setMoreData(messageNitificationResponse);
+                    mContractView.setMoreData(newsListResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

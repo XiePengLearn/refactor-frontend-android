@@ -329,6 +329,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
 
     }
+
     public void initUserResearchData() {
         String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
@@ -342,6 +343,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
 
     }
+
     @Override
     public void setResponseData(HomePageResponse homePageResponse) {
 
@@ -1043,9 +1045,23 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
             startActivity(mIntent);
         } else if (i == R.id.ll_newsItem) {
+            String itemUrl = llNewsItem.getTag().toString();
+
+
+            Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+            intent.putExtra("title", "详情");
+            intent.putExtra("url", itemUrl);
+            mActivity.startActivity(intent);
+
 
         } else if (i == R.id.ll_newsItem1) {
+            String itemUrl1 = llNewsItem1.getTag().toString();
 
+
+            Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+            intent.putExtra("title", "详情");
+            intent.putExtra("url", itemUrl1);
+            mActivity.startActivity(intent);
         }
 
     }

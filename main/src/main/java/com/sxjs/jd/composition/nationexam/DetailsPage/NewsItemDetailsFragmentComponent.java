@@ -12,7 +12,7 @@ import dagger.Component;
  */
 
 @PerFragment
-@Component(dependencies = AppComponent.class , modules = NotificationFragmentModule.class)
-public interface NotificationFragmentComponent {
-    void inject(NotificationFragment fragment);
+@Component(dependencies = AppComponent.class , modules = NewsItemDetailsFragmentModule.class)
+public interface NewsItemDetailsFragmentComponent {
+    void inject(NewsItemDetailsFragment fragment);
 }

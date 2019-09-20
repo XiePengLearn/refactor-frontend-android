@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.nationexam.DetailsPage;
 
 import com.sxjs.jd.entities.MessageNotificationResponse;
+import com.sxjs.jd.entities.NewsListResponse;
 
 import java.util.Map;
 
@@ -9,17 +10,17 @@ import java.util.Map;
  * @Date: 2019/9/15 16:36
  * @Description:
  */
-public interface NotificationFragmentContract {
+public interface NewsItemDetailsFragmentContract {
 
     interface View {
 
 
-        void setResponseData(MessageNotificationResponse messageNotificationResponse);
+        void setResponseData(NewsListResponse newsListResponse);
 
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
-        void setMoreData(MessageNotificationResponse messageNotificationResponse);
+        void setMoreData(NewsListResponse newsListResponse);
     }
 
     interface Presenter {
