@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.Map;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

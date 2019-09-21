@@ -1,1 +1,1 @@
-include ':main', ':common', ':testmodule', ':app_common', ':app', ':banner', ':tablayout'
+include ':main', ':common', ':testmodule', ':app_common', ':app', ':banner', ':tablayout', ':addressSelectlib'

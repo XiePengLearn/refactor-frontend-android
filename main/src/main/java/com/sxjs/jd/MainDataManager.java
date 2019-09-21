@@ -19,7 +19,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
+import retrofit2.http.HeaderMap;
 
 /**
  * @author：xiepeng on 2018/4/20 18:26.
@@ -71,7 +73,27 @@ public class MainDataManager extends BaseDataManager {
 
         return changeIOToMainThread(getService(MainApiService.class).login(mobile, verifyCode), consumer);
     }
+    /* List<MultipartBody.Part> partList
+     *验证短信验证码注册/登陆 （只做示例，无数据返回）
+     */
+    public Disposable loadImage( Map<String, String> headers, List<MultipartBody.Part> partList, DisposableObserver<ResponseBody> consumer) {
 
+        return changeIOToMainThread(getService(MainApiService.class).saveThePictureMsg
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE,headers,partList), consumer);
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getUploadImageToOssData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + GENERAL_DIR, mapParameters, mapHeaders), consumer);
+    }
 
     public Disposable getMainData(int start, int count, DisposableObserver<ResponseBody> consumer) {
         Map<String, Object> map = new HashMap<>(2);
@@ -347,10 +369,18 @@ public class MainDataManager extends BaseDataManager {
 
 
 
-
-
-
-
+    /**
+     * 上传用户认证信息
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getUploadAuthenticationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
+    }
 
 
 

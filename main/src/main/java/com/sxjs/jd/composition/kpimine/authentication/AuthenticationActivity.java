@@ -1,14 +1,10 @@
 package com.sxjs.jd.composition.kpimine.authentication;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,8 +26,11 @@ import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.sxjs.common.apiservice.RetrofitService;
+import com.sxjs.common.apiservice.RetrofitServiceUtil;
 import com.sxjs.common.base.BaseActivity;
 import com.sxjs.common.constant.Constant;
+import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.PermissionHelper;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
@@ -42,10 +41,18 @@ import com.sxjs.common.view.SelectPicPopupWindow;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.entities.AuthenticationDataResponse;
+import com.sxjs.jd.entities.JkxAcContainerRequest;
+import com.sxjs.jd.entities.JkxAcContainerRes;
+import com.sxjs.jd.entities.JkxAcContainerResList;
+import com.sxjs.jd.entities.JkxAlreadySelectedQRRes;
+import com.sxjs.jd.entities.UploadImageResponse;
 import com.sxjs.jd.entities.UserAuthenticationResponse;
-import com.yalantis.ucrop.UCrop;
+
+import org.reactivestreams.Subscriber;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +63,20 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import chihane.jdaddressselector.BottomDialog;
+import chihane.jdaddressselector.DataProvider;
+import chihane.jdaddressselector.GetDataListener;
+import chihane.jdaddressselector.ISelectAble;
+import chihane.jdaddressselector.SelectedListener;
+import chihane.jdaddressselector.Selector;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
 /**
  * @author xiepeng
@@ -115,8 +136,16 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     private List<LocalMedia>           selectListTemp;    //该数组是为存储选中的图片而临时存在
     private int                        SelectedIndex = 0;    //标识当前选中的是哪个证件
 
-    public static final int TAKE_ALBUM   = 16; // 相册
-    public static final int TAKE_PICTURE = 3; // 拍照
+    public static final int                                TAKE_ALBUM         = 16; // 相册
+    public static final int                                TAKE_PICTURE       = 3; // 拍照
+    private             chihane.jdaddressselector.Selector selector;                     //区划选择控件
+    private             BottomDialog                       dialog;
+    private             ArrayList<JkxAcContainerRes>       acContainerReslist;               //每次根据区划id获取的区划数据
+    private             ArrayList<JkxAlreadySelectedQRRes> alreadySelectArray = null; //在编辑页获取的已选区划
+
+    private boolean                    qrEditFlag = false;                                   //弹出区划选择时判断是来自编辑还是重新选择
+    private UploadImageResponse        uploadImageResponse;
+    private AuthenticationDataResponse authenticationDataResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,6 +158,180 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         initTitle();
         initView();
         initData();
+        showDialog();
+    }
+
+    public void uploadImage(List<LocalMedia> localMediaList) {
+        //localMediaList 索引对应图片  0 身份证正面  1 身份证反面 2 职业医师证,3拍摄工作证或者胸卡
+
+        String compressPath = localMediaList.get(0).getCompressPath();
+        File file = new File(compressPath);
+
+        LogUtil.e(TAG,"=====compressPath======"+compressPath);
+//        LogUtil.e(TAG,"=====File======"+file.s);
+        LogUtil.e("compress image result:", new File(compressPath).length() / 1024 + "k");
+//        initUploadImageDate(file);
+//        uploadImage(file);
+        upload_avatar(file);
+//                if (localMediaList.size() > 0) {
+//                    JkxImageRequest imageRequest = new JkxImageRequest();
+//                    MyTask task = TaskManager.getInstace(getContext())
+//                            .uploadImage(getCallBackInstance(), imageRequest, getFile(localMediaList.get(0).getCompressPath()));
+//                    setClassT(JkxImageResponse.class);
+//                    excuteNetTask(task, false);
+//                    localMediaList.remove(0);
+//                } else {
+//                    JkxUserAuthenticationResquest resquest = ((JkxUserAuthenticationView) mModel).saveUserAuthentication();
+//                    String json = new Gson().toJson(imgUriList);
+//                    resquest.setDOCUMENT_URI(json);
+//                    MyTask task = TaskManager.getInstace(getContext())
+//                            .commitUserAuthentication(getCallBackInstance(), resquest);
+//                    excuteNetTask(task, false);
+//                    imgUriList.clear();
+//
+//                }
+    }
+
+    //    private UpLoadFile getFile(String path) {
+    //
+    //        UpLoadFile file = new UpLoadFile();
+    //
+    //        ArrayList<NameValuePair> paths = new ArrayList<>();
+    //
+    //        //        byte[] b = FileUtils.compressImage(this.bitmap);
+    //        //        String ImageName = "image";
+    //        //        FileUtils.saveBitmap(b, ImageName);
+    //        paths.add(new BasicNameValuePair("IMAGE", path));
+    //        file.setmUpLoadPath(paths);
+    //        return file;
+    //    }
+    private void showDialog() {
+        if (selector == null) {
+            selector = new Selector(mContext, 7);
+            selector.setOnGetDataListener(new GetDataListener() {
+                @Override
+                public void onGetDataListen(String id) {
+                    if ("".equals(id)) {
+
+                    } else {
+
+                    }
+                    JkxAcContainerRequest acContainerRequest = new JkxAcContainerRequest();
+                    acContainerRequest.setID(id);
+                    setACContainerData(null);
+                    //mEventCallBack.EventClick(JkxUserAuthenticationFragment.EVENT_GET_AC_CONTAINER_DATA,
+                    //      acContainerRequest);
+                }
+            });
+            selector.setDataProvider(new DataProvider() {
+                @Override
+                public void provideData(int currentDeep, int preId, DataReceiver receiver) {
+                    //根据tab的深度和前一项选择的id，获取下一级菜单项
+                    receiver.send(getDatas());
+                }
+            });
+            selector.setSelectedListener(new SelectedListener() {
+                @Override
+                public void onAddressSelected(ArrayList<ISelectAble> selectAbles) {
+                    String result = "";
+                    for (ISelectAble selectAble : selectAbles) {
+                        result += selectAble.getName() + " ";
+                    }
+                    selectedQrID = selectAbles.get(selectAbles.size() - 1).getId();
+                    qrName.setText(selectAbles.get(selectAbles.size() - 1).getName());
+                    if (!qrEditFlag) {
+                        dialog.dismiss();
+                    } else {
+                        qrEditFlag = false;
+                        alreadySelectArray = null;
+                    }
+                }
+
+                @Override
+                public void closeDialog() {
+                    dialog.dismiss();
+                }
+            });
+
+        }
+
+
+        if (dialog == null) {
+            dialog = new BottomDialog(AuthenticationActivity.this);
+            dialog.init(AuthenticationActivity.this, selector);
+        }
+        //dialog.show();
+    }
+
+    private ArrayList<ISelectAble> getDatas() {
+        if (acContainerReslist == null) {
+            acContainerReslist = new ArrayList<JkxAcContainerRes>();
+            acContainerReslist.clear();
+        }
+        ArrayList<ISelectAble> data = new ArrayList<>(acContainerReslist.size());
+
+        for (int j = 0; j < acContainerReslist.size(); j++) {
+            final JkxAcContainerRes acContainerRes = acContainerReslist.get(j);
+            data.add(new ISelectAble() {
+                @Override
+                public String getName() {
+                    return acContainerRes.getNAME();
+                }
+
+                @Override
+                public String getId() {
+                    return acContainerRes.getID();
+                }
+
+                @Override
+                public Object getArg() {
+                    return this;
+                }
+            });
+        }
+        return data;
+    }
+
+    public void setACContainerData(JkxAcContainerResList list) {
+
+        if (list == null) {
+            list = new JkxAcContainerResList();
+        }
+        ArrayList<JkxAcContainerRes> page = new ArrayList<>();
+        page.clear();
+        String[] areaArray = mContext.getResources().getStringArray(R.array.area_name_array);
+        for (int i = 0; i < areaArray.length; i++) {
+            String[] value = areaArray[i].split("_");
+            JkxAcContainerRes acContainerRes = new JkxAcContainerRes();
+            acContainerRes.setID(value[1]);
+            acContainerRes.setNAME(value[0]);
+            page.add(acContainerRes);
+        }
+
+        list.setPAGE(page);
+        if (acContainerReslist == null) {
+            acContainerReslist = new ArrayList<JkxAcContainerRes>();
+            acContainerReslist.clear();
+            if ((list != null) && (list.getPAGE() != null)) {
+                acContainerReslist.addAll(list.getPAGE());
+            }
+        } else {
+            acContainerReslist.clear();
+        }
+
+        selector.getNextData(0);
+        if ((alreadySelectArray != null) && (alreadySelectArray.size() > 0)) {
+            qrEditFlag = true;
+            for (int j = 0; j < alreadySelectArray.size(); j++) {
+                for (int i = 0; i < acContainerReslist.size(); i++) {
+                    if ((alreadySelectArray.get(j).getID()).equals(acContainerReslist.get(i).getID())) {
+                        selector.SimulateonItemClick(i);
+                    }
+                }
+            }
+        } else {
+
+        }
     }
 
     private void initView() {
@@ -239,6 +442,154 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         mPresenter.getRequestData(mapHeaders, mapParameters);
     }
 
+    private void initUploadImageDate(File file) {
+
+        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(2);
+        mapParameters.put("IMAGE", file);
+        mapParameters.put("IMAGE_TYPE", "JPEG");
+        Map<String, String> mapHeaders = new HashMap<>(4);
+        mapHeaders.put("ACTION", "CM003");
+        mapHeaders.put("SESSION_ID", mSession_id);
+        mapHeaders.put("Content-Type", "multipart/form-data;charset=UTF-8");
+//        mapHeaders.put("multipart", "form-data");
+//        mapHeaders.put("charset", "UTF-8");
+
+        mPresenter.getUploadImageToOssData(mapHeaders, mapParameters);
+    }
+
+
+    private void uploadImage(File file_name) {
+
+        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+//        Map<String, Object> mapParameters = new HashMap<>(2);
+//        mapParameters.put("IMAGE", file_name);
+//        mapParameters.put("IMAGE_TYPE", "JPEG");
+        Map<String, String> mapHeaders = new HashMap<>(4);
+
+
+        mapHeaders.put("ACTION", "CM003");
+        mapHeaders.put("SESSION_ID", mSession_id);
+//        mapHeaders.put("Content-Type", "multipart/form-data;charset=UTF-8");
+        //        mapHeaders.put("multipart", "form-data");
+        //        mapHeaders.put("charset", "UTF-8");
+
+
+
+        //1.创建MultipartBody.Builder对象
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM);
+
+        //2.获取图片，创建请求体
+                RequestBody body=RequestBody.create(MediaType.parse("multipart/form-data"),file_name);//表单类型
+//        RequestBody body=RequestBody.create(MediaType.parse("image/"+"multipart"),file_name);//表单类型
+
+        //3.调用MultipartBody.Builder的addFormDataPart()方法添加表单数据
+        builder.addFormDataPart("IMAGE",file_name.getName(),body); //添加图片数据，body创建的请求体
+        builder.addFormDataPart("IMAGE_TYPE", "jpg");//传入服务器需要的key，和相应value值
+
+        //4.创建List<MultipartBody.Part> 集合，
+        //  调用MultipartBody.Builder的build()方法会返回一个新创建的MultipartBody
+        //  再调用MultipartBody的parts()方法返回MultipartBody.Part集合
+        List<MultipartBody.Part> parts = builder.build().parts();
+
+        mPresenter.getUploadImage(mapHeaders, parts);
+
+
+
+
+
+
+//        //5.最后进行HTTP请求，传入parts即可
+//        ApiService apiService = RetrofitUtils.getInstence().getAService();
+//        apiService.saveThePictureMsg(parts)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Action1<SaveThePictureBean>() {
+//                    @Override
+//                    public void call(SaveThePictureBean saveThePictureBean) {
+//                        view.showPhotoMsg(saveThePictureBean);
+//                    }
+//                }, new Action1<Throwable>() {
+//                    @Override
+//                    public void call(Throwable throwable) {
+//                        view.throwable(throwable.toString());
+//                    }
+//                });
+
+
+
+    }
+
+
+    //上传图片(方法一)
+    private void upload_avatar(File file_name) {
+        RetrofitService retrofitService = RetrofitServiceUtil.getRetrofitService();
+        RequestBody params = RequestBody.create(MediaType.parse("IMAGE_TYPE"), "png");
+        final RequestBody requestBody = RequestBody.create(MediaType.parse("image/png/jpg; charset=utf-8"), file_name);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("headimgurl", "avatar", requestBody);
+        retrofitService.upload_avatar(part, params)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+                        Toast.makeText(AuthenticationActivity.this, "上传完成", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+
+
+//        new Subscriber<ResponseBody>() {
+//            @Override
+//            public void onCompleted() {
+//                Toast.makeText(SingleUploadActivity.this, "上传完成", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.e("111", "error =" + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onNext(ResponseBody responseBody) {
+//                try {
+//                    Log.e("111", "result =" + responseBody.string());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+    }
+    private void initUploadAuthenticationData() {
+
+        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("ACTION", "I002");
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "S010");
+        mapHeaders.put("SESSION_ID", mSession_id);
+
+        mPresenter.getAuthenticationData(mapHeaders, mapParameters);
+    }
+
+
+
     /**
      * 初始化title
      */
@@ -264,6 +615,62 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
             if (code.equals(ResponseCode.SUCCESS_OK)) {
 
                 setUserAuthentication(userAuthenticationResponse);
+
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setUploadImageToOssData(UploadImageResponse uploadImageResponse) {
+        this.uploadImageResponse = uploadImageResponse;
+        try {
+            String code = uploadImageResponse.getCode();
+            String msg = uploadImageResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+                //                setUserAuthentication(uploadImageResponse);
+
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+                finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
+            }
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setUploadImage(UploadImageResponse uploadImageResponse) {
+
+
+    }
+
+    @Override
+    public void setAuthenticationData(AuthenticationDataResponse authenticationDataResponse) {
+        this.authenticationDataResponse = authenticationDataResponse;
+        try {
+            String code = authenticationDataResponse.getCode();
+            String msg = authenticationDataResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+                //                setUserAuthentication(userAuthenticationResponse);
 
 
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
@@ -383,7 +790,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         } else if (i == R.id.qr_name) {
 
             //省市
-
+            dialog.show();
 
         } else if (i == R.id.tv_commit) {
 
@@ -392,43 +799,43 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     }
 
     private void commitToServer() {
-        if ("".equals(etName.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
-            return;
-        }
-        if ("".equals(etHospitalName.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入医院", Toast.LENGTH_SHORT);
-            return;
-        }
-        if ("".equals(etResign.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入职务", Toast.LENGTH_SHORT);
-            return;
-        }
-        if ("".equals(etDepartment.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入科室", Toast.LENGTH_SHORT);
-            return;
-        }
-        if ("".equals(etWorkTel.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入单位电话", Toast.LENGTH_SHORT);
-            return;
-        }
-        if ("".equals(selectedQrID)) {
-            ToastUtil.showToast(mContext, "请选择地区", Toast.LENGTH_SHORT);
-            return;
-        }
-        boolean picInfoFinish = true;
-        for (int i = 0; i < 4; i++) {
-            if (flowlayout.getChildAt(i).findViewById(R.id.dest_img_layout).getVisibility() != View.VISIBLE) {
-                picInfoFinish = false;
-                ToastUtil.showToast(mContext, "请将证件信息上传完整", Toast.LENGTH_SHORT);
-                break;
-            }
-        }
-        if (!picInfoFinish) {
-            return;
-        }
+//        if ("".equals(etName.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if ("".equals(etHospitalName.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入医院", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if ("".equals(etResign.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入职务", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if ("".equals(etDepartment.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入科室", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if ("".equals(etWorkTel.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入单位电话", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        if ("".equals(selectedQrID)) {
+//            ToastUtil.showToast(mContext, "请选择地区", Toast.LENGTH_SHORT);
+//            return;
+//        }
+//        boolean picInfoFinish = true;
+//        for (int i = 0; i < 4; i++) {
+//            if (flowlayout.getChildAt(i).findViewById(R.id.dest_img_layout).getVisibility() != View.VISIBLE) {
+//                picInfoFinish = false;
+//                ToastUtil.showToast(mContext, "请将证件信息上传完整", Toast.LENGTH_SHORT);
+//                break;
+//            }
+//        }
+//        if (!picInfoFinish) {
+//            return;
+//        }
 
-
+        uploadImage(selectListTemp);
     }
 
 

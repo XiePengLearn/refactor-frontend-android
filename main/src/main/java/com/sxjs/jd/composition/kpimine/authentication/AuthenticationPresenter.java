@@ -5,14 +5,18 @@ import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
+import com.sxjs.jd.entities.AuthenticationDataResponse;
 import com.sxjs.jd.entities.LoginResponse;
+import com.sxjs.jd.entities.UploadImageResponse;
 import com.sxjs.jd.entities.UserAuthenticationResponse;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 
 /**
@@ -64,6 +68,123 @@ public class AuthenticationPresenter extends BasePresenter implements Authentica
                     UserAuthenticationResponse userAuthenticationResponse = gson.fromJson(response, UserAuthenticationResponse.class);
 
                     mContractView.setResponseData(userAuthenticationResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getUploadImageToOssData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getUploadImageToOssData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    UploadImageResponse uploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
+
+                    mContractView.setUploadImageToOssData(uploadImageResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getUploadImage(Map<String, String> headers, List<MultipartBody.Part> partList) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.loadImage(headers, partList, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    UploadImageResponse uploadImageResponse = gson.fromJson(response, UploadImageResponse.class);
+
+                    mContractView.setUploadImageToOssData(uploadImageResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getAuthenticationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getUploadAuthenticationData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    AuthenticationDataResponse authenticationDataResponse = gson.fromJson(response, AuthenticationDataResponse.class);
+
+                    mContractView.setAuthenticationData(authenticationDataResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

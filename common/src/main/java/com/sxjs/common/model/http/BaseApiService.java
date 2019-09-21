@@ -18,6 +18,7 @@
 package com.sxjs.common.model.http;
 
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -42,7 +43,7 @@ import retrofit2.http.Url;
 
 /**
  * ApiService
- * Created by Tamic on 2016-06-03.
+ *
  */
 public interface BaseApiService {
     @POST()
@@ -58,6 +59,13 @@ public interface BaseApiService {
             @FieldMap Map<String, Object> maps,
             @HeaderMap Map<String, String> headers
     );
+    //上传头像
+    @Multipart
+    @POST()
+    Observable<ResponseBody> saveThePictureMsg(
+            @Url() String url,
+            @HeaderMap Map<String, String> headers,
+            @Part List<MultipartBody.Part> partList);
 
     @POST("{url}")
     Flowable<ResponseBody> executePostBody(
