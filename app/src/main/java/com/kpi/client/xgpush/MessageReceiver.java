@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.sxjs.common.constant.Constant;
+import com.sxjs.common.util.PrefUtils;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushRegisterResult;
@@ -21,11 +22,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
     private void updataSystemMessageCount(Context context, String customContent) {
 
 
-        SharedPreferences sp = context.getApplicationContext().
-                getSharedPreferences(Constant.JIXIAO_AUTHORIZATION, MODE_PRIVATE);
-        SharedPreferences.Editor edit = sp.edit();
-        edit.putString(Constant.JIXIAO_AUTHORIZATION, "1");  //值为1时标识页面刷新来自于推送引起 为0时标识来自普通的activity声明周期引起
-        edit.apply();
+        //值为1时标识页面刷新来自于推送引起 为0时标识来自普通的activity声明周期引起
+        PrefUtils.writeAuthenticationStatus("1",context.getApplicationContext());
         Intent intent = new Intent("com.jkx.message");
         // 消息通知的广播名称
         context.sendBroadcast(intent);

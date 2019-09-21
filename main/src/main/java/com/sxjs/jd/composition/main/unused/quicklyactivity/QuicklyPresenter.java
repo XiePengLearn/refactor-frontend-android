@@ -17,12 +17,12 @@ import okhttp3.ResponseBody;
 /**
  * @Auther: xp
  * @Date: 2019/9/13 22:09
- * @Description:
+ * @Description: AuthenticationPresenter
  */
 public class QuicklyPresenter extends BasePresenter implements QuicklyContract.Presenter {
     private              MainDataManager      mDataManager;
     private              QuicklyContract.View mContractView;
-    private static final String               TAG = "MainPresenter";
+    private static final String               TAG = "AuthenticationPresenter";
 
     @Inject
     public QuicklyPresenter(MainDataManager mDataManager, QuicklyContract.View view) {
@@ -49,7 +49,7 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
     }
 
     @Override
-    public void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
         Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
@@ -62,7 +62,7 @@ public class QuicklyPresenter extends BasePresenter implements QuicklyContract.P
                     Gson gson = new Gson();
                     LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
 
-                    mContractView.setLoginData(loginResponse);
+                    mContractView.setResponseData(loginResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

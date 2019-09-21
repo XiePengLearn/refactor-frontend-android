@@ -1,8 +1,10 @@
 package com.sxjs.jd.composition.main.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +13,30 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.PrefUtils;
+import com.sxjs.common.util.ResponseCode;
+import com.sxjs.common.util.ToastUtil;
 import com.sxjs.common.widget.headerview.JDHeaderView;
 import com.sxjs.common.widget.pulltorefresh.PtrFrameLayout;
 import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpimine.authentication.AuthenticationActivity;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.MessageNotificationResponse;
+import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -31,10 +44,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.sxjs.common.constant.Constant.CONTENT_TITLE;
+
 /**
  * @Auther: xp
- * @Date: 2019/9/15 16:50
- * @Description:
+ * @Date: 2019/9/21 16:50
+ * @Description:  我的模块
  */
 public class MinePageFragment extends BaseFragment implements MinePageContract.View, PtrHandler {
 
@@ -107,19 +122,10 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     TextView          tvLoginOut;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView      findPullRefreshHeader;
-    private Handler mHandler;
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_mine_page, container, false);
-//        unbinder = ButterKnife.bind(this, view);
-//        initView();
-//        initData();
-//
-//        return view;
-//
-//    }
+    private              Handler          mHandler;
+    private static final String           TAG = "MinePageFragment";
+    private              UserInfoResponse userInfoResponse;
+    private final int mRequestCode =1 ;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -130,15 +136,33 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
 
     @Override
     public void initEvent() {
-
+        initTitle();
         initView();
         initData();
 
     }
+
     @Override
     public void onLazyLoad() {
 
     }
+
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        //扫一扫
+        jkxTitleLeftBtn.setVisibility(View.VISIBLE);
+
+        //标题
+        jkxTitleCenter.setText("考中");
+
+        //消息
+        jkxTitleRightBtn.setVisibility(View.VISIBLE);
+
+
+    }
+
     public static MinePageFragment newInstance() {
         return new MinePageFragment();
     }
@@ -163,21 +187,135 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     }
 
     public void initData() {
-        showJDLoadingDialog();
-        //                mPresenter.getFindData();
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("MESSAGE_TYPE", "3");
 
-                hideJDLoadingDialog();
-            }
-        }, 2000);
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "S004");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getRequestData(mapHeaders, mapParameters);
     }
 
 
     @Override
-    public void setResponseData(ForgetPasswordResponse registerResponse) {
+    public void setResponseData(UserInfoResponse userInfoResponse) {
+        this.userInfoResponse = userInfoResponse;
+        try {
+            String code = userInfoResponse.getCode();
+            String msg = userInfoResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+                //初始化 用户信息
+                initUserInfo(userInfoResponse);
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext, msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext, "解析数据失败");
+        }
+    }
+
+    /**
+     * 初始化用户信息
+     */
+    public void initUserInfo(UserInfoResponse userInfoResponse) {
+
+        if (userInfoResponse == null) {
+            ToastUtil.showToast(getActivity(), mActivity.getResources().getString(R.string.init_userdata_failed), Toast.LENGTH_SHORT);
+            return;
+        }
+
+        /**
+         * “NAME”: “姓名”,
+         * 		“HEAD_PORTRAIT”: “头像url”,
+         * 		“AUTHENTICATE_STATUS”: “认证状态”,
+         * 		“VIP_STATUS”: “VIP状态（ 医院）”
+         */
+
+        String name = userInfoResponse.getData().getNAME();
+
+        String head_portrait = userInfoResponse.getData().getHEAD_PORTRAIT();
+        String vip_status = userInfoResponse.getData().getVIP_STATUS();
+        String authenticate_status = userInfoResponse.getData().getAUTHENTICATE_STATUS();
+        if (!TextUtils.isEmpty(name)) {
+            tvName.setText(name);
+        }
+        if (!TextUtils.isEmpty(vip_status)) {
+            if (!"1".equals(vip_status)) {
+                ivIsVip.setVisibility(View.GONE);
+            } else {
+                ivIsVip.setVisibility(View.VISIBLE);
+            }
+        } else {
+            ivIsVip.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(authenticate_status)) {
+            //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
+
+            if ("1".equals(authenticate_status)) {
+
+                //1:认证审核中
+
+                renzhengShenhe.setVisibility(View.VISIBLE);
+
+                renzhengAlready.setVisibility(View.GONE);
+                renzhengNo.setVisibility(View.GONE);
+                renzhengBiangengShenhe.setVisibility(View.GONE);
+            } else if ("0".equals(authenticate_status)) {
+
+                //0:未认证
+
+                renzhengAlready.setVisibility(View.GONE);
+                renzhengNo.setVisibility(View.VISIBLE);
+                renzhengBiangengShenhe.setVisibility(View.GONE);
+                renzhengShenhe.setVisibility(View.GONE);
+            } else if ("2".equals(authenticate_status)) {
+                //2:变更审核中
+
+                renzhengAlready.setVisibility(View.GONE);
+                renzhengNo.setVisibility(View.GONE);
+                renzhengBiangengShenhe.setVisibility(View.VISIBLE);
+                renzhengShenhe.setVisibility(View.GONE);
+            } else {
+                //3:已认证
+
+//                renzhengAlready.setVisibility(View.VISIBLE);
+//                renzhengNo.setVisibility(View.GONE);
+//                renzhengBiangengShenhe.setVisibility(View.GONE);
+//                renzhengShenhe.setVisibility(View.GONE);
+
+
+                //0:开发暂时写未认证
+
+                renzhengAlready.setVisibility(View.GONE);
+                renzhengNo.setVisibility(View.VISIBLE);
+                renzhengBiangengShenhe.setVisibility(View.GONE);
+                renzhengShenhe.setVisibility(View.GONE);
+            }
+
+        } else {
+            //0:未认证
+
+            renzhengAlready.setVisibility(View.GONE);
+            renzhengNo.setVisibility(View.VISIBLE);
+            renzhengBiangengShenhe.setVisibility(View.GONE);
+            renzhengShenhe.setVisibility(View.GONE);
+        }
+
 
     }
 
@@ -196,6 +334,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
+                initData();
                 frame.refreshComplete();
             }
         }, 2000);
@@ -222,6 +361,8 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
 
         } else if (i == R.id.renzheng_no) {
 
+            //进行医生认证
+            jumpUserAuthenticationActivity();
         } else if (i == R.id.renzheng_already) {
 
         } else if (i == R.id.ll_userAuthentication) {
@@ -243,5 +384,13 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.tv_loginOut) {
 
         }
+    }
+
+    private void jumpUserAuthenticationActivity() {
+
+        Intent intent = new Intent(mActivity, AuthenticationActivity.class);
+        intent.putExtra(CONTENT_TITLE, "用户认证");
+
+        mActivity.startActivityForResult(intent, mRequestCode);
     }
 }

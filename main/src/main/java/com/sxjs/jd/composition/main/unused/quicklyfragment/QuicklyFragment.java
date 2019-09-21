@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
-import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -22,6 +21,9 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -30,34 +32,17 @@ import butterknife.ButterKnife;
 /**
  * @Auther: xp
  * @Date: 2019/9/15 16:50
- * @Description:
+ * @Description: 快速开发Fragment
  */
 public class QuicklyFragment extends BaseFragment implements QuicklyFragmentContract.View, PtrHandler {
-
-
     @Inject
     QuicklyFragmentPresenter mPresenter;
-
     @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+    JDHeaderView             findPullRefreshHeader;
     private Handler mHandler;
 
     private static final String TAG = "NationExamActivity";
     private              String mSession_id;
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_quickly, container, false);
-//        unbinder = ButterKnife.bind(this, view);
-//        Bundle arguments = getArguments();
-//
-//        initView();
-//        initData();
-//
-//        return view;
-//
-//    }
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -75,10 +60,12 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
         initData();
 
     }
+
     @Override
     public void onLazyLoad() {
 
     }
+
     public static QuicklyFragment newInstance() {
         QuicklyFragment quicklyFragment = new QuicklyFragment();
         Bundle bundle = new Bundle();
@@ -109,16 +96,14 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     }
 
     public void initData() {
-        showJDLoadingDialog();
-        //                mPresenter.getFindData();
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("ACTION", "I002");
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "I002");
+        mapHeaders.put("SESSION_ID", mSession_id);
 
-                hideJDLoadingDialog();
-            }
-        }, 2000);
+        mPresenter.getRequestData(mapHeaders, mapParameters);
     }
 
 
@@ -128,24 +113,17 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
             String code = loginResponse.getCode();
             String msg = loginResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + loginResponse.getData());
 
 
-                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
-                //                finish();
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
                 //SESSION_ID过期或者报错  要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
-
                 mActivity.finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(mContext, msg);
                 }
-
             }
-
-
         } catch (Exception e) {
             ToastUtil.showToast(mContext, "解析数据失败");
         }

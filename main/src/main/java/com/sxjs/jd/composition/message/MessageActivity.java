@@ -141,14 +141,13 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
      * 初始化title
      */
     public void initTitle() {
-        //扫一扫
+        //返回按钮
         jkxTitleLeft.setVisibility(View.VISIBLE);
 
         //标题
         jkxTitleCenter.setText("我的消息");
 
-        //消息
-        //        jkxTitleRightBtn.setVisibility(View.VISIBLE);
+
 
 
     }

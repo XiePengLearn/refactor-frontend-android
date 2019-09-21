@@ -74,7 +74,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R2.id.register)
     TextView       register;
     private              String        mXinGeToken;
-    private static final String        TAG                   = "NationExamActivity";
+    private static final String        TAG                   = "LoginActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
     private              boolean       isClickForgetPassword = false;
@@ -264,16 +264,14 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
         if (TextUtils.isEmpty(lAccount)) {
 
-            ToastUtil.showToast(mContext, mContext.getResources().getString(
+            ToastUtil.showToast(mContext, getResources().getString(
                     R.string.username_not_empty), Toast.LENGTH_SHORT);
             return;
         }
 
         String lPassword = editPassword.getText().toString().trim();
         if (TextUtils.isEmpty(lPassword)) {
-            ToastUtil.showToast(
-                    mContext,
-                    mContext.getResources().getString(
+            ToastUtil.showToast(mContext, getResources().getString(
                             R.string.password_not_empty), Toast.LENGTH_SHORT);
             return;
         }

@@ -1,19 +1,25 @@
 package com.sxjs.jd.composition.html.exammiddle;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ProgressBar;
 
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.view.X5WebView;
+import com.sxjs.common.widget.headerview.JDHeaderView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +35,8 @@ public class ExamMiddleFragment extends BaseFragment {
     @BindView(R2.id.webView)
     X5WebView   webView;
 
-    public static String mUrlDataKey = "url";
+    public static String mUrlDataKey   = "url";
+    public static String mJDHeaderView = "JDHeaderView";
     private       Bundle mArguments;
     private       String mWebUrl;
     private       View   mView;
@@ -50,6 +57,8 @@ public class ExamMiddleFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_exam_middle, container, false);
         unbinder = ButterKnife.bind(this, mView);
+
+
         return mView;
     }
 
@@ -57,10 +66,38 @@ public class ExamMiddleFragment extends BaseFragment {
     public void initEvent() {
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onLazyLoad() {
         mArguments = getArguments();
         mWebUrl = mArguments.getString(mUrlDataKey);
+        final JDHeaderView findPullRefreshHeader = (JDHeaderView) mArguments.getSerializable(mJDHeaderView);
+
+
+
+        webView.setOnScrollChangeListenerToTop(new X5WebView.OnScrollChangeListener() {
+            @Override
+            public void onPageEnd(int l, int t, int oldl, int oldt) {
+//                LogUtil.e("onPageEnd", "---1--" + l + ";----2---" + t + ";---3---" + oldl + ";-----4-----" + oldt);
+                Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
+            }
+
+            @Override
+            public void onPageTop(int l, int t, int oldl, int oldt) {
+                //webView 滑到顶部时,显示下拉刷新空件
+                if(t ==0){
+                    Objects.requireNonNull(findPullRefreshHeader).setEnabled(true);
+                }else {
+                    Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
+                }
+
+            }
+
+            @Override
+            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+                Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
+            }
+        });
         initView();
     }
 
@@ -82,10 +119,12 @@ public class ExamMiddleFragment extends BaseFragment {
 
     }
 
-    public static ExamMiddleFragment newInstance(String url) {
+
+    public static ExamMiddleFragment newInstance(String url, JDHeaderView findPullRefreshHeader) {
         ExamMiddleFragment examMiddleFragment = new ExamMiddleFragment();
         Bundle bundle = new Bundle();
         bundle.putString(mUrlDataKey, url);
+        bundle.putSerializable(mJDHeaderView, findPullRefreshHeader);
         examMiddleFragment.setArguments(bundle);
         return examMiddleFragment;
     }

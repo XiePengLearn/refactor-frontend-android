@@ -173,7 +173,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
         fragments = new ArrayList<>();
         fragments.clear();
         for (int i = 0; i < mTabUrl.size(); i++) {
-            ExamMiddleFragment examMiddleFragment = ExamMiddleFragment.newInstance(mTabUrl.get(i));
+            ExamMiddleFragment examMiddleFragment = ExamMiddleFragment.newInstance(mTabUrl.get(i),findPullRefreshHeader);
             fragments.add(examMiddleFragment);
         }
         adapter = new MiddlePageAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragments, mTabTitle);
@@ -211,6 +211,8 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
                 .inject(this);
         //
         findPullRefreshHeader.setPtrHandler(this);
+
+
         //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
         //                adapter = new FindsAdapter(R.layout.item_finds_recyclerview);
         //                adapter.setOnLoadMoreListener(this);

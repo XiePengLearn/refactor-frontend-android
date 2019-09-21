@@ -34,7 +34,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".composition.login.forget.ForgetPasswordActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".composition.login.register.RegisterActivity"
             android:screenOrientation="portrait" />
@@ -49,6 +49,15 @@
         <activity
             android:name=".composition.nationexam.NationExamActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpimine.authentication.AuthenticationActivity"
+            android:screenOrientation="portrait" />
+
+
+
+
+
+
         <activity
             android:name=".composition.html.homeweb.HomeWebActivity"
             android:screenOrientation="portrait" /> <!-- 配置APP ID -->

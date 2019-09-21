@@ -92,7 +92,7 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
 
     @Override
     public void initEvent() {
-
+        initTitle();
         initView();
         initData();
     }
@@ -100,7 +100,21 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
     public void onLazyLoad() {
 
     }
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        //扫一扫
+        jkxTitleLeftBtn.setVisibility(View.VISIBLE);
 
+        //标题
+        jkxTitleCenter.setText("考中");
+
+        //消息
+        jkxTitleRightBtn.setVisibility(View.VISIBLE);
+
+
+    }
     public static BeforePageFragment newInstance() {
         return new BeforePageFragment();
     }

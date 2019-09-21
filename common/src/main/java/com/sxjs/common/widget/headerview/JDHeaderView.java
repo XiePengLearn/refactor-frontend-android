@@ -13,11 +13,13 @@ import com.sxjs.common.widget.pulltorefresh.PtrFrameLayout;
 import com.sxjs.common.widget.pulltorefresh.PtrUIHandler;
 import com.sxjs.common.widget.pulltorefresh.indicator.PtrIndicator;
 
+import java.io.Serializable;
+
 
 /**
  * Created by admin on 2017/2/23.
  */
-public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
+public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler, Serializable {
 
 
     private TextView status_text;

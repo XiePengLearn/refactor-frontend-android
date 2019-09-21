@@ -1,12 +1,12 @@
-package com.sxjs.jd.composition.main.mine;
+package com.sxjs.jd.composition.kpimine.authentication;
 
 import com.google.gson.Gson;
 import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
-import com.sxjs.jd.entities.UserInfoResponse;
+import com.sxjs.jd.entities.LoginResponse;
+import com.sxjs.jd.entities.UserAuthenticationResponse;
 
 import java.util.Map;
 
@@ -17,17 +17,16 @@ import okhttp3.ResponseBody;
 
 /**
  * @Auther: xp
- * @Date: 2019/9/15 16:53
- * @Description:
+ * @Date: 2019/9/13 22:09
+ * @Description: AuthenticationPresenter
  */
-public class MinePagePresenter extends BasePresenter implements MinePageContract.Presenter {
+public class AuthenticationPresenter extends BasePresenter implements AuthenticationContract.Presenter {
+    private              MainDataManager             mDataManager;
+    private              AuthenticationContract.View mContractView;
+    private static final String                      TAG = "AuthenticationPresenter";
 
-    private MainDataManager mDataManager;
-
-    private MinePageContract.View mContractView;
-    private static  final String  TAG = "MiddlePagePresenter";
     @Inject
-    public MinePagePresenter(MainDataManager mDataManager, MinePageContract.View view) {
+    public AuthenticationPresenter(MainDataManager mDataManager, AuthenticationContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -54,20 +53,20 @@ public class MinePagePresenter extends BasePresenter implements MinePageContract
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getUserInfoData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getUserAuthenticationData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
+
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    UserInfoResponse userInfoResponse = gson.fromJson(response, UserInfoResponse.class);
+                    UserAuthenticationResponse userAuthenticationResponse = gson.fromJson(response, UserAuthenticationResponse.class);
 
-                    mContractView.setResponseData(userInfoResponse);
+                    mContractView.setResponseData(userAuthenticationResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 mContractView.hiddenProgressDialogView();
             }
 
@@ -88,5 +87,4 @@ public class MinePagePresenter extends BasePresenter implements MinePageContract
         });
         addDisposabe(disposable);
     }
-
 }

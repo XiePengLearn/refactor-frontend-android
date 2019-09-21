@@ -79,9 +79,9 @@ public class Constant {
     public static final String IS_LOGIN_RUNNING = "isLoingRunning";// 是否登录后运行（前台后太均算true,只有未登录为false）
 
     // public static final String IS_FIRSTSTART = "isFirstStart";// 是否首次启动
-    public static final String CITY_CONFIG = "provinceName"; // 城市设置
+    public static final String CITY_CONFIG      = "provinceName"; // 城市设置
     public static final String TEMP_CITY_CONFIG = "tempProvinceName"; // 城市设置
-    public static final String USER_AREA_ID = "area_id"; // 用户所在地区ID（主键，不代表地区）
+    public static final String USER_AREA_ID     = "area_id"; // 用户所在地区ID（主键，不代表地区）
 
     public static final String USER_AREA_CODE = "area_code";    //用户所在区划编码
 
@@ -94,19 +94,19 @@ public class Constant {
     public static final String USER_IS_REGISTRESTER = "YYGH"; // 用户所在区县是否接入了预约挂号
 
     public static final String USER_IS_DRUG_CIRCULATION = "DRUG";//用户所在地区是否接入药品流转
-    public static final String USER_IS_RECORD = "RECORD";// 用户所在区县是否接入了健康档案
+    public static final String USER_IS_RECORD           = "RECORD";// 用户所在区县是否接入了健康档案
 
-    public static final String USER_IS_SHOW = "isshow";// 用户所在区县是否接入了健康档案
+    public static final String USER_IS_SHOW            = "isshow";// 用户所在区县是否接入了健康档案
     public static final String USER_IS_USING_WITHNURSE = "SING_WITHNURSE";// 是否开启随身护士
-    public static final String USER_IS_USING_ZNDZ = "USING_ZNDZ";// 是否开启智能导诊
-    public static final String USER_FACE_MFRS = "FACE_MFRS";// 人脸厂商 0未接入 1face++ 2 合合 3 神思
-    public static final String USER_IS_OPEN_DCWJ = "IS_OPEN_DCWJ";//  是否开启调查问卷 0否 1是
+    public static final String USER_IS_USING_ZNDZ      = "USING_ZNDZ";// 是否开启智能导诊
+    public static final String USER_FACE_MFRS          = "FACE_MFRS";// 人脸厂商 0未接入 1face++ 2 合合 3 神思
+    public static final String USER_IS_OPEN_DCWJ       = "IS_OPEN_DCWJ";//  是否开启调查问卷 0否 1是
 
-    public static final String POSITION_LATITUDE = "Latitude";// 经度
+    public static final String POSITION_LATITUDE  = "Latitude";// 经度
     public static final String POSITION_LONGITUDE = "Longitude";// 纬度
-    public static final String LANGUAGE_SWITCH = "language_switch";    //预言切换
-    public static final String TEMPLATE_CODE = "template_code";    //模版code
-    public static final String INSURANCE_REQUEST = "insurance_request";  //调出保险页之后需要回到首页
+    public static final String LANGUAGE_SWITCH    = "language_switch";    //预言切换
+    public static final String TEMPLATE_CODE      = "template_code";    //模版code
+    public static final String INSURANCE_REQUEST  = "insurance_request";  //调出保险页之后需要回到首页
 
 
     /**
@@ -214,13 +214,17 @@ public class Constant {
      */
     public static final String MS_FORMART = "yyyy-MM-dd HH:mm:ss SSS";
 
-    public static final String ACCOUNT_REMOVED = "account_removed";
-    public static final String ACCOUNT_CONFLICT = "conflict";
+    public static final String ACCOUNT_REMOVED     = "account_removed";
+    public static final String ACCOUNT_CONFLICT    = "conflict";
     /**
      * 登录用户地址
      */
     public static final String USER_ADDRESS_CONFIT = "USER_ASSRESS";
 
+    /**
+     * 传递的标题KEY
+     */
+    public static final String CONTENT_TITLE        = "title";
     //绩效认证状态存储
     public static final String JIXIAO_AUTHORIZATION = "JIXIAO_AUTHORIZATION";
 

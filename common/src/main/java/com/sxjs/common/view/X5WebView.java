@@ -3,6 +3,7 @@ package com.sxjs.common.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.tencent.smtt.export.external.interfaces.SslError;
 import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
@@ -14,6 +15,7 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 
 public class X5WebView extends WebView {
+    public OnScrollChangeListener listener;
 
     @SuppressLint("SetJavaScriptEnabled")
     public X5WebView(Context arg0, AttributeSet arg1) {
@@ -57,7 +59,7 @@ public class X5WebView extends WebView {
                 super.onReceivedHttpError(view, request, errorResponse);
                 if (errorResponse.getStatusCode() == 404) {
                     if (errorCallBackListener != null) {
-                       // errorCallBackListener.error();
+                        // errorCallBackListener.error();
                     }
                 }
 
@@ -106,6 +108,42 @@ public class X5WebView extends WebView {
 
     public interface ErrorCallBackListener {
         void error();
+    }
+
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        super.onScrollChanged(l, t, oldl, oldt);
+
+        float webcontent = getContentHeight() * getScale();// webview的高度
+        float webnow = getHeight() + this.getScrollY();// 当前webview的高度
+        if (Math.abs(webcontent - webnow) < 1) {
+            // 已经处于底端
+            // Log.i("TAG1", "已经处于底端");
+            listener.onPageEnd(l, t, oldl, oldt);
+        } else if (getScrollY() == 0) {
+            // Log.i("TAG1", "已经处于顶端");
+            listener.onPageTop(l, t, oldl, oldt);
+        } else {
+            listener.onScrollChanged(l, t, oldl, oldt);
+        }
+
+    }
+
+    public void setOnScrollChangeListenerToTop(OnScrollChangeListener listener) {
+
+        this.listener = listener;
+
+    }
+
+    public interface OnScrollChangeListener {
+        void onPageEnd(int l, int t, int oldl, int oldt);
+
+        void onPageTop(int l, int t, int oldl, int oldt);
+
+        void onScrollChanged(int l, int t, int oldl, int oldt);
+
     }
 
 }

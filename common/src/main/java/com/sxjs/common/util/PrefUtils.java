@@ -26,7 +26,19 @@ public class PrefUtils {
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getString("userName", "");
     }
+    public static void writeAuthenticationStatus(String userName, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("authenticationStatus", userName);
+        editor.apply();
+    }
 
+    public static String readAuthenticationStatus(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getString("authenticationStatus", "");
+    }
     public static void writePassword(String password, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);

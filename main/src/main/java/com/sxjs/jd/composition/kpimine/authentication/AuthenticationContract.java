@@ -1,6 +1,7 @@
-package com.sxjs.jd.composition.main.unused.quicklyactivity;
+package com.sxjs.jd.composition.kpimine.authentication;
 
 import com.sxjs.jd.entities.LoginResponse;
+import com.sxjs.jd.entities.UserAuthenticationResponse;
 
 import java.util.Map;
 
@@ -9,12 +10,12 @@ import java.util.Map;
  * @Date: 2019/9/13 22:10
  * @Description:
  */
-public interface QuicklyContract {
+public interface AuthenticationContract {
 
     interface View {
 
 
-        void setResponseData(LoginResponse loginResponse);
+        void setResponseData(UserAuthenticationResponse userAuthenticationResponse);
 
         void showProgressDialogView();
 

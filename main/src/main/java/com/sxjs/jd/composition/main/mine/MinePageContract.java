@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.main.mine;
 
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public interface MinePageContract {
     interface View {
 
 
-        void setResponseData(ForgetPasswordResponse registerResponse);
+        void setResponseData(UserInfoResponse userInfoResponse);
 
         void showProgressDialogView();
 
