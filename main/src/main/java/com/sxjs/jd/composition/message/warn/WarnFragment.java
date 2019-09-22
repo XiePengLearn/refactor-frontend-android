@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
@@ -50,6 +51,9 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     JDHeaderView findPullRefreshHeader;
     @BindView(R2.id.find_recyclerview)
     RecyclerView findRecyclerview;
+
+    @BindView(R2.id.rl_no_data)
+    RelativeLayout rlNoData;
     private Handler mHandler;
 
     private static final String                      TAG = "NationExamActivity";
@@ -154,13 +158,17 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
             String code = messageNotificationResponse.getCode();
             String msg = messageNotificationResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + messageNotificationResponse.getData());
-                List<MessageNotificationResponse.DataBean> data = adapter.getData();
-                data.clear();
-                adapter.addData(messageNotificationResponse.getData());
 
-                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
-                //                finish();
+                List<MessageNotificationResponse.DataBean> messageDate = messageNotificationResponse.getData();
+                if(messageDate != null && messageDate.size()>0){
+
+                    List<MessageNotificationResponse.DataBean> data = adapter.getData();
+                    data.clear();
+                    adapter.addData(messageDate);
+                    rlNoData.setVisibility(View.GONE);
+                }else {
+                    rlNoData.setVisibility(View.VISIBLE);
+                }
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
                 //SESSION_ID过期或者报错  要调起登录页面
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);

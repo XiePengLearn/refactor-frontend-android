@@ -17,7 +17,7 @@ public class ToastUtil {
      */
     public static void showToast(Context context, String msg, int duration) {
         if (mToast == null) {
-            mToast = Toast.makeText(context.getApplicationContext(), msg, duration);
+            mToast = Toast.makeText(context, msg, duration);
         } else {
             mToast.setText(msg);
         }
@@ -28,7 +28,7 @@ public class ToastUtil {
      */
     public static void showToast(Context mContext,String msg) {
         if (mToast == null) {
-            mToast = Toast.makeText(mContext.getApplicationContext(), msg, Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
         } else {
             mToast.setText(msg);
         }

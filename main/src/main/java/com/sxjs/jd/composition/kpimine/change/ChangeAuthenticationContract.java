@@ -1,27 +1,24 @@
-package com.sxjs.jd.composition.kpimine.authentication;
+package com.sxjs.jd.composition.kpimine.change;
 
 import com.sxjs.jd.entities.AuthenticationDataResponse;
-import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UploadImageResponse;
 import com.sxjs.jd.entities.UserAuthenticationResponse;
+import com.sxjs.jd.entities.UserChangeAuthenticationResponse;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
-
-import okhttp3.MultipartBody;
 
 /**
  * @Auther: xp
  * @Date: 2019/9/13 22:10
  * @Description:
  */
-public interface AuthenticationContract {
+public interface ChangeAuthenticationContract {
 
     interface View {
 
 
-        void setResponseData(UserAuthenticationResponse userAuthenticationResponse);
+        void setResponseData(UserChangeAuthenticationResponse userChangeAuthenticationResponse);
         void setUploadImage(UploadImageResponse uploadImageResponse);
         void setCommitAuthenticationResponseData(AuthenticationDataResponse authenticationDataResponse);
 

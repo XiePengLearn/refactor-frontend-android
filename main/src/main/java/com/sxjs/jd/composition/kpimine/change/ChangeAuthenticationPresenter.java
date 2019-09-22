@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.kpimine.authentication;
+package com.sxjs.jd.composition.kpimine.change;
 
 import com.google.gson.Gson;
 import com.sxjs.common.apiservice.RetrofitService;
@@ -10,6 +10,7 @@ import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.AuthenticationDataResponse;
 import com.sxjs.jd.entities.UploadImageResponse;
 import com.sxjs.jd.entities.UserAuthenticationResponse;
+import com.sxjs.jd.entities.UserChangeAuthenticationResponse;
 
 import java.io.File;
 import java.util.Map;
@@ -30,13 +31,13 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/13 22:09
  * @Description: ChangeAuthenticationPresenter
  */
-public class AuthenticationPresenter extends BasePresenter implements AuthenticationContract.Presenter {
-    private              MainDataManager             mDataManager;
-    private              AuthenticationContract.View mContractView;
-    private static final String                      TAG = "ChangeAuthenticationPresenter";
+public class ChangeAuthenticationPresenter extends BasePresenter implements ChangeAuthenticationContract.Presenter {
+    private              MainDataManager                   mDataManager;
+    private              ChangeAuthenticationContract.View mContractView;
+    private static final String                            TAG = "ChangeAuthenticationPresenter";
 
     @Inject
-    public AuthenticationPresenter(MainDataManager mDataManager, AuthenticationContract.View view) {
+    public ChangeAuthenticationPresenter(MainDataManager mDataManager, ChangeAuthenticationContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -63,7 +64,7 @@ public class AuthenticationPresenter extends BasePresenter implements Authentica
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getUserAuthenticationData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getChangeUserAuthenticationData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
@@ -71,9 +72,9 @@ public class AuthenticationPresenter extends BasePresenter implements Authentica
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    UserAuthenticationResponse userAuthenticationResponse = gson.fromJson(response, UserAuthenticationResponse.class);
+                    UserChangeAuthenticationResponse userChangeAuthenticationResponse = gson.fromJson(response, UserChangeAuthenticationResponse.class);
 
-                    mContractView.setResponseData(userAuthenticationResponse);
+                    mContractView.setResponseData(userChangeAuthenticationResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

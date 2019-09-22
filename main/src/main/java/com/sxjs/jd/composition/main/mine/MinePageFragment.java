@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,9 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpimine.aboutme.AboutMeActivity;
 import com.sxjs.jd.composition.kpimine.authentication.AuthenticationActivity;
+import com.sxjs.jd.composition.kpimine.change.ChangeAuthenticationActivity;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.MessageNotificationResponse;
 import com.sxjs.jd.entities.UserInfoResponse;
@@ -44,12 +47,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
 import static com.sxjs.common.constant.Constant.CONTENT_TITLE;
 
 /**
  * @Auther: xp
  * @Date: 2019/9/21 16:50
- * @Description:  我的模块
+ * @Description: 我的模块
  */
 public class MinePageFragment extends BaseFragment implements MinePageContract.View, PtrHandler {
 
@@ -123,9 +127,10 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView      findPullRefreshHeader;
     private              Handler          mHandler;
-    private static final String           TAG = "MinePageFragment";
+    private static final String           TAG          = "MinePageFragment";
     private              UserInfoResponse userInfoResponse;
-    private final int mRequestCode =1 ;
+    private final        int              mRequestCode = 1;
+    private String mAuthenticate_status;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -155,7 +160,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         jkxTitleLeftBtn.setVisibility(View.VISIBLE);
 
         //标题
-        jkxTitleCenter.setText("考中");
+        jkxTitleCenter.setText("我的");
 
         //消息
         jkxTitleRightBtn.setVisibility(View.VISIBLE);
@@ -249,7 +254,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
 
         String head_portrait = userInfoResponse.getData().getHEAD_PORTRAIT();
         String vip_status = userInfoResponse.getData().getVIP_STATUS();
-        String authenticate_status = userInfoResponse.getData().getAUTHENTICATE_STATUS();
+        mAuthenticate_status = userInfoResponse.getData().getAUTHENTICATE_STATUS();
         if (!TextUtils.isEmpty(name)) {
             tvName.setText(name);
         }
@@ -263,10 +268,10 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
             ivIsVip.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(authenticate_status)) {
+        if (!TextUtils.isEmpty(mAuthenticate_status)) {
             //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
 
-            if ("1".equals(authenticate_status)) {
+            if ("1".equals(mAuthenticate_status)) {
 
                 //1:认证审核中
 
@@ -275,7 +280,9 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 renzhengAlready.setVisibility(View.GONE);
                 renzhengNo.setVisibility(View.GONE);
                 renzhengBiangengShenhe.setVisibility(View.GONE);
-            } else if ("0".equals(authenticate_status)) {
+
+
+            } else if ("0".equals(mAuthenticate_status)) {
 
                 //0:未认证
 
@@ -283,7 +290,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 renzhengNo.setVisibility(View.VISIBLE);
                 renzhengBiangengShenhe.setVisibility(View.GONE);
                 renzhengShenhe.setVisibility(View.GONE);
-            } else if ("2".equals(authenticate_status)) {
+            } else if ("2".equals(mAuthenticate_status)) {
                 //2:变更审核中
 
                 renzhengAlready.setVisibility(View.GONE);
@@ -293,18 +300,13 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
             } else {
                 //3:已认证
 
-//                renzhengAlready.setVisibility(View.VISIBLE);
-//                renzhengNo.setVisibility(View.GONE);
-//                renzhengBiangengShenhe.setVisibility(View.GONE);
-//                renzhengShenhe.setVisibility(View.GONE);
-
-
-                //0:开发暂时写未认证
-
-                renzhengAlready.setVisibility(View.GONE);
-                renzhengNo.setVisibility(View.VISIBLE);
+                renzhengAlready.setVisibility(View.VISIBLE);
+                renzhengNo.setVisibility(View.GONE);
                 renzhengBiangengShenhe.setVisibility(View.GONE);
                 renzhengShenhe.setVisibility(View.GONE);
+
+
+
             }
 
         } else {
@@ -360,9 +362,30 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.jkx_title_right_btn) {
 
         } else if (i == R.id.renzheng_no) {
+            if (!TextUtils.isEmpty(mAuthenticate_status)) {
+                //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
+                if ("1".equals(mAuthenticate_status)) {
+                    //1:认证审核中
+                    ToastUtil.showToast(mContext.getApplicationContext(),"认证审核中,不能进行医院变更");
 
-            //进行医生认证
-            jumpUserAuthenticationActivity();
+                } else if ("0".equals(mAuthenticate_status)) {
+                    //0:未认证
+                    ToastUtil.showToast(mContext.getApplicationContext(),"未认证,请认证");
+                } else if ("2".equals(mAuthenticate_status)) {
+                    //2:变更审核中
+                    ToastUtil.showToast(mContext.getApplicationContext(),"变更审核中,不能进行医院变更");
+                } else {
+                    //3:已认证
+                    //进行医生认证
+                    jumpUserAuthenticationActivity();
+                }
+
+            } else {
+                //0:未认证
+                ToastUtil.showToast(mContext.getApplicationContext(),"未认证,请认证");
+
+            }
+
         } else if (i == R.id.renzheng_already) {
 
         } else if (i == R.id.ll_userAuthentication) {
@@ -376,14 +399,28 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.rl_modifyPassword) {
 
         } else if (i == R.id.hospital_change) {
-
+            jumpHospitalChangeActivity();
         } else if (i == R.id.rl_rebindPhone) {
 
         } else if (i == R.id.rl_about) {
-
+            jumpAboutMeActivity();
         } else if (i == R.id.tv_loginOut) {
 
         }
+    }
+
+    private void jumpHospitalChangeActivity() {
+        Intent intent = new Intent(mActivity, ChangeAuthenticationActivity.class);
+        intent.putExtra(CONTENT_TITLE, "医院变更");
+
+        startActivityForResult(intent, mRequestCode);
+    }
+
+    private void jumpAboutMeActivity() {
+        Intent intent = new Intent(mActivity, AboutMeActivity.class);
+        intent.putExtra(CONTENT_TITLE, "关于");
+
+        startActivity(intent);
     }
 
     private void jumpUserAuthenticationActivity() {
@@ -391,6 +428,36 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         Intent intent = new Intent(mActivity, AuthenticationActivity.class);
         intent.putExtra(CONTENT_TITLE, "用户认证");
 
-        mActivity.startActivityForResult(intent, mRequestCode);
+        startActivityForResult(intent, mRequestCode);
+    }
+
+    /**
+     * 为了得到传回的数据，必须在前面的Activity中（指MainActivity类）重写onActivityResult方法
+     * <p>
+     * requestCode 请求码，即调用startActivityForResult()传递过去的值
+     * resultCode 结果码，结果码用于标识返回数据来自哪个新Activity
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == mRequestCode) {
+            if (resultCode == RESULT_OK) {
+                String userAuthenticationCommitResult = data.getStringExtra("userAuthenticationCommitResult");
+                if (!TextUtils.isEmpty(userAuthenticationCommitResult)) {
+                    //用户认证提交成功，变更用户状态
+                    if (userAuthenticationCommitResult.equals("SUCCESS_OK")) {
+                        //1:认证审核中
+
+                        renzhengShenhe.setVisibility(View.VISIBLE);
+
+                        renzhengAlready.setVisibility(View.GONE);
+                        renzhengNo.setVisibility(View.GONE);
+                        renzhengBiangengShenhe.setVisibility(View.GONE);
+                    }
+                }
+
+            }
+
+        }
+
     }
 }

@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @Auther: xp
@@ -47,9 +49,12 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     AttentionFragmentPresenter mPresenter;
 
     @BindView(R2.id.find_pull_refresh_header)
-    JDHeaderView findPullRefreshHeader;
+    JDHeaderView   findPullRefreshHeader;
     @BindView(R2.id.find_recyclerview)
-    RecyclerView findRecyclerview;
+    RecyclerView   findRecyclerview;
+    @BindView(R2.id.rl_no_data)
+    RelativeLayout rlNoData;
+    Unbinder unbinder;
     private Handler mHandler;
 
     private static final String                      TAG = "NationExamActivity";
@@ -59,31 +64,30 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     private              AttentionAdapter            adapter;
     private              View                        mView;
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        if (null == mView) {
-//            mView = inflater.inflate(R.layout.fragment_attention, container, false);
-//            unbinder = ButterKnife.bind(this, mView);
-//            Bundle arguments = getArguments();
-//
-//            initView();
-//            initData();
-//        } else {
-//            unbinder = ButterKnife.bind(this, mView);
-//        }
-//
-//        return mView;
-//
-//    }
+    //    @Nullable
+    //    @Override
+    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    //        if (null == mView) {
+    //            mView = inflater.inflate(R.layout.fragment_attention, container, false);
+    //            unbinder = ButterKnife.bind(this, mView);
+    //            Bundle arguments = getArguments();
+    //
+    //            initView();
+    //            initData();
+    //        } else {
+    //            unbinder = ButterKnife.bind(this, mView);
+    //        }
+    //
+    //        return mView;
+    //
+    //    }
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-            mView = inflater.inflate(R.layout.fragment_attention, container, false);
-            unbinder = ButterKnife.bind(this, mView);
-            Bundle arguments = getArguments();
-
+        mView = inflater.inflate(R.layout.fragment_attention, container, false);
+        unbinder = ButterKnife.bind(this, mView);
+        Bundle arguments = getArguments();
 
 
         return mView;
@@ -91,7 +95,6 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
 
     @Override
     public void initEvent() {
-
 
 
     }
@@ -156,10 +159,18 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
             String code = messageNotificationResponse.getCode();
             String msg = messageNotificationResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                LogUtil.e(TAG, "SESSION_ID: " + messageNotificationResponse.getData());
-                List<MessageNotificationResponse.DataBean> data = adapter.getData();
-                data.clear();
-                adapter.addData(messageNotificationResponse.getData());
+                List<MessageNotificationResponse.DataBean> messageDate = messageNotificationResponse.getData();
+                if(messageDate != null && messageDate.size()>0){
+
+                    List<MessageNotificationResponse.DataBean> data = adapter.getData();
+                    data.clear();
+                    adapter.addData(messageDate);
+                    rlNoData.setVisibility(View.GONE);
+                }else {
+                    rlNoData.setVisibility(View.VISIBLE);
+                }
+
+
 
                 //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 //                finish();
@@ -251,6 +262,7 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        unbinder.unbind();
 
     }
 
@@ -275,5 +287,13 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
                 //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
             }
         }, 2000);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
     }
 }

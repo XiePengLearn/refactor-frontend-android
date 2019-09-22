@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.kpimine.authentication;
+package com.sxjs.jd.composition.kpimine.change;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +40,7 @@ import com.sxjs.common.view.SelectPicPopupWindow;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpimine.authentication.DaggerAuthenticationActivityComponent;
 import com.sxjs.jd.entities.AuthenticationDataResponse;
 import com.sxjs.jd.entities.JkxAcContainerRequest;
 import com.sxjs.jd.entities.JkxAcContainerRes;
@@ -48,6 +49,7 @@ import com.sxjs.jd.entities.JkxAlreadySelectedQRRes;
 import com.sxjs.jd.entities.JkxZJZRes;
 import com.sxjs.jd.entities.UploadImageResponse;
 import com.sxjs.jd.entities.UserAuthenticationResponse;
+import com.sxjs.jd.entities.UserChangeAuthenticationResponse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,21 +74,21 @@ import chihane.jdaddressselector.Selector;
  * @Description: 用户认证模块
  */
 @Route(path = "/authenticationActivity/authenticationActivity")
-public class AuthenticationActivity extends BaseActivity implements AuthenticationContract.View {
+public class ChangeAuthenticationActivity extends BaseActivity implements ChangeAuthenticationContract.View {
     @Inject
-    AuthenticationPresenter mPresenter;
+    ChangeAuthenticationPresenter mPresenter;
     @BindView(R2.id.fake_status_bar)
-    View                    fakeStatusBar;
+    View                          fakeStatusBar;
     @BindView(R2.id.jkx_title_left)
-    TextView                jkxTitleLeft;
+    TextView                      jkxTitleLeft;
     @BindView(R2.id.jkx_title_left_btn)
-    Button                  jkxTitleLeftBtn;
+    Button                        jkxTitleLeftBtn;
     @BindView(R2.id.jkx_title_center)
-    TextView                jkxTitleCenter;
+    TextView                      jkxTitleCenter;
     @BindView(R2.id.jkx_title_right_btn)
-    TextView                jkxTitleRightBtn;
+    TextView                      jkxTitleRightBtn;
     @BindView(R2.id.new_message)
-    TextView                newMessage;
+    TextView                      newMessage;
     @BindView(R2.id.rl_new_message)
     RelativeLayout          rlNewMessage;
     @BindView(R2.id.jkx_title_right)
@@ -128,7 +130,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
     public static final int                                TAKE_ALBUM         = 16; // 相册
     public static final int                                TAKE_PICTURE       = 3; // 拍照
-    private             chihane.jdaddressselector.Selector selector;                     //区划选择控件
+    private             Selector selector;                     //区划选择控件
     private             BottomDialog                       dialog;
     private             ArrayList<JkxAcContainerRes>       acContainerReslist;               //每次根据区划id获取的区划数据
     private             ArrayList<JkxAlreadySelectedQRRes> alreadySelectArray = null; //在编辑页获取的已选区划
@@ -137,11 +139,12 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     private UploadImageResponse        uploadImageResponse;
     private AuthenticationDataResponse authenticationDataResponse;
     private List<JkxZJZRes>            imgUriList = new ArrayList<>();
+    private UserChangeAuthenticationResponse userChangeAuthenticationResponse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_authentication);
+        setContentView(R.layout.activity_user_authentication_change);
         StatusBarUtil.setImmersiveStatusBar(this, true);
         unbinder = ButterKnife.bind(this);
         mIntent = getIntent();
@@ -156,14 +159,14 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
 
     private void initView() {
-        DaggerAuthenticationActivityComponent.builder()
+        DaggerChangeAuthenticationActivityComponent.builder()
                 .appComponent(getAppComponent())
-                .authenticationPresenterModule(new AuthenticationPresenterModule(this, MainDataManager.getInstance(mDataManager)))
+                .changeAuthenticationPresenterModule(new ChangeAuthenticationPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
         selectList = new ArrayList<LocalMedia>();
         selectListTemp = new ArrayList<LocalMedia>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
             LocalMedia localMedia = new LocalMedia();
             localMedia.setCompressPath("");
             selectListTemp.add(localMedia);
@@ -179,7 +182,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
         Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "S010");
+        mapHeaders.put("ACTION", "S018");
         mapHeaders.put("SESSION_ID", mSession_id);
 
         mPresenter.getRequestData(mapHeaders, mapParameters);
@@ -210,12 +213,12 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
          */
         mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(10);
-        mapParameters.put("NAME", etName.getText().toString().trim());
-        if ("男".equals(tvSex.getText().toString().trim())) {
-            mapParameters.put("SEX", "1");
-        } else {
-            mapParameters.put("SEX", "2");
-        }
+//        mapParameters.put("NAME", etName.getText().toString().trim());
+//        if ("男".equals(tvSex.getText().toString().trim())) {
+//            mapParameters.put("SEX", "1");
+//        } else {
+//            mapParameters.put("SEX", "2");
+//        }
 
         mapParameters.put("HOSPITAL_NAME", etHospitalName.getText().toString());
         mapParameters.put("DEPARTMENT", etDepartment.getText().toString());
@@ -312,9 +315,11 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
             if (code.equals(ResponseCode.SUCCESS_OK)) {
 
                 String image_uri = uploadImageResponse.getData().getIMAGE_URI();
+
+                //只有胸牌 setTYPE 4
                 if (imgUriList.size() < 1) {
                     JkxZJZRes zjzRes = new JkxZJZRes();
-                    zjzRes.setTYPE("1");
+                    zjzRes.setTYPE("4");
                     zjzRes.setURI(image_uri);
                     imgUriList.add(zjzRes);
                 } else if ((imgUriList.size() < 2) && (imgUriList.size() >= 1)) {
@@ -359,7 +364,8 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
                   }
               }else if(selectCommitTemp.size()==4){
                   if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "身份证正面:"+msg);
+//                      ToastUtil.showToast(this.getApplicationContext(), "身份证正面:"+msg);
+                      ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:"+msg);
                   }
               }
 
@@ -372,14 +378,14 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     }
 
     @Override
-    public void setResponseData(UserAuthenticationResponse userAuthenticationResponse) {
-        this.userAuthenticationResponse = userAuthenticationResponse;
+    public void setResponseData(UserChangeAuthenticationResponse userChangeAuthenticationResponse) {
+        this.userChangeAuthenticationResponse = userChangeAuthenticationResponse;
         try {
-            String code = userAuthenticationResponse.getCode();
-            String msg = userAuthenticationResponse.getMsg();
+            String code = userChangeAuthenticationResponse.getCode();
+            String msg = userChangeAuthenticationResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
 
-                setUserAuthentication(userAuthenticationResponse);
+                setUserAuthentication(userChangeAuthenticationResponse);
 
 
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
@@ -410,9 +416,9 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
                 //把返回数据存入Intent
                 intent.putExtra("userAuthenticationCommitResult", "SUCCESS_OK");
                 //设置返回数据
-                AuthenticationActivity.this.setResult(RESULT_OK, intent);
+                ChangeAuthenticationActivity.this.setResult(RESULT_OK, intent);
                 //关闭Activity
-                AuthenticationActivity.this.finish();
+                ChangeAuthenticationActivity.this.finish();
 
             } else if (code.equals(ResponseCode.SEESION_ERROR)) {
                 //SESSION_ID为空别的页面 要调起登录页面
@@ -432,7 +438,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
     private void initFlowLayoutChild() {
         flowlayout.removeAllViews();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
 
             View selected_img = View.inflate(mContext, R.layout.jkx_author_item, null);
             ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -487,13 +493,15 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
             dest_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PictureSelector.create(AuthenticationActivity.this).themeStyle(R.style.picture_default_style).openExternalPreview(finalI, selectListTemp);
+                    PictureSelector.create(ChangeAuthenticationActivity.this).themeStyle(R.style.picture_default_style).openExternalPreview(finalI, selectListTemp);
                 }
             });
             if (i == 0) {
                 src_img.setVisibility(View.VISIBLE);
                 dest_img_layout.setVisibility(View.GONE);
-                src_img.setBackgroundResource(R.drawable.sf_zm);
+//                src_img.setBackgroundResource(R.drawable.sf_zm);
+                //只有胸牌
+                src_img.setBackgroundResource(R.drawable.gzz);
 
             } else if (i == 1) {
                 src_img.setVisibility(View.VISIBLE);
@@ -512,25 +520,11 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         }
     }
 
-    public void setUserAuthentication(UserAuthenticationResponse userAuthenticationResponse) {
-        UserAuthenticationResponse.DataBean data = userAuthenticationResponse.getData();
+    public void setUserAuthentication(UserChangeAuthenticationResponse userChangeAuthenticationResponse) {
+        UserChangeAuthenticationResponse.DataBean data = userChangeAuthenticationResponse.getData();
 
         if (data != null) {
-            //姓名
-            String name = data.getNAME();
-            if (!TextUtils.isEmpty(name)) {
-                etName.setText(name);
-            }
-            //性别
-            String sex = data.getSEX();
-            if (!TextUtils.isEmpty(sex)) {
-                if ("1".equals(sex)) {
-                    tvSex.setText("男");
-                } else {
-                    tvSex.setText("女");
 
-                }
-            }
             //医院名称
             String hospital_name = data.getHOSPITAL_NAME();
             if (!TextUtils.isEmpty(hospital_name)) {
@@ -605,9 +599,9 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
             //把返回数据存入Intent
             intent.putExtra("userAuthenticationCommitResult", "SUCCESS_OK");
             //设置返回数据
-            AuthenticationActivity.this.setResult(RESULT_OK, intent);
+            ChangeAuthenticationActivity.this.setResult(RESULT_OK, intent);
             //关闭Activity
-            AuthenticationActivity.this.finish();
+            ChangeAuthenticationActivity.this.finish();
         } else if (i == R.id.tv_sex) {
 
             //性别
@@ -632,10 +626,10 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     }
 
     private void commitToServer() {
-        if ("".equals(etName.getText().toString().trim())) {
-            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
-            return;
-        }
+//        if ("".equals(etName.getText().toString().trim())) {
+//            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
+//            return;
+//        }
         if ("".equals(etHospitalName.getText().toString().trim())) {
             ToastUtil.showToast(mContext, "请输入医院", Toast.LENGTH_SHORT);
             return;
@@ -882,8 +876,8 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
 
         if (dialog == null) {
-            dialog = new BottomDialog(AuthenticationActivity.this);
-            dialog.init(AuthenticationActivity.this, selector);
+            dialog = new BottomDialog(ChangeAuthenticationActivity.this);
+            dialog.init(ChangeAuthenticationActivity.this, selector);
         }
         //dialog.show();
     }

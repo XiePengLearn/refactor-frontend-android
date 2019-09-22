@@ -41,7 +41,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/x10"
-                        android:drawableRight="@drawable/arrow_down"
+                        android:drawableRight="@drawable/arrow_down_black"
                         android:gravity="center_vertical"
                         android:text="2019"
                         android:textColor="#333333"

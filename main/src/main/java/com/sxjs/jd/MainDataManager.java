@@ -366,7 +366,18 @@ public class MainDataManager extends BaseDataManager {
                 (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
     }
 
-
+    /**
+     * 4.11	医院信息变更回显
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getChangeUserAuthenticationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
+    }
 
 
     /**

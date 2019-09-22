@@ -20,10 +20,10 @@
         android:persistent="true"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".composition.html.homeweb.HomeWebViewActivity"
-            android:screenOrientation="portrait" >
-
-        </activity>
+        <activity android:name=".composition.kpimine.aboutme.AboutMeActivity"></activity>
+        <activity
+            android:name=".composition.html.homeweb.HomeWebViewActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".composition.main.MainActivity"
             android:launchMode="singleTask"
@@ -41,23 +41,18 @@
         <activity
             android:name=".composition.message.MessageActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".composition.html.messagedetails.MessageWebViewActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".composition.nationexam.NationExamActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".composition.kpimine.authentication.AuthenticationActivity"
             android:screenOrientation="portrait" />
-
-
-
-
-
-
+        <activity
+            android:name=".composition.kpimine.change.ChangeAuthenticationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".composition.html.homeweb.HomeWebActivity"
             android:screenOrientation="portrait" /> <!-- 配置APP ID -->

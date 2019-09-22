@@ -17,12 +17,12 @@ import okhttp3.ResponseBody;
 /**
  * @Auther: xp
  * @Date: 2019/9/13 22:09
- * @Description: AuthenticationPresenter
+ * @Description: ChangeAuthenticationPresenter
  */
 public class QuicklyPresenter extends BasePresenter implements QuicklyContract.Presenter {
     private              MainDataManager      mDataManager;
     private              QuicklyContract.View mContractView;
-    private static final String               TAG = "AuthenticationPresenter";
+    private static final String               TAG = "ChangeAuthenticationPresenter";
 
     @Inject
     public QuicklyPresenter(MainDataManager mDataManager, QuicklyContract.View view) {

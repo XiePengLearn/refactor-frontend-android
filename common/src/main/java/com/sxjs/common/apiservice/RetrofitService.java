@@ -10,6 +10,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -32,8 +33,11 @@ public interface RetrofitService {
 
     //单文件上传头像（方式一）
     @Multipart
-    @POST("s/v1")
-    Observable<ResponseBody> upload_avatar(@Part MultipartBody.Part part, @Part("auth") RequestBody paramsBody);
+    @POST("cm/v1")
+    Observable<ResponseBody> upload_avatar(
+            @HeaderMap Map<String, String> headers,
+            @Part MultipartBody.Part part,
+            @Part("IMAGE_TYPE") RequestBody paramsBody);
 
     //单文件上传头像（方式二）
     @POST("api.php?con=user&act=updateavatar")
