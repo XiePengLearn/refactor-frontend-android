@@ -211,6 +211,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
                 .inject(this);
         //
         findPullRefreshHeader.setPtrHandler(this);
+        findPullRefreshHeader.setEnabled(false);
 
 
         //                findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));

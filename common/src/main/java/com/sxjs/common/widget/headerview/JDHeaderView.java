@@ -19,7 +19,7 @@ import java.io.Serializable;
 /**
  * Created by admin on 2017/2/23.
  */
-public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler, Serializable {
+public class JDHeaderView extends PtrFrameLayout implements PtrUIHandler {
 
 
     private TextView status_text;

@@ -1,14 +1,18 @@
 package com.sxjs.jd.composition.html.exammiddle;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.common.util.LogUtil;
@@ -16,6 +20,8 @@ import com.sxjs.common.view.X5WebView;
 import com.sxjs.common.widget.headerview.JDHeaderView;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.main.MainActivity;
+import com.sxjs.jd.composition.main.middle.MiddlePageFragment;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 
@@ -53,6 +59,8 @@ public class ExamMiddleFragment extends BaseFragment {
     //    }
 
 
+
+
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_exam_middle, container, false);
@@ -71,33 +79,43 @@ public class ExamMiddleFragment extends BaseFragment {
     public void onLazyLoad() {
         mArguments = getArguments();
         mWebUrl = mArguments.getString(mUrlDataKey);
-        final JDHeaderView findPullRefreshHeader = (JDHeaderView) mArguments.getSerializable(mJDHeaderView);
+        //        final JDHeaderView findPullRefreshHeader = (JDHeaderView) mArguments.getSerializable(mJDHeaderView);
 
 
-
-        webView.setOnScrollChangeListenerToTop(new X5WebView.OnScrollChangeListener() {
-            @Override
-            public void onPageEnd(int l, int t, int oldl, int oldt) {
-//                LogUtil.e("onPageEnd", "---1--" + l + ";----2---" + t + ";---3---" + oldl + ";-----4-----" + oldt);
-                Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
-            }
-
-            @Override
-            public void onPageTop(int l, int t, int oldl, int oldt) {
-                //webView 滑到顶部时,显示下拉刷新空件
-                if(t ==0){
-                    Objects.requireNonNull(findPullRefreshHeader).setEnabled(true);
-                }else {
-                    Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
-                }
-
-            }
-
-            @Override
-            public void onScrollChanged(int l, int t, int oldl, int oldt) {
-                Objects.requireNonNull(findPullRefreshHeader).setEnabled(false);
-            }
-        });
+        //        webView.setOnScrollChangeListenerToTop(new X5WebView.OnScrollChangeListener() {
+        //            @Override
+        //            public void onPageEnd(int l, int t, int oldl, int oldt) {
+        ////                LogUtil.e("onPageEnd", "---1--" + l + ";----2---" + t + ";---3---" + oldl + ";-----4-----" + oldt);
+        //                if(findPullRefreshHeader != null){
+        //                    findPullRefreshHeader.setEnabled(false);
+        //                }
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onPageTop(int l, int t, int oldl, int oldt) {
+        //                //webView 滑到顶部时,显示下拉刷新空件
+        //                if(t ==0){
+        //                    if(findPullRefreshHeader != null){
+        //                        findPullRefreshHeader.setEnabled(true);
+        //                    }
+        //
+        //                }else {
+        //                    if(findPullRefreshHeader != null){
+        //                        findPullRefreshHeader.setEnabled(false);
+        //                    }
+        //
+        //                }
+        //
+        //            }
+        //
+        //            @Override
+        //            public void onScrollChanged(int l, int t, int oldl, int oldt) {
+        //                if(findPullRefreshHeader != null){
+        //                    findPullRefreshHeader.setEnabled(false);
+        //                }
+        //            }
+        //        });
         initView();
     }
 
@@ -124,7 +142,7 @@ public class ExamMiddleFragment extends BaseFragment {
         ExamMiddleFragment examMiddleFragment = new ExamMiddleFragment();
         Bundle bundle = new Bundle();
         bundle.putString(mUrlDataKey, url);
-        bundle.putSerializable(mJDHeaderView, findPullRefreshHeader);
+        //        bundle.putSerializable(mJDHeaderView, findPullRefreshHeader);
         examMiddleFragment.setArguments(bundle);
         return examMiddleFragment;
     }

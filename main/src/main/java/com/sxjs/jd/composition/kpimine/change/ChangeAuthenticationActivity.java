@@ -228,7 +228,7 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
         mapParameters.put("DOCUMENT_URI", json);
 
         Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "S011");
+        mapHeaders.put("ACTION", "S017");
         mapHeaders.put("SESSION_ID", mSession_id);
 
         mPresenter.getCommitAuthenticationToServerData(mapHeaders, mapParameters);
@@ -651,7 +651,7 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
             return;
         }
         boolean picInfoFinish = true;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 1; i++) {
             if (flowlayout.getChildAt(i).findViewById(R.id.dest_img_layout).getVisibility() != View.VISIBLE) {
                 picInfoFinish = false;
                 ToastUtil.showToast(mContext, "请将证件信息上传完整", Toast.LENGTH_SHORT);

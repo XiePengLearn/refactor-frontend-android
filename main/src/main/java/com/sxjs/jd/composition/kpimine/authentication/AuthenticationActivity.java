@@ -222,6 +222,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         mapParameters.put("RESIGN", etResign.getText().toString());
         mapParameters.put("WORK_TEL", etWorkTel.getText().toString());
         mapParameters.put("PROVINCIAL_CODE", selectedQrID);
+        LogUtil.e(TAG,"=======selectedQrID======"+selectedQrID);
         mapParameters.put("DOCUMENT_URI", json);
 
         Map<String, String> mapHeaders = new HashMap<>(2);

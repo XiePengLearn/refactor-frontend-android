@@ -362,6 +362,24 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.jkx_title_right_btn) {
 
         } else if (i == R.id.renzheng_no) {
+
+            jumpUserAuthenticationActivity();
+
+        } else if (i == R.id.renzheng_already) {
+
+        } else if (i == R.id.ll_userAuthentication) {
+
+        } else if (i == R.id.rl_myFeedBack) {
+
+        } else if (i == R.id.cert_download) {
+
+        } else if (i == R.id.rl_findCa) {
+
+        } else if (i == R.id.rl_modifyPassword) {
+
+        } else if (i == R.id.hospital_change) {
+
+
             if (!TextUtils.isEmpty(mAuthenticate_status)) {
                 //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
                 if ("1".equals(mAuthenticate_status)) {
@@ -377,7 +395,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 } else {
                     //3:已认证
                     //进行医生认证
-                    jumpUserAuthenticationActivity();
+                    jumpHospitalChangeActivity();
                 }
 
             } else {
@@ -385,21 +403,6 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 ToastUtil.showToast(mContext.getApplicationContext(),"未认证,请认证");
 
             }
-
-        } else if (i == R.id.renzheng_already) {
-
-        } else if (i == R.id.ll_userAuthentication) {
-
-        } else if (i == R.id.rl_myFeedBack) {
-
-        } else if (i == R.id.cert_download) {
-
-        } else if (i == R.id.rl_findCa) {
-
-        } else if (i == R.id.rl_modifyPassword) {
-
-        } else if (i == R.id.hospital_change) {
-            jumpHospitalChangeActivity();
         } else if (i == R.id.rl_rebindPhone) {
 
         } else if (i == R.id.rl_about) {
