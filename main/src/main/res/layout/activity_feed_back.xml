@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/x13"
+    android:paddingRight="@dimen/x13">
+
+    <include layout="@layout/jkx_public_title_home" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/x13"
+        android:paddingRight="@dimen/x13">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y194"
+            android:layout_marginTop="@dimen/y3"
+            android:background="@drawable/bg_shap_button_19"
+            android:padding="@dimen/x13">
+
+            <EditText
+                android:id="@+id/ed_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:cursorVisible="true"
+                android:textCursorDrawable="@drawable/text_cursor"
+                android:hint="请在此处填写您对我们产品与服务的建议，以便我们改进。"
+                android:textColorHint="#999999"
+                android:textSize="@dimen/x13" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/y9">
+
+
+
+                <ImageView
+                    android:id="@+id/iv_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/x5"
+                    android:visibility="invisible"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/iv_feedback_yy"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="限1000字" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y12"
+            android:background="@drawable/bg_shap_button_31"
+            android:gravity="center"
+            android:padding="@dimen/y8"
+            android:text="提交"
+            android:textColor="@color/white"
+            android:textSize="@dimen/x15" />
+
+    </LinearLayout>
+
+</LinearLayout>

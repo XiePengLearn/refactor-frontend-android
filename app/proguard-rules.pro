@@ -245,9 +245,11 @@
     #如果使用了实时音视频功能
     -keep class com.superrtc.** {*;}
     -dontwarn  com.superrtc.**
-    -libraryjars ../easeui/src/main/jniLibs/armeabi/libBaiduMapSDK_base_v5_1_0.so
-    -libraryjars ../easeui/src/main/jniLibs/armeabi/libBaiduMapSDK_map_v5_1_0.so
-    -libraryjars ../easeui/src/main/jniLibs/armeabi/liblocSDK7b.so
+#    暂时去掉
+#    -libraryjars ../easeui/src/main/jniLibs/armeabi/libBaiduMapSDK_base_v5_1_0.so
+#    -libraryjars ../easeui/src/main/jniLibs/armeabi/libBaiduMapSDK_map_v5_1_0.so
+#    -libraryjars ../easeui/src/main/jniLibs/armeabi/liblocSDK7b.so
+#     暂时去掉结束
     #环信混淆
 
     #讯飞sdk

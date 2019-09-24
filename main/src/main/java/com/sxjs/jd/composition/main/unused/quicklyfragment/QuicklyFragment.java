@@ -121,11 +121,11 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
                 mActivity.finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
             }
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 

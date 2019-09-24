@@ -176,14 +176,14 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
                 mActivity.finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -222,7 +222,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
             } else {
                 adapter.loadMoreComplete();
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
@@ -230,7 +230,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
 
         } catch (Exception e) {
             adapter.loadMoreComplete();
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 

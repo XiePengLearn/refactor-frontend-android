@@ -6,6 +6,8 @@ import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.example.app_common.CommonModule;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
@@ -39,6 +41,8 @@ public class MyApplication extends Application {
 
         //初始化x5内核
         initX5webview();
+
+
     }
 
     public static MyApplication getInstance() {

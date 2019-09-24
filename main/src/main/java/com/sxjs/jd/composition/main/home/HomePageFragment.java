@@ -381,7 +381,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                     setNewsData(data.getI006().getPAGE());
 
                 } else {
-                    ToastUtil.showToast(mContext, "响应数据缺少主参数");
+                    ToastUtil.showToast(mContext.getApplicationContext(), "响应数据缺少主参数");
                 }
 
 
@@ -395,14 +395,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
 
@@ -429,14 +429,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }
@@ -479,14 +479,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }
@@ -532,14 +532,14 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }
@@ -631,7 +631,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
                     @Override
                     public void onFinish() {
-                        ToastUtil.showToast(mContext, "下载完成");
+                        ToastUtil.showToast(mContext.getApplicationContext(), "下载完成");
                     }
 
                     @Override

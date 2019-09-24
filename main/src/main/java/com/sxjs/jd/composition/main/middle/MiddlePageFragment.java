@@ -225,6 +225,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
     }
 
+    //未读消息
     public void initData() {
 
 
@@ -302,14 +303,14 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
 
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }
@@ -359,14 +360,14 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
                 emptyTip.setVisibility(View.VISIBLE);
                 normalDisplay.setVisibility(View.GONE);
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }
@@ -406,14 +407,14 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
                 emptyTip.setVisibility(View.VISIBLE);
                 normalDisplay.setVisibility(View.GONE);
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败:");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
         }
     }

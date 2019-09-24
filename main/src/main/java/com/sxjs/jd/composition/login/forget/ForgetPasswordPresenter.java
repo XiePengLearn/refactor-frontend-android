@@ -24,7 +24,7 @@ public class ForgetPasswordPresenter extends BasePresenter implements ForgetPass
 
     private              MainDataManager             mDataManager;
     private              ForgetPasswordContract.View mLoginView;
-    private static final String                      TAG = "ForgetPasswordPresenter";
+    private static final String                      TAG = "ChangePasswordPresenter";
 
     @Inject
     public ForgetPasswordPresenter(MainDataManager mDataManager, ForgetPasswordContract.View view) {

@@ -45,7 +45,7 @@ import butterknife.OnClick;
 /**
  * @author xiepeng
  */
-@Route(path = "/messageActivity/messageActivity")
+@Route(path = "/nationExamActivity/nationExamActivity")
 public class NationExamActivity extends BaseActivity implements NationExamContract.View {
     @Inject
     NationExamPresenter presenter;

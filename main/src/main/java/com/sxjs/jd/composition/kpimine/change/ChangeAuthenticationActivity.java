@@ -73,7 +73,7 @@ import chihane.jdaddressselector.Selector;
  * @author xiepeng
  * @Description: 用户认证模块
  */
-@Route(path = "/authenticationActivity/authenticationActivity")
+@Route(path = "/changeAuthenticationActivity/changeAuthenticationActivity")
 public class ChangeAuthenticationActivity extends BaseActivity implements ChangeAuthenticationContract.View {
     @Inject
     ChangeAuthenticationPresenter mPresenter;

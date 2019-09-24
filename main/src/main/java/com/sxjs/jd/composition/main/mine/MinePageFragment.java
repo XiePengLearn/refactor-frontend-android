@@ -1,5 +1,6 @@
 package com.sxjs.jd.composition.main.mine;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -31,6 +33,10 @@ import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.kpimine.aboutme.AboutMeActivity;
 import com.sxjs.jd.composition.kpimine.authentication.AuthenticationActivity;
 import com.sxjs.jd.composition.kpimine.change.ChangeAuthenticationActivity;
+import com.sxjs.jd.composition.kpimine.feedback.FeedBackActivity;
+import com.sxjs.jd.composition.login.changepassage.ChangePasswordActivity;
+import com.sxjs.jd.composition.login.changephone.ChangePhoneActivity;
+import com.sxjs.jd.entities.FeedBackResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.MessageNotificationResponse;
 import com.sxjs.jd.entities.UserInfoResponse;
@@ -130,7 +136,8 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     private static final String           TAG          = "MinePageFragment";
     private              UserInfoResponse userInfoResponse;
     private final        int              mRequestCode = 1;
-    private String mAuthenticate_status;
+    private final        int              mChangeRequestCode = 2;
+    private              String           mAuthenticate_status;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -222,14 +229,14 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 mActivity.finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -306,7 +313,6 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 renzhengShenhe.setVisibility(View.GONE);
 
 
-
             }
 
         } else {
@@ -362,61 +368,104 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.jkx_title_right_btn) {
 
         } else if (i == R.id.renzheng_no) {
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                jumpUserAuthenticationActivity();
+            }
 
-            jumpUserAuthenticationActivity();
 
         } else if (i == R.id.renzheng_already) {
 
         } else if (i == R.id.ll_userAuthentication) {
 
         } else if (i == R.id.rl_myFeedBack) {
+            //我的反馈
+            if (!NoDoubleClickUtils.isDoubleClick())
+                jumpMyFeedBackActivity();
 
         } else if (i == R.id.cert_download) {
 
         } else if (i == R.id.rl_findCa) {
 
         } else if (i == R.id.rl_modifyPassword) {
-
+            //修改密码
+            if (!NoDoubleClickUtils.isDoubleClick())
+                jumpModifyPasswordActivity();
         } else if (i == R.id.hospital_change) {
-
-
-            if (!TextUtils.isEmpty(mAuthenticate_status)) {
-                //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
-                if ("1".equals(mAuthenticate_status)) {
-                    //1:认证审核中
-                    ToastUtil.showToast(mContext.getApplicationContext(),"认证审核中,不能进行医院变更");
-
-                } else if ("0".equals(mAuthenticate_status)) {
-                    //0:未认证
-                    ToastUtil.showToast(mContext.getApplicationContext(),"未认证,请认证");
-                } else if ("2".equals(mAuthenticate_status)) {
-                    //2:变更审核中
-                    ToastUtil.showToast(mContext.getApplicationContext(),"变更审核中,不能进行医院变更");
-                } else {
-                    //3:已认证
-                    //进行医生认证
-                    jumpHospitalChangeActivity();
-                }
-
-            } else {
-                //0:未认证
-                ToastUtil.showToast(mContext.getApplicationContext(),"未认证,请认证");
-
-            }
+            //医院变更
+            if (!NoDoubleClickUtils.isDoubleClick())
+                HospitalChangeMethod();
         } else if (i == R.id.rl_rebindPhone) {
-
+            //更换手机号码
+            if (!NoDoubleClickUtils.isDoubleClick())
+                jumpRebindPhoneActivity();
         } else if (i == R.id.rl_about) {
-            jumpAboutMeActivity();
+            //关于
+            if (!NoDoubleClickUtils.isDoubleClick())
+                jumpAboutMeActivity();
         } else if (i == R.id.tv_loginOut) {
+            //退出
+            if (!NoDoubleClickUtils.isDoubleClick())
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+            mActivity.finish();
 
         }
+    }
+
+    private void jumpMyFeedBackActivity() {
+        Intent intent = new Intent(mActivity, FeedBackActivity.class);
+        intent.putExtra(CONTENT_TITLE, "我的反馈");
+
+        startActivity(intent);
+    }
+
+    private void jumpRebindPhoneActivity() {
+        Intent intent = new Intent(mActivity, ChangePhoneActivity.class);
+        intent.putExtra(CONTENT_TITLE, "更换手机");
+
+        startActivity(intent);
+
+    }
+
+    private void HospitalChangeMethod() {
+        if (!TextUtils.isEmpty(mAuthenticate_status)) {
+            //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
+            if ("1".equals(mAuthenticate_status)) {
+                //1:认证审核中
+                ToastUtil.showToast(mContext.getApplicationContext(), "认证审核中,不能进行医院变更");
+
+            } else if ("0".equals(mAuthenticate_status)) {
+                //0:未认证
+                ToastUtil.showToast(mContext.getApplicationContext(), "未认证,请认证");
+            } else if ("2".equals(mAuthenticate_status)) {
+                //2:变更审核中
+                ToastUtil.showToast(mContext.getApplicationContext(), "变更审核中,不能进行医院变更");
+            } else {
+                //3:已认证
+                //进行医生认证
+                jumpHospitalChangeActivity();
+            }
+
+        } else {
+            //0:未认证
+            ToastUtil.showToast(mContext.getApplicationContext(), "未认证,请认证");
+
+        }
+    }
+
+    private void jumpModifyPasswordActivity() {
+        Intent intent = new Intent(mActivity, ChangePasswordActivity.class);
+        intent.putExtra(CONTENT_TITLE, "修改密码");
+
+        startActivity(intent);
+
     }
 
     private void jumpHospitalChangeActivity() {
         Intent intent = new Intent(mActivity, ChangeAuthenticationActivity.class);
         intent.putExtra(CONTENT_TITLE, "医院变更");
 
-        startActivityForResult(intent, mRequestCode);
+        startActivityForResult(intent, mChangeRequestCode);
     }
 
     private void jumpAboutMeActivity() {
@@ -460,6 +509,22 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
 
             }
 
+        }else if(requestCode == mChangeRequestCode){
+            if (resultCode == RESULT_OK) {
+                String userAuthenticationCommitResult = data.getStringExtra("userAuthenticationCommitResult");
+                if (!TextUtils.isEmpty(userAuthenticationCommitResult)) {
+                    //用户认证提交成功，变更用户状态
+                    if (userAuthenticationCommitResult.equals("SUCCESS_OK")) {
+                        //2:变更审核中
+
+                        renzhengAlready.setVisibility(View.GONE);
+                        renzhengNo.setVisibility(View.GONE);
+                        renzhengBiangengShenhe.setVisibility(View.VISIBLE);
+                        renzhengShenhe.setVisibility(View.GONE);
+                    }
+                }
+
+            }
         }
 
     }

@@ -116,7 +116,18 @@ public class MainDataManager extends BaseDataManager {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
     }
-
+    /**
+     * 获取登录数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getFeedBackData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
+    }
     /**
      * 获取注册数据
      *
@@ -140,6 +151,20 @@ public class MainDataManager extends BaseDataManager {
      * @return Disposable
      */
     public Disposable getForgetPasswordData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
+     * 获取修改密码数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getChangePasswordData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + SYSTEM_DIR_BASE, mapParameters, mapHeaders), consumer);
 

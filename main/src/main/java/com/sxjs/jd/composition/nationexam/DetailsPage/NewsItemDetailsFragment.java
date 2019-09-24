@@ -225,14 +225,14 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
                 mActivity.finish();
             } else {
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
 
 
         } catch (Exception e) {
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         } finally {
             adapter.loadMoreComplete();
         }
@@ -287,7 +287,7 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
             } else {
 
                 if (!TextUtils.isEmpty(msg)) {
-                    ToastUtil.showToast(mContext, msg);
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
 
             }
@@ -295,7 +295,7 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
 
         } catch (Exception e) {
 
-            ToastUtil.showToast(mContext, "解析数据失败");
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         } finally {
             adapter.loadMoreComplete();
         }

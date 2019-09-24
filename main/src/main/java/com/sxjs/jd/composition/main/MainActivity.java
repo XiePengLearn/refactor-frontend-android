@@ -1,5 +1,6 @@
 package com.sxjs.jd.composition.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -37,14 +38,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     @BindView(R2.id.main_container)
     FrameLayout         mainContainer;
     //    private MainHomeFragment       mMainHomeFragment;
-    private HomePageFragment   mMainHomeFragment;
+    private       HomePageFragment   mMainHomeFragment;
 //    private ClassificationFragment mClassificationFragment;
-    private MiddlePageFragment mClassificationFragment;
-    private FragmentManager    mFragmentManager;
+    private       MiddlePageFragment mClassificationFragment;
+    private       FragmentManager    mFragmentManager;
 //    private FindFragment       mFindFragment;
-    private BeforePageFragment mFindFragment;
+    private       BeforePageFragment mFindFragment;
 //    private MyFragment             mMyFragment;
-    private MinePageFragment   mMyFragment;
+    private       MinePageFragment   mMyFragment;
+    @SuppressLint("StaticFieldLeak")
+    public static MainActivity       instance;//关闭当前页面的instance
 
 
     @Override
@@ -56,7 +59,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         mFragmentManager = getSupportFragmentManager();
         initView();
         initData();
-
+        //在oncreate中添加
+        instance = this;
 
     }
 

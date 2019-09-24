@@ -45,8 +45,10 @@ dependencies {
     //rxJava
     api "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     api "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
-//    api "io.reactivex.rxjava2:adapter-rxjava:$rootProject.rxjavaVersion"
-//    api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
+    //    api "io.reactivex.rxjava2:adapter-rxjava:$rootProject.rxjavaVersion"
+
+    //    api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     //dagger
     api "com.google.dagger:dagger:$rootProject.daggerVersion"
@@ -90,4 +92,5 @@ dependencies {
     // updateApp
     api 'com.teprinciple:updateapputils:2.0.4'
     api project(path: ':addressSelectlib')
+    api files('libs/Msc.jar')
 }
