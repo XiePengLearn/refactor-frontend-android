@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.main.before;
+package com.sxjs.jd.composition.main.befor;
 
 import com.sxjs.common.AppComponent;
 import com.sxjs.common.PerFragment;

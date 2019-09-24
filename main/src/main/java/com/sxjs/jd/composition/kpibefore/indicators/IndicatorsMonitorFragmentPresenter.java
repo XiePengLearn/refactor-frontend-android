@@ -1,10 +1,11 @@
-package com.sxjs.jd.composition.main.unused.quicklyfragment;
+package com.sxjs.jd.composition.kpibefore.indicators;
 
 import com.google.gson.Gson;
 import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
+import com.sxjs.jd.entities.BeforeIndicatorsResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 
 import java.util.Map;
@@ -19,14 +20,14 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/15 16:53
  * @Description:
  */
-public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFragmentContract.Presenter {
+public class IndicatorsMonitorFragmentPresenter extends BasePresenter implements IndicatorsMonitorFragmentContract.Presenter {
 
     private MainDataManager mDataManager;
 
-    private QuicklyFragmentContract.View mContractView;
-    private static  final String         TAG = "BeforePagePresenter";
+    private IndicatorsMonitorFragmentContract.View mContractView;
+    private static  final String                   TAG = "BeforePagePresenter";
     @Inject
-    public QuicklyFragmentPresenter(MainDataManager mDataManager, QuicklyFragmentContract.View view) {
+    public IndicatorsMonitorFragmentPresenter(MainDataManager mDataManager, IndicatorsMonitorFragmentContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -53,16 +54,16 @@ public class QuicklyFragmentPresenter extends BasePresenter implements QuicklyFr
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getForgetPasswordData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getBeforeIndicatorsData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    ForgetPasswordResponse forgetPasswordResponse = gson.fromJson(response, ForgetPasswordResponse.class);
+                    BeforeIndicatorsResponse beforeIndicatorsResponse = gson.fromJson(response, BeforeIndicatorsResponse.class);
 
-                    mContractView.setResponseData(forgetPasswordResponse);
+                    mContractView.setResponseData(beforeIndicatorsResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

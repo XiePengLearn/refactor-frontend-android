@@ -1,11 +1,13 @@
-package com.sxjs.jd.composition.main.before;
+package com.sxjs.jd.composition.main.befor;
 
 import com.google.gson.Gson;
 import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.ExamMiddleKpiReportResponse;
+import com.sxjs.jd.entities.ExamMiddleResponse;
+import com.sxjs.jd.entities.UnReadMessageResponse;
 
 import java.util.Map;
 
@@ -23,8 +25,9 @@ public class BeforePagePresenter extends BasePresenter implements BeforePageCont
 
     private MainDataManager mDataManager;
 
-    private BeforePageContract.View mContractView;
-    private static  final String    TAG = "MiddlePagePresenter";
+    private              BeforePageContract.View mContractView;
+    private static final String                  TAG = "BeforePagePresenter";
+
     @Inject
     public BeforePagePresenter(MainDataManager mDataManager, BeforePageContract.View view) {
         this.mDataManager = mDataManager;
@@ -53,20 +56,23 @@ public class BeforePagePresenter extends BasePresenter implements BeforePageCont
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getForgetPasswordData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getNoReadMessageData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
                 try {
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    ForgetPasswordResponse forgetPasswordResponse = gson.fromJson(response, ForgetPasswordResponse.class);
+                    UnReadMessageResponse unReadMessageResponse = gson.fromJson(response, UnReadMessageResponse.class);
 
-                    mContractView.setResponseData(forgetPasswordResponse);
+                    mContractView.setResponseData(unReadMessageResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                mContractView.hiddenProgressDialogView();
             }
+
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
             @Override
@@ -85,5 +91,7 @@ public class BeforePagePresenter extends BasePresenter implements BeforePageCont
         });
         addDisposabe(disposable);
     }
+
+
 
 }

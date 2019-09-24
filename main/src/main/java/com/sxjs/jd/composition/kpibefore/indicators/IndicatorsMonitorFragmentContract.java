@@ -1,8 +1,7 @@
-package com.sxjs.jd.composition.main.mine;
+package com.sxjs.jd.composition.kpibefore.indicators;
 
+import com.sxjs.jd.entities.BeforeIndicatorsResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
-import com.sxjs.jd.entities.UnReadMessageResponse;
-import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.util.Map;
 
@@ -11,14 +10,12 @@ import java.util.Map;
  * @Date: 2019/9/15 16:36
  * @Description:
  */
-public interface MinePageContract {
+public interface IndicatorsMonitorFragmentContract {
 
     interface View {
 
 
-        void setResponseData(UserInfoResponse userInfoResponse);
-
-        void setUnreadMessageResponseData(UnReadMessageResponse unReadMessageResponse);
+        void setResponseData(BeforeIndicatorsResponse beforeIndicatorsResponse);
 
         void showProgressDialogView();
 
@@ -35,8 +32,6 @@ public interface MinePageContract {
         Map getData();
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
-
-        void getUnreadMessageRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }

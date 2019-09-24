@@ -3,101 +3,136 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:cube_ptr="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <include layout="@layout/jkx_public_title_home" />
 
-    <com.sxjs.common.widget.headerview.JDHeaderView
-        android:id="@+id/find_pull_refresh_header"
-        cube_ptr:ptr_duration_to_close="200"
-        cube_ptr:ptr_duration_to_close_header="300"
-        cube_ptr:ptr_keep_header_when_refresh="true"
-        cube_ptr:ptr_pull_to_fresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
-        cube_ptr:ptr_resistance="2.0"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
+
+
         <LinearLayout
+            android:id="@+id/normal_display"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
             <RelativeLayout
-                android:id="@+id/empty_tip"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible">
+                android:layout_height="@dimen/y40"
+                android:layout_gravity="top">
 
-                <LinearLayout
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:layout_marginRight="@dimen/x15"
+                    android:background="#EEEEEE" />
+
+
+                <com.antiless.support.widget.TabLayout
+                    android:id="@+id/tabLayout_before"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:layout_height="56dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    app:indicatorEndColor="#2297FF"
+                    app:indicatorMarginBottom="3dp"
 
-                    <ImageView
-                        android:id="@+id/img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/zwxx" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="该页面无法查看"
-                        android:textColor="#666666"
-                        android:textSize="@dimen/x13" />
+                    app:indicatorMarginEnd="20dp"
+                    app:indicatorMarginStart="20dp"
+                    app:indicatorStartColor="#2297FF"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="scrollable"
+                    app:tabSelectedTextColor="#2297FF" />
 
-                    <TextView
-                        android:id="@+id/tip"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/y6"
-                        android:text="请去“我的”页面进行认证"
-                        android:textColor="#666666"
-                        android:textSize="@dimen/x13" />
-                </LinearLayout>
+
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/normal_display"
+            <!-- <com.kpi.client.view.CustomViewPager
+                 android:id="@+id/jkx_viewpage"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent" />-->
+
+            <android.support.v4.view.ViewPager
+
+                android:id="@+id/jkx_viewpager_before"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:background="@color/white" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/y40"
-                    android:layout_gravity="top">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="3px"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="@dimen/x15"
-                        android:layout_marginRight="@dimen/x15"
-                        android:background="#EEEEEE" />
-
-                    <android.support.design.widget.TabLayout
-                        android:id="@+id/tabs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        app:tabIndicatorHeight="0dp"
-                        app:tabMode="fixed" />
-                </RelativeLayout>
-
-                <com.sxjs.common.util.CustomViewPager
-                    android:id="@+id/jkx_viewpage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#F3F3F3" />
-
-            </LinearLayout>
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/empty_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/zwxx" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="该页面无法查看"
+                    android:textColor="#666666"
+                    android:textSize="@dimen/x13" />
+
+                <TextView
+                    android:id="@+id/tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y6"
+                    android:text="请去“我的”页面进行认证"
+                    android:textColor="#666666"
+                    android:textSize="@dimen/x13" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/no_data_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/message_empty" />
 
 
-    </com.sxjs.common.widget.headerview.JDHeaderView>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
 </LinearLayout>

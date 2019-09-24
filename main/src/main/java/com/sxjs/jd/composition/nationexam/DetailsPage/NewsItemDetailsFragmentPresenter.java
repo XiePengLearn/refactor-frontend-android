@@ -25,7 +25,7 @@ public class NewsItemDetailsFragmentPresenter extends BasePresenter implements N
     private MainDataManager mDataManager;
 
     private NewsItemDetailsFragmentContract.View mContractView;
-    private static  final String                 TAG = "MiddlePagePresenter";
+    private static  final String                 TAG = "BeforePagePresenter";
     @Inject
     public NewsItemDetailsFragmentPresenter(MainDataManager mDataManager, NewsItemDetailsFragmentContract.View view) {
         this.mDataManager = mDataManager;

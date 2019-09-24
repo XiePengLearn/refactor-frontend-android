@@ -24,7 +24,7 @@ public class AttentionFragmentPresenter extends BasePresenter implements Attenti
     private MainDataManager mDataManager;
 
     private AttentionFragmentContract.View mContractView;
-    private static  final String           TAG = "MiddlePagePresenter";
+    private static  final String           TAG = "BeforePagePresenter";
     @Inject
     public AttentionFragmentPresenter(MainDataManager mDataManager, AttentionFragmentContract.View view) {
         this.mDataManager = mDataManager;

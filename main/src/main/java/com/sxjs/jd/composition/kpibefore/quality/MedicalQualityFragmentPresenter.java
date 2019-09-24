@@ -1,10 +1,11 @@
-package com.sxjs.jd.composition.message.notification;
+package com.sxjs.jd.composition.kpibefore.quality;
 
 import com.google.gson.Gson;
 import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
+import com.sxjs.jd.entities.MedicalQualityResponse;
 import com.sxjs.jd.entities.MessageNotificationResponse;
 
 import java.util.Map;
@@ -19,14 +20,15 @@ import okhttp3.ResponseBody;
  * @Date: 2019/9/15 16:53
  * @Description:
  */
-public class NotificationFragmentPresenter extends BasePresenter implements NotificationFragmentContract.Presenter {
+public class MedicalQualityFragmentPresenter extends BasePresenter implements MedicalQualityFragmentContract.Presenter {
 
     private MainDataManager mDataManager;
 
-    private NotificationFragmentContract.View mContractView;
-    private static  final String              TAG = "BeforePagePresenter";
+    private              MedicalQualityFragmentContract.View mContractView;
+    private static final String                              TAG = "NationalPreviewsFragmentPresenter";
+
     @Inject
-    public NotificationFragmentPresenter(MainDataManager mDataManager, NotificationFragmentContract.View view) {
+    public MedicalQualityFragmentPresenter(MainDataManager mDataManager, MedicalQualityFragmentContract.View view) {
         this.mDataManager = mDataManager;
         this.mContractView = view;
 
@@ -53,7 +55,7 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
     public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getBeforeMediacalData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
 
@@ -61,9 +63,9 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
+                    MedicalQualityResponse medicalQualityResponse = gson.fromJson(response, MedicalQualityResponse.class);
 
-                    mContractView.setResponseData(messageNitificationResponse);
+                    mContractView.setResponseData(medicalQualityResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -92,7 +94,7 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
     public void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getMessageNotifitionData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getBeforeMediacalData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
 
@@ -100,9 +102,9 @@ public class NotificationFragmentPresenter extends BasePresenter implements Noti
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MessageNotificationResponse messageNitificationResponse = gson.fromJson(response, MessageNotificationResponse.class);
+                    MedicalQualityResponse medicalQualityResponse = gson.fromJson(response, MedicalQualityResponse.class);
 
-                    mContractView.setMoreData(messageNitificationResponse);
+                    mContractView.setMoreData(medicalQualityResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

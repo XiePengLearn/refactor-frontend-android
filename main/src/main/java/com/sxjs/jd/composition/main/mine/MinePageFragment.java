@@ -1,5 +1,6 @@
 package com.sxjs.jd.composition.main.mine;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,9 +37,11 @@ import com.sxjs.jd.composition.kpimine.change.ChangeAuthenticationActivity;
 import com.sxjs.jd.composition.kpimine.feedback.FeedBackActivity;
 import com.sxjs.jd.composition.login.changepassage.ChangePasswordActivity;
 import com.sxjs.jd.composition.login.changephone.ChangePhoneActivity;
+import com.sxjs.jd.composition.message.MessageActivity;
 import com.sxjs.jd.entities.FeedBackResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.MessageNotificationResponse;
+import com.sxjs.jd.entities.UnReadMessageResponse;
 import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.text.SimpleDateFormat;
@@ -132,12 +135,18 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     TextView          tvLoginOut;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView      findPullRefreshHeader;
-    private              Handler          mHandler;
-    private static final String           TAG          = "MinePageFragment";
-    private              UserInfoResponse userInfoResponse;
-    private final        int              mRequestCode = 1;
-    private final        int              mChangeRequestCode = 2;
-    private              String           mAuthenticate_status;
+    private              Handler               mHandler;
+    private static final String                TAG                = "MinePageFragment";
+    private              UserInfoResponse      userInfoResponse;
+    private final        int                   mRequestCode       = 1;
+    private final        int                   mChangeRequestCode = 2;
+    private              String                mAuthenticate_status;
+    private              UnReadMessageResponse unReadMessageResponse;
+
+    private int    mTz = 0;
+    private int    mTx = 0;
+    private int    mGz = 0;
+    private Intent mIntent;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -151,7 +160,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         initTitle();
         initView();
         initData();
-
+        initMessageData();
     }
 
     @Override
@@ -211,6 +220,20 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         mPresenter.getRequestData(mapHeaders, mapParameters);
     }
 
+    //未读消息
+    public void initMessageData() {
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "I002");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getUnreadMessageRequestData(mapHeaders, mapParameters);
+
+
+    }
 
     @Override
     public void setResponseData(UserInfoResponse userInfoResponse) {
@@ -238,6 +261,77 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } catch (Exception e) {
             ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
+    }
+
+    @Override
+    public void setUnreadMessageResponseData(UnReadMessageResponse unReadMessageResponse) {
+        this.unReadMessageResponse = unReadMessageResponse;
+
+        try {
+            String code = unReadMessageResponse.getCode();
+            String msg = unReadMessageResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+
+                //{"code":"200200","data":{"YJ":1,"TX":2,"WD":1},"msg":null}
+                UnReadMessageResponse.DataBean data = unReadMessageResponse.getData();
+                if (data != null) {
+                    mTz = data.getWD();
+                    mTx = data.getTX();
+                    mGz = data.getYJ();
+                    setUnReadMessage(data);
+
+                } else {
+
+                }
+
+
+                //                ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
+                //                finish();
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+
+            } else {
+
+
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
+            LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+    /**
+     * 未读消息设置
+     *
+     * @param unReadMessage 未读消息响应数据
+     */
+    @SuppressLint("SetTextI18n")
+    public void setUnReadMessage(UnReadMessageResponse.DataBean unReadMessage) {
+        if (unReadMessage == null)
+            return;
+        int tz = unReadMessage.getWD();
+        int tx = unReadMessage.getTX();
+        int gz = unReadMessage.getYJ();
+        if (tz + tx + gz != 0) {
+            rlNewMessage.setVisibility(View.VISIBLE);
+            newMessage.setText(tz + tx + gz + "");
+            if (tz + tx + gz > 99) {
+                newMessage.setText("99+");
+            }
+        } else {
+            rlNewMessage.setVisibility(View.GONE);
+        }
+
     }
 
     /**
@@ -366,7 +460,13 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.jkx_title_left_btn) {
 
         } else if (i == R.id.jkx_title_right_btn) {
-
+            //我的消息
+            if (!NoDoubleClickUtils.isDoubleClick())
+            mIntent = new Intent(mActivity, MessageActivity.class);
+            mIntent.putExtra("tz", mTz);
+            mIntent.putExtra("tx", mTx);
+            mIntent.putExtra("gz", mGz);
+            startActivity(mIntent);
         } else if (i == R.id.renzheng_no) {
             if (!NoDoubleClickUtils.isDoubleClick()) {
                 jumpUserAuthenticationActivity();
@@ -383,9 +483,9 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 jumpMyFeedBackActivity();
 
         } else if (i == R.id.cert_download) {
-
+            ToastUtil.showToast(mContext.getApplicationContext(), "开发中");
         } else if (i == R.id.rl_findCa) {
-
+            ToastUtil.showToast(mContext.getApplicationContext(), "开发中");
         } else if (i == R.id.rl_modifyPassword) {
             //修改密码
             if (!NoDoubleClickUtils.isDoubleClick())
@@ -509,7 +609,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
 
             }
 
-        }else if(requestCode == mChangeRequestCode){
+        } else if (requestCode == mChangeRequestCode) {
             if (resultCode == RESULT_OK) {
                 String userAuthenticationCommitResult = data.getStringExtra("userAuthenticationCommitResult");
                 if (!TextUtils.isEmpty(userAuthenticationCommitResult)) {

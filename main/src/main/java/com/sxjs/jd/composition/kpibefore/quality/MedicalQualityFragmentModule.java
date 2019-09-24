@@ -1,4 +1,4 @@
-package com.sxjs.jd.composition.main.before;
+package com.sxjs.jd.composition.kpibefore.quality;
 
 import com.sxjs.jd.MainDataManager;
 
@@ -12,19 +12,19 @@ import dagger.Provides;
  */
 
 @Module
-public class BeforePageModule {
+public class MedicalQualityFragmentModule {
 
-    private BeforePageContract.View view;
+    private MedicalQualityFragmentContract.View view;
 
     private MainDataManager mainDataManager;
 
-    public BeforePageModule(BeforePageContract.View  view, MainDataManager mainDataManager) {
+    public MedicalQualityFragmentModule(MedicalQualityFragmentContract.View  view, MainDataManager mainDataManager) {
         this.view = view;
         this.mainDataManager = mainDataManager;
     }
 
     @Provides
-    BeforePageContract.View providerMainContractView(){
+    MedicalQualityFragmentContract.View providerMainContractView(){
         return view;
     }
 

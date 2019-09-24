@@ -28,6 +28,7 @@ import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
 import com.sxjs.common.base.baseadapter.BaseViewHolder;
 import com.sxjs.common.layoutmanager.MyLinearLayoutManager;
 import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -104,7 +105,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     LinearLayout        normalDisplay;
     @BindView(R2.id.find_pull_refresh_header)
     JDHeaderView        findPullRefreshHeader;
-    private static final String TAG = "MiddlePageFragment";
+    private static final String TAG = "BeforePageFragment";
     @BindView(R2.id.rl_no_data)
     RelativeLayout rlNoData;
     Unbinder unbinder;
@@ -116,7 +117,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     private int                   mTx = 0;
     private int                   mGz = 0;
 
-    List<Fragment> fragments;
+    private List<Fragment>    fragments;
     private MiddlePageAdapter adapter;
 
     private ExamMiddleResponse          examMiddleResponse;
@@ -125,6 +126,8 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     private String                      mSession_id;
     private String                      mCurrenYear;
     private ExamMiddleKpiReportResponse examMiddleKpiReportResponse;
+
+    private boolean isFirstEnterPage = true;
 
     //    @Nullable
     //    @Override
@@ -147,7 +150,17 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_middle_page, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        isFirstEnterPage = false;
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!isFirstEnterPage){
+            initData();
+        }
     }
 
     @Override
@@ -173,7 +186,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
         fragments = new ArrayList<>();
         fragments.clear();
         for (int i = 0; i < mTabUrl.size(); i++) {
-            ExamMiddleFragment examMiddleFragment = ExamMiddleFragment.newInstance(mTabUrl.get(i),findPullRefreshHeader);
+            ExamMiddleFragment examMiddleFragment = ExamMiddleFragment.newInstance(mTabUrl.get(i), findPullRefreshHeader);
             fragments.add(examMiddleFragment);
         }
         adapter = new MiddlePageAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragments, mTabTitle);
@@ -384,7 +397,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
                 String session_id = PrefUtils.readSESSION_ID(mContext);
                 String dataKpiUrl = examMiddleKpiReportResponse.getData();
-                String url ;
+                String url;
                 if (!TextUtils.isEmpty(dataKpiUrl)) {
                     url = dataKpiUrl + "&sessionId=" + session_id;
                 } else {
@@ -494,29 +507,32 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
         } else if (i == R.id.jkx_title_right_btn) {
 
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                //我的消息
+                mIntent = new Intent(mActivity, MessageActivity.class);
 
-            //我的消息
-
-
-            mIntent = new Intent(mActivity, MessageActivity.class);
-
-            mIntent.putExtra("tz", mTz);
-            mIntent.putExtra("tx", mTx);
-            mIntent.putExtra("gz", mGz);
-
-
-            startActivity(mIntent);
-        } else if (i == R.id.year) {
-            //不同年份 数据请求
-            if (popupWindow == null) {
-                initYearPop();
+                mIntent.putExtra("tz", mTz);
+                mIntent.putExtra("tx", mTx);
+                mIntent.putExtra("gz", mGz);
+                startActivity(mIntent);
             }
-            setWindowAlhpa(0.98f);
-            popupWindow.showAsDropDown(year, 0, 0);
-        } else if (i == R.id.report) {
 
-            //绩效报告
-            initExamMiddleKpiReportData(mCurrenYear);
+        } else if (i == R.id.year) {
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                //不同年份 数据请求
+                if (popupWindow == null) {
+                    initYearPop();
+                }
+                setWindowAlhpa(0.98f);
+                popupWindow.showAsDropDown(year, 0, 0);
+            }
+
+        } else if (i == R.id.report) {
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                //绩效报告
+                initExamMiddleKpiReportData(mCurrenYear);
+            }
+
         }
     }
 

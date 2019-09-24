@@ -24,7 +24,7 @@ public class WarnFragmentPresenter extends BasePresenter implements WarnFragment
     private MainDataManager mDataManager;
 
     private WarnFragmentContract.View mContractView;
-    private static  final String      TAG = "MiddlePagePresenter";
+    private static  final String      TAG = "BeforePagePresenter";
     @Inject
     public WarnFragmentPresenter(MainDataManager mDataManager, WarnFragmentContract.View view) {
         this.mDataManager = mDataManager;

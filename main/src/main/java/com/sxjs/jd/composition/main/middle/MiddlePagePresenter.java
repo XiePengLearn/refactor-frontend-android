@@ -27,7 +27,7 @@ public class MiddlePagePresenter extends BasePresenter implements MiddlePageCont
     private MainDataManager mDataManager;
 
     private              MiddlePageContract.View mContractView;
-    private static final String                  TAG = "MiddlePagePresenter";
+    private static final String                  TAG = "BeforePagePresenter";
 
     @Inject
     public MiddlePagePresenter(MainDataManager mDataManager, MiddlePageContract.View view) {

@@ -28,7 +28,7 @@ public class HomePagePresenter extends BasePresenter implements HomePageContract
     private MainDataManager mDataManager;
 
     private HomePageContract.View mContractView;
-    private static  final String  TAG = "MiddlePagePresenter";
+    private static  final String  TAG = "BeforePagePresenter";
     @Inject
     public HomePagePresenter(MainDataManager mDataManager, HomePageContract.View view) {
         this.mDataManager = mDataManager;

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y3"
+        android:paddingBottom="@dimen/y6"
+        android:paddingStart="@dimen/x7"
+        android:paddingEnd="@dimen/x10"
+        android:paddingTop="@dimen/y6">
+
+        <ImageView
+            android:id="@+id/iv_image1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/before_quality_line" />
+
+        <TextView
+            android:id="@+id/tv_CLASSIFY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/x5"
+            android:layout_toEndOf="@id/iv_image1"
+            android:text="质量指标"
+            android:textColor="#1773CB"
+            android:textSize="@dimen/x15" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="中差病案数/病案总数"
+            android:textColor="#666666"
+            android:textSize="@dimen/x13"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+</LinearLayout>
