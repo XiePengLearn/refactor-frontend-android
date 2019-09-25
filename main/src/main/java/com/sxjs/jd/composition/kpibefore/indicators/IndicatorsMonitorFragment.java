@@ -24,7 +24,6 @@ import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.entities.BeforeIndicatorsResponse;
-import com.sxjs.jd.entities.ForgetPasswordResponse;
 
 import java.util.HashMap;
 import java.util.List;

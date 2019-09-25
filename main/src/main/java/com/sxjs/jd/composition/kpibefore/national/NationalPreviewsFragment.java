@@ -31,7 +31,8 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
-import com.sxjs.jd.composition.kpibefore.quality.DaggerMedicalQualityFragmentComponent;
+import com.sxjs.jd.entities.JkxYuPingResponse;
+import com.sxjs.jd.entities.JkxYuPingStatusResponse;
 import com.sxjs.jd.entities.MedicalQualityResponse;
 
 import java.text.SimpleDateFormat;
@@ -58,23 +59,16 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
 
     @Inject
     NationalPreviewsFragmentPresenter mPresenter;
-    @BindView(R2.id.tv_text1)
-    TextView                          tvText1;
-    @BindView(R2.id.tv_date)
-    TextView                          tvDate;
-    @BindView(R2.id.tv_more)
-    TextView                          tvMore;
-    @BindView(R2.id.rl_top_data)
-    RelativeLayout                    rlTopData;
-    @BindView(R2.id.medical_recycler_view)
-    RecyclerView                      findRecyclerview;
-    @BindView(R2.id.medical_pull_refresh_header)
-    JDHeaderView                      findPullRefreshHeader;
-    @BindView(R2.id.no_data_img)
-    ImageView                       noDataImg;
-    @BindView(R2.id.rl_no_data)
-    RelativeLayout                  rlNoData;
+
     Unbinder unbinder;
+    @BindView(R2.id.national_recycler_view)
+    RecyclerView   findRecyclerview;
+    @BindView(R2.id.national_pull_refresh_header)
+    JDHeaderView   findPullRefreshHeader;
+    @BindView(R2.id.no_data_img)
+    ImageView      noDataImg;
+    @BindView(R2.id.rl_no_data)
+    RelativeLayout rlNoData;
 
     private Handler mHandler;
 
@@ -83,7 +77,8 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
     private              Dialog                  dialog;
     private              NationalPreviewsAdapter adapter;
     private              View                    mView;
-    private              MedicalQualityResponse  medicalQualityResponse;
+    private              JkxYuPingStatusResponse jkxYuPingStatusResponse;
+    private              JkxYuPingResponse       jkxYuPingResponse;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -101,7 +96,8 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
     @Override
     public void onLazyLoad() {
         initView();
-        initData();
+        initStatusData();
+        initNationalData();
     }
 
 
@@ -125,7 +121,7 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
         //
         findPullRefreshHeader.setPtrHandler(this);
         findRecyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-        adapter = new NationalPreviewsAdapter(R.layout.item_medical_recyclerview);
+        adapter = new NationalPreviewsAdapter(R.layout.item_national_recyclerview);
         adapter.setOnLoadMoreListener(this);
         adapter.setEnableLoadMore(false);
         adapter.loadMoreComplete();
@@ -134,7 +130,21 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
 
     }
 
-    public void initData() {
+    public void initStatusData() {
+
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("MONTHLY", year + m);
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "Y004");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getRequestStatusData(mapHeaders, mapParameters);
+    }
+
+    public void initNationalData() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -145,44 +155,64 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
         String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("MONTHLY", year + m);
+        //        mapParameters.put("MONTHLY", year + m);
 
         Map<String, String> mapHeaders = new HashMap<>(2);
-        mapHeaders.put("ACTION", "Y003");
+        mapHeaders.put("ACTION", "H004");
         mapHeaders.put("SESSION_ID", session_id);
 
-        mPresenter.getRequestData(mapHeaders, mapParameters);
+        mPresenter.getRequestNationalData(mapHeaders, mapParameters);
     }
-
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void setResponseData(MedicalQualityResponse medicalQualityResponse) {
+    public void setResponseStatusData(JkxYuPingStatusResponse jkxYuPingStatusResponse) {
 
-        this.medicalQualityResponse = medicalQualityResponse;
+        this.jkxYuPingStatusResponse = jkxYuPingStatusResponse;
         try {
-            String code = medicalQualityResponse.getCode();
-            String msg = medicalQualityResponse.getMsg();
+            String code = jkxYuPingStatusResponse.getCode();
+            String msg = jkxYuPingStatusResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
-                MedicalQualityResponse.DataBean messageDate = medicalQualityResponse.getData();
-                if (messageDate != null) {
-                    String data_end_date = messageDate.getDATA_END_DATE();
-                    if (!TextUtils.isEmpty(data_end_date)) {
-                        tvDate.setText("截至" + data_end_date);
-                    } else {
-                        tvDate.setText("");
-                    }
-                    List<MedicalQualityResponse.DataBean.CLASSIFYBean> classify = messageDate.getCLASSIFY();
-                    if (classify != null) {
-                        if (classify.size() > 0) {
-                            List<MedicalQualityResponse.DataBean.CLASSIFYBean> data = adapter.getData();
-                            data.clear();
-                            adapter.addData(classify);
-                            rlNoData.setVisibility(View.GONE);
-                        } else {
-                            rlNoData.setVisibility(View.VISIBLE);
-                        }
+                JkxYuPingStatusResponse.DataBean data = jkxYuPingStatusResponse.getData();
+                if (data != null) {
+                    setPerformanceStatus(data);
+                }
 
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setResponseNationalData(JkxYuPingResponse jkxYuPingResponse) {
+
+        this.jkxYuPingResponse = jkxYuPingResponse;
+        try {
+            String code = jkxYuPingResponse.getCode();
+            String msg = jkxYuPingResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+                List<JkxYuPingResponse.DataBean> messageDate = jkxYuPingResponse.getData();
+                if (messageDate != null) {
+                    if (messageDate.size() > 0) {
+                        List<JkxYuPingResponse.DataBean> data = adapter.getData();
+                        data.clear();
+                        adapter.addData(messageDate);
+                        rlNoData.setVisibility(View.GONE);
                     } else {
                         rlNoData.setVisibility(View.VISIBLE);
                     }
@@ -219,18 +249,18 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
     }
 
     @Override
-    public void setMoreData(MedicalQualityResponse moreDate) {
+    public void setMoreData(JkxYuPingResponse moreDate) {
 
         try {
             String code = moreDate.getCode();
             String msg = moreDate.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
                 LogUtil.e(TAG, "SESSION_ID: " + moreDate.getData());
-                MedicalQualityResponse.DataBean data = moreDate.getData();
+                List<JkxYuPingResponse.DataBean> data = moreDate.getData();
                 if (data != null) {
-                    List<MedicalQualityResponse.DataBean.CLASSIFYBean> classify = data.getCLASSIFY();
-                    for (int i = 0; i < classify.size(); i++) {
-                        adapter.getData().add(classify.get(i));
+
+                    for (int i = 0; i < data.size(); i++) {
+                        adapter.getData().add(data.get(i));
                     }
                 }
 
@@ -263,7 +293,7 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initData();
+                initNationalData();
                 frame.refreshComplete();
             }
         }, 2000);
@@ -299,99 +329,100 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
         }, 2000);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
 
-    @OnClick({R2.id.tv_text1, R2.id.tv_more})
-    public void onViewClicked(View view) {
-        int i = view.getId();
-        if (i == R.id.tv_text1) {
+    //    @OnClick({R2.id.tv_text1, R2.id.tv_more})
+    //    public void onViewClicked(View view) {
+    //        int i = view.getId();
+    //        if (i == R.id.tv_text1) {
+    //
+    //        } else if (i == R.id.tv_more) {
+    //
+    //
+    //        }
+    //    }
 
-        } else if (i == R.id.tv_more) {
+    private boolean isFinish;
 
+    @SuppressLint("SetTextI18n")
+    public void setPerformanceStatus(JkxYuPingStatusResponse.DataBean performanceStatusResponse) {
+
+
+        View headerView = LayoutInflater.from(mContext).inflate(R.layout.jkx_yuping_hearder, null);
+
+        TextView tv_examName = headerView.findViewById(R.id.tv_examName);
+        TextView tv_statusNameAndDate = headerView.findViewById(R.id.tv_statusNameAndDate);
+        TextView tv_day1 = headerView.findViewById(R.id.tv_day1);
+        TextView tv_day2 = headerView.findViewById(R.id.tv_day2);
+        TextView tv_hour1 = headerView.findViewById(R.id.tv_hour1);
+        TextView tv_hour2 = headerView.findViewById(R.id.tv_hour2);
+        LinearLayout ll_examFinsh = headerView.findViewById(R.id.ll_examFinsh);
+        LinearLayout ll_examSchedule = headerView.findViewById(R.id.ll_examSchedule);
+        ll_examSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //                    mEventCallBack.EventClick(JkxBeforeExamFragment.EVENT_GO_PREVIEW_EXAMSCHEDULE, null);
+            }
+        });
+        String preview_name = performanceStatusResponse.getPREVIEW_NAME();
+        if (!TextUtils.isEmpty(preview_name)) {
+            tv_examName.setText(preview_name);
+        }
+
+        String preview_stage_name = performanceStatusResponse.getPREVIEW_STAGE_NAME();
+        String preview_stage_end_date = performanceStatusResponse.getPREVIEW_STAGE_END_DATE();
+
+        tv_statusNameAndDate.setText(preview_stage_name + "(截止" + preview_stage_end_date + ")");
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String time = "0";
+        if (performanceStatusResponse.getPREVIEW_STAGE_END_DATE() != null) {
+            time = performanceStatusResponse.getPREVIEW_STAGE_END_DATE();
+        }
+        Date endDate = TimeUtils.string2Date(time, dateFormat);
+        //        if (endDate == null) {
+        //            endDate = TimeUtils.getNowDate();
+        //        }
+        Date nowDate = TimeUtils.getNowDate();
+        if (endDate == null || endDate.before(nowDate)) {
+            isFinish = true;
+            ll_examFinsh.setVisibility(View.VISIBLE);
+            ll_examSchedule.setVisibility(View.GONE);
+        } else {
+            isFinish = false;
+            ll_examFinsh.setVisibility(View.GONE);
+            ll_examSchedule.setVisibility(View.VISIBLE);
 
         }
+        if (!isFinish) {
+            long hours = TimeUtils.getTimeSpanByNow(endDate, TimeConstants.HOUR);
+            String day = (hours / 24) + "";
+            String hour = (hours % 24) + "";
+            if (day.length() > 1) {
+                String day1 = day.substring(0, 1);
+                tv_day1.setText(day1);
+                String day2 = day.substring(1, 2);
+                tv_day2.setText(day2);
+            } else {
+                tv_day1.setText("0");
+                tv_day2.setText(day);
+            }
+
+            if (hour.length() > 1) {
+                String hour1 = hour.substring(0, 1);
+                tv_hour1.setText(hour1);
+                String hour2 = hour.substring(1, 2);
+                tv_hour2.setText(hour2);
+            } else {
+                tv_hour1.setText("0");
+                tv_hour2.setText(hour);
+            }
+
+        }
+
+
+        adapter.addHeaderView(headerView);
+
     }
-
-
-//    public void setPerformanceStatus(JkxYuPingStatusResponse.DataBean performanceStatusResponse) {
-//
-//        View view = lists.get(mCurrentPageIndex);
-//        RecyclerView recyclerview = view.findViewById(R.id.recyclerview);
-//        MyAdapter adapter = (MyAdapter) recyclerview.getAdapter();
-//
-//        View headerView = LayoutInflater.from(mContext).inflate(R.layout.jkx_yuping_hearder, null);
-//
-//        TextView tv_examName = headerView.findViewById(R.id.tv_examName);
-//        TextView tv_statusNameAndDate = headerView.findViewById(R.id.tv_statusNameAndDate);
-//        TextView tv_day1 = headerView.findViewById(R.id.tv_day1);
-//        TextView tv_day2 = headerView.findViewById(R.id.tv_day2);
-//        TextView tv_hour1 = headerView.findViewById(R.id.tv_hour1);
-//        TextView tv_hour2 = headerView.findViewById(R.id.tv_hour2);
-//        LinearLayout ll_examFinsh = headerView.findViewById(R.id.ll_examFinsh);
-//        LinearLayout ll_examSchedule = headerView.findViewById(R.id.ll_examSchedule);
-//        ll_examSchedule.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mEventCallBack.EventClick(JkxBeforeExamFragment.EVENT_GO_PREVIEW_EXAMSCHEDULE, null);
-//            }
-//        });
-//
-//        tv_examName.setText(performanceStatusResponse.getPREVIEW_NAME());
-//        tv_statusNameAndDate.setText(performanceStatusResponse.getPREVIEW_STAGE_NAME()
-//                + "(截止" + performanceStatusResponse.getPREVIEW_STAGE_END_DATE() + ")");
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String time = "0";
-//        if (performanceStatusResponse.getPREVIEW_STAGE_END_DATE() != null) {
-//            time = performanceStatusResponse.getPREVIEW_STAGE_END_DATE();
-//        }
-//        Date endDate = TimeUtils.string2Date(time, dateFormat);
-//        //        if (endDate == null) {
-//        //            endDate = TimeUtils.getNowDate();
-//        //        }
-//        Date nowDate = TimeUtils.getNowDate();
-//        if (endDate == null || endDate.before(nowDate)) {
-//            isFinish = true;
-//            ll_examFinsh.setVisibility(View.VISIBLE);
-//            ll_examSchedule.setVisibility(View.GONE);
-//        } else {
-//            isFinish = false;
-//            ll_examFinsh.setVisibility(View.GONE);
-//            ll_examSchedule.setVisibility(View.VISIBLE);
-//
-//        }
-//        if (!isFinish) {
-//            long hours = TimeUtils.getTimeSpanByNow(endDate, TimeConstants.HOUR);
-//            String day = (hours / 24) + "";
-//            String hour = (hours % 24) + "";
-//            if (day.length() > 1) {
-//                String day1 = day.substring(0, 1);
-//                tv_day1.setText(day1);
-//                String day2 = day.substring(1, 2);
-//                tv_day2.setText(day2);
-//            } else {
-//                tv_day1.setText("0");
-//                tv_day2.setText(day);
-//            }
-//
-//            if (hour.length() > 1) {
-//                String hour1 = hour.substring(0, 1);
-//                tv_hour1.setText(hour1);
-//                String hour2 = hour.substring(1, 2);
-//                tv_hour2.setText(hour2);
-//            } else {
-//                tv_hour1.setText("0");
-//                tv_hour2.setText(hour);
-//            }
-//
-//        }
-//
-//        adapter.addHeaderView(headerView);
-//
-//    }
 }

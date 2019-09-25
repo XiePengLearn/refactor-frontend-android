@@ -42,7 +42,7 @@ public class AppUpdateResponse {
         this.data = data;
     }
 
-    public static class DataBean {
+    public  class DataBean {
         /**
          * updateTip : 更新提示
          * flag : true

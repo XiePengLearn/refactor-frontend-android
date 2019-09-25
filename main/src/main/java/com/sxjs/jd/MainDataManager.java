@@ -419,7 +419,7 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
-     * 获取忘记密码数据
+     * 获取考前指标监控数据
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -433,7 +433,7 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
-     * 获取忘记密码数据
+     * 获取考前病案质量数据
      *
      * @param mapHeaders    请求头
      * @param mapParameters 请求参数
@@ -445,7 +445,33 @@ public class MainDataManager extends BaseDataManager {
                 (KPI_ROOT_URL + BEFORE_DIR, mapParameters, mapHeaders), consumer);
 
     }
+    /**
+     * 获取考前 国考预评状态
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getNationalStatusData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + BEFORE_DIR, mapParameters, mapHeaders), consumer);
 
+    }
+
+    /**
+     * 获取考前 国考预评数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getNationalData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + HOME_DIR, mapParameters, mapHeaders), consumer);
+
+    }
     //=================================================================================================
 
     public List<String> getTypeOfNameData() {

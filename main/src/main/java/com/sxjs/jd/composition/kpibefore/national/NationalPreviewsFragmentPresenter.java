@@ -5,6 +5,8 @@ import com.sxjs.common.base.rxjava.ErrorDisposableObserver;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.composition.BasePresenter;
+import com.sxjs.jd.entities.JkxYuPingResponse;
+import com.sxjs.jd.entities.JkxYuPingStatusResponse;
 import com.sxjs.jd.entities.MedicalQualityResponse;
 
 import java.util.Map;
@@ -51,10 +53,10 @@ public class NationalPreviewsFragmentPresenter extends BasePresenter implements 
     }
 
     @Override
-    public void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+    public void getRequestStatusData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
-        Disposable disposable = mDataManager.getBeforeMediacalData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+        Disposable disposable = mDataManager.getNationalStatusData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
             @Override
             public void onNext(ResponseBody responseBody) {
 
@@ -62,9 +64,9 @@ public class NationalPreviewsFragmentPresenter extends BasePresenter implements 
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MedicalQualityResponse medicalQualityResponse = gson.fromJson(response, MedicalQualityResponse.class);
+                    JkxYuPingStatusResponse jkxYuPingStatusResponse = gson.fromJson(response, JkxYuPingStatusResponse.class);
 
-                    mContractView.setResponseData(medicalQualityResponse);
+                    mContractView.setResponseStatusData(jkxYuPingStatusResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -90,6 +92,46 @@ public class NationalPreviewsFragmentPresenter extends BasePresenter implements 
     }
 
     @Override
+    public void getRequestNationalData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getNationalData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+
+                try {
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    JkxYuPingResponse jkxYuPingResponse = gson.fromJson(response, JkxYuPingResponse.class);
+
+                    mContractView.setResponseNationalData(jkxYuPingResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mContractView.hiddenProgressDialogView();
+            }
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+
+    }
+
+    @Override
     public void getMoreFindData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
         mContractView.showProgressDialogView();
         final long beforeRequestTime = System.currentTimeMillis();
@@ -101,9 +143,9 @@ public class NationalPreviewsFragmentPresenter extends BasePresenter implements 
                     String response = responseBody.string();
                     LogUtil.e(TAG, "=======response:=======" + response);
                     Gson gson = new Gson();
-                    MedicalQualityResponse medicalQualityResponse = gson.fromJson(response, MedicalQualityResponse.class);
+                    JkxYuPingResponse jkxYuPingResponse = gson.fromJson(response, JkxYuPingResponse.class);
 
-                    mContractView.setMoreData(medicalQualityResponse);
+                    mContractView.setMoreData(jkxYuPingResponse);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
