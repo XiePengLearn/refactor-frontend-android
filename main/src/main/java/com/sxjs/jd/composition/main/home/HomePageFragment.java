@@ -1,8 +1,10 @@
 package com.sxjs.jd.composition.main.home;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -185,6 +187,8 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     private              PolicyElucidationResponse          policyElucidationResponse;
     private              UserResearchResponse               userResearchResponse;
 
+    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
+
     //    @Nullable
     //    @Override
     //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -217,11 +221,39 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
         //初始化用户调研数据
         initUserResearchData();
+
+        registerMessageBroadcast();
     }
 
     @Override
     public void onLazyLoad() {
 
+    }
+
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        mActivity.registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----HomePage收到信鸽的服务推送消息-----");
+        //初始化首页数据
+        initData();
     }
 
     /**
@@ -296,7 +328,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         //
         //                hideJDLoadingDialog();
         //            }
-        //        }, 2000);
+        //        }, 500);
     }
 
     public void initUpdateData() {
@@ -983,13 +1015,15 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
                 tvExceptiopDesc.startAutoScroll();
                 frame.refreshComplete();
             }
-        }, 800);
+        }, 500);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        if (mSystemMessageReceiver != null) {
+            mActivity.unregisterReceiver(mSystemMessageReceiver);
+        }
     }
 
     @OnClick({R2.id.jkx_title_left, R2.id.jkx_title_left_btn, R2.id.jkx_title_right_btn, R2.id.ll_examSchedule,

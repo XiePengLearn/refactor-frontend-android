@@ -58,7 +58,6 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
     private Handler mHandler;
 
     private static final String TAG = "IndicatorsMonitorFragment";
-    private              String mSession_id;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -88,7 +87,7 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
 
     public void initView() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+       String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerIndicatorsMonitorFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -108,6 +107,7 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
     }
 
     public void initData() {
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
 
@@ -162,7 +162,7 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
                 initData();
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override

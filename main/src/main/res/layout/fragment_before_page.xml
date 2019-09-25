@@ -15,7 +15,7 @@
 
 
         <LinearLayout
-            android:id="@+id/normal_display"
+            android:id="@+id/before_normal_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -71,7 +71,7 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/empty_tip"
+            android:id="@+id/before_empty_tip"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
@@ -94,7 +94,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="该页面无法查看"
+                    android:text="考前页面无法查看"
                     android:textColor="#666666"
                     android:textSize="@dimen/x13" />
 
@@ -110,7 +110,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_no_data"
+            android:id="@+id/before_rl_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 

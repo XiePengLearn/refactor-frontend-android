@@ -3,6 +3,7 @@ package com.sxjs.jd.composition.html.homeweb;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -22,6 +23,7 @@ import com.tencent.smtt.sdk.WebView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class HomeWebViewActivity extends BaseActivity {
 
@@ -87,7 +89,25 @@ public class HomeWebViewActivity extends BaseActivity {
         jkxTitleLeft.setVisibility(View.VISIBLE);
 
     }
+    @OnClick(R2.id.jkx_title_left)
+    public void onViewClicked() {
+        goBack();
+    }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_UP
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            goBack();
+        }
+        return false;
+    }
+    public void goBack() {
+        if (webView.canGoBack())
+            webView.goBack();
+        else
+            finish();
+    }
     class MyWebChromClient extends WebChromeClient {
 
         @Override

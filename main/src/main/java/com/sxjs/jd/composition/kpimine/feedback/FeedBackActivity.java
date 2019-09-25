@@ -93,7 +93,6 @@ public class FeedBackActivity extends BaseActivity implements FeedBackContract.V
     @BindView(R2.id.tv_commit)
     TextView       tvCommit;
     private Button           mLoginEntry;
-    private String           mSession_id;
     private FeedBackResponse feedBackResponse;
 
     // 语音听写对象
@@ -123,7 +122,21 @@ public class FeedBackActivity extends BaseActivity implements FeedBackContract.V
         buffer = new StringBuffer();
         mIatResults = new LinkedHashMap<>();
         //        initSDK();
+        initTitle();
         initView();
+
+    }
+
+    /**
+     * 初始化title
+     */
+    public void initTitle() {
+        //返回按钮
+        jkxTitleLeft.setVisibility(View.VISIBLE);
+
+        //标题
+        jkxTitleCenter.setText("我的反馈");
+
 
     }
 
@@ -167,7 +180,7 @@ public class FeedBackActivity extends BaseActivity implements FeedBackContract.V
 
     private void initData(String content) {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("CONTETNT", content);
 

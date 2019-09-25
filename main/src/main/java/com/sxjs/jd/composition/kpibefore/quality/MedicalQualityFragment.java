@@ -73,7 +73,6 @@ public class MedicalQualityFragment extends BaseFragment implements MedicalQuali
     private Handler mHandler;
 
     private static final String                 TAG = "NationExamActivity";
-    private              String                 mSession_id;
     private              Dialog                 dialog;
     private              MedicalQualityAdapter  adapter;
     private              View                   mView;
@@ -109,7 +108,7 @@ public class MedicalQualityFragment extends BaseFragment implements MedicalQuali
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerMedicalQualityFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -260,7 +259,7 @@ public class MedicalQualityFragment extends BaseFragment implements MedicalQuali
                 initData();
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -290,7 +289,7 @@ public class MedicalQualityFragment extends BaseFragment implements MedicalQuali
                 //
                 //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override

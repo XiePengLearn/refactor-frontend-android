@@ -134,7 +134,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="该页面无法查看"
+                        android:text="考中页面无法查看"
                         android:textColor="#666666"
                         android:textSize="@dimen/x13" />
 

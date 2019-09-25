@@ -200,6 +200,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                     //保存账号密码   储存状态 SESSION_ID
                     PrefUtils.writeUserName(editAccount.getText().toString().trim(), this.getApplicationContext());
                     PrefUtils.writePassword(editPassword.getText().toString().trim(), this.getApplicationContext());
+
+
                     PrefUtils.writeCheckRemember(true, this.getApplicationContext());
                     PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
 
@@ -210,6 +212,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                     PrefUtils.writeCheckRemember(false, this.getApplicationContext());
                     PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
                 }
+
+                PrefUtils.writeUserNameDefault(editAccount.getText().toString().trim(), this.getApplicationContext());
+                PrefUtils.writePasswordDefault(editPassword.getText().toString().trim(), this.getApplicationContext());
 
                 ARouter.getInstance().build("/main/MainActivity").greenChannel().navigation(this);
                 finish();
@@ -273,7 +278,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         String lPassword = editPassword.getText().toString().trim();
         if (TextUtils.isEmpty(lPassword)) {
             ToastUtil.showToast(mContext, getResources().getString(
-                            R.string.password_not_empty), Toast.LENGTH_SHORT);
+                    R.string.password_not_empty), Toast.LENGTH_SHORT);
             return;
         }
 
@@ -295,6 +300,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         mapParameters.put("USER_TYPE", "1");
         mapParameters.put("MOBILE_TYPE", "1");
         mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
 
         Map<String, String> mapHeaders = new HashMap<>(1);
         mapHeaders.put("ACTION", "S002");
@@ -342,6 +348,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     private long timeMillis;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {

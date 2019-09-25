@@ -99,7 +99,7 @@ public class FindFragment extends BaseFragment implements FindContract.View, Ptr
 
                 hideJDLoadingDialog();
             }
-        }, 2000);
+        }, 500);
     }
 
 
@@ -127,7 +127,7 @@ public class FindFragment extends BaseFragment implements FindContract.View, Ptr
             public void run() {
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
 
     }
 
@@ -142,7 +142,7 @@ public class FindFragment extends BaseFragment implements FindContract.View, Ptr
                     mPresenter.getMoreFindData();
                 }
             }
-        }, 1000);
+        }, 500);
 
     }
 }

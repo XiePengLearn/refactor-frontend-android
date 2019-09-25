@@ -234,6 +234,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     private void RegisterMethod() {
+//        lRandomNumber = Tool.GetRandomNumber(3);
         String lRealName = regRealName.getText().toString().trim();
         if (TextUtils.isEmpty(lRealName)) {
             ToastUtil.showToast(mContext, "请填写本人真实姓名", Toast.LENGTH_SHORT);

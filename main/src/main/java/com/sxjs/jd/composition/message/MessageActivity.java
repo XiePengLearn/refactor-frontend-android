@@ -81,9 +81,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     private MessageAdapter adapter;
     String[] tabTitle = {"通知", "提醒", "关注"};
     private Intent mIntent;
-    private int mTz;
-    private int mTx;
-    private int mGz;
+    private int    mTz;
+    private int    mTx;
+    private int    mGz;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,24 +94,24 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
 
         mIntent = getIntent();
         mTz = mIntent.getIntExtra("tz", 0);
-        if(mTz>0){
+        if (mTz > 0) {
             newMessage1.setVisibility(View.VISIBLE);
-            newMessage1.setText(""+mTz);
-        }else {
+            newMessage1.setText("" + mTz);
+        } else {
             newMessage1.setVisibility(View.INVISIBLE);
         }
         mTx = mIntent.getIntExtra("tx", 0);
-        if(mTx>0){
+        if (mTx > 0) {
             newMessage2.setVisibility(View.VISIBLE);
-            newMessage2.setText(""+mTx);
-        }else {
+            newMessage2.setText("" + mTx);
+        } else {
             newMessage2.setVisibility(View.INVISIBLE);
         }
         mGz = mIntent.getIntExtra("gz", 0);
-        if(mGz>0){
+        if (mGz > 0) {
             newMessage3.setVisibility(View.VISIBLE);
-            newMessage3.setText(""+mGz);
-        }else {
+            newMessage3.setText("" + mGz);
+        } else {
             newMessage3.setVisibility(View.INVISIBLE);
         }
 
@@ -146,8 +146,6 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
 
         //标题
         jkxTitleCenter.setText("我的消息");
-
-
 
 
     }
@@ -268,7 +266,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     public void onViewClicked(View view) {
         int i = view.getId();
         if (i == R.id.jkx_title_left) {
-
+            finish();
 
         } else if (i == R.id.jkx_title_left_btn) {
 

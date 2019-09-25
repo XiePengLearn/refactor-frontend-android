@@ -49,13 +49,9 @@ public class SplashActivity extends BaseActivity {
                 }
                 finish();
             }
-        }, 2000);*/
+        }, 500);*/
 
-        String xinGeToken = XGPushConfig.getToken(mContext);
-        String packageName = getPackageName();
-        LogUtil.e(TAG, "token---------------:" + xinGeToken + "--packageName--;" + packageName);
 
-        PrefUtils.writeXinGeToken(xinGeToken, this.getApplicationContext());
 
     }
 
@@ -84,6 +80,12 @@ public class SplashActivity extends BaseActivity {
             // 动画结束的回调
             @Override
             public void onAnimationEnd(Animation animation) {
+
+                String xinGeToken = XGPushConfig.getToken(mContext);
+                String packageName = getPackageName();
+                LogUtil.e(TAG, "token---------------:" + xinGeToken + "--packageName--;" + packageName);
+
+                PrefUtils.writeXinGeToken(xinGeToken, SplashActivity.this.getApplicationContext());
                 // 判断新手引导是否展示过
                 boolean showed = PrefUtils.getBoolean(
                         SplashActivity.this, PREF_IS_USER_GUIDE_SHOWED, false);

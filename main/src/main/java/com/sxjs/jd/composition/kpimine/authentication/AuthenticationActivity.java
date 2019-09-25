@@ -116,7 +116,6 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
     private static final String TAG = "ChangeAuthenticationActivity";
     @BindView(R2.id.ll_user_authentication)
     LinearLayout llUserAuthentication;
-    private String                     mSession_id;
     private Intent                     mIntent;
     private String                     mStringExtra;
     private UserAuthenticationResponse userAuthenticationResponse;
@@ -175,7 +174,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
     private void initData() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -187,7 +186,8 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
 
     //上传图片(方法)
     private void uploadImageToServer(File file_name) {
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, String> mapHeaders = new HashMap<>(2);
         mapHeaders.put("ACTION", "CM003");
         mapHeaders.put("SESSION_ID", mSession_id);
@@ -208,7 +208,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
          * PROVINCIAL_CODE	省市代码	 字符型
          * DOCUMENT_URI	图像地址集合 	数组
          */
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(10);
         mapParameters.put("NAME", etName.getText().toString().trim());
         if ("男".equals(tvSex.getText().toString().trim())) {
@@ -222,7 +222,7 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         mapParameters.put("RESIGN", etResign.getText().toString());
         mapParameters.put("WORK_TEL", etWorkTel.getText().toString());
         mapParameters.put("PROVINCIAL_CODE", selectedQrID);
-        LogUtil.e(TAG,"=======selectedQrID======"+selectedQrID);
+        LogUtil.e(TAG, "=======selectedQrID======" + selectedQrID);
         mapParameters.put("DOCUMENT_URI", json);
 
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -346,23 +346,23 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
                 finish();
             } else {
                 //localMediaList 索引对应图片  0 身份证正面  1 身份证反面 2 职业医师证,3拍摄工作证或者胸卡
-              if(selectCommitTemp.size()==1){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==2){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "职业医师证:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==3){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "身份证反面:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==4){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "身份证正面:"+msg);
-                  }
-              }
+                if (selectCommitTemp.size() == 1) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 2) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "职业医师证:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 3) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "身份证反面:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 4) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "身份证正面:" + msg);
+                    }
+                }
 
 
                 hiddenProgressDialogView();
@@ -600,15 +600,8 @@ public class AuthenticationActivity extends BaseActivity implements Authenticati
         int i = view.getId();
         if (i == R.id.jkx_title_left) {
 
-            //            finish();
-            //            数据是使用Intent返回
-            Intent intent = new Intent();
-            //把返回数据存入Intent
-            intent.putExtra("userAuthenticationCommitResult", "SUCCESS_OK");
-            //设置返回数据
-            AuthenticationActivity.this.setResult(RESULT_OK, intent);
-            //关闭Activity
-            AuthenticationActivity.this.finish();
+            finish();
+
         } else if (i == R.id.tv_sex) {
 
             //性别

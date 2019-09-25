@@ -3,6 +3,7 @@ package com.sxjs.jd.composition.main.befor;
 import com.sxjs.jd.entities.ExamMiddleKpiReportResponse;
 import com.sxjs.jd.entities.ExamMiddleResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
+import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public interface BeforePageContract {
 
         void setResponseData(UnReadMessageResponse unReadMessageResponse);
 
+        void setUserStatusData(UserInfoResponse userInfoResponse);
 
         void showProgressDialogView();
 
@@ -35,6 +37,6 @@ public interface BeforePageContract {
 
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
-
+        void getUserStatusData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

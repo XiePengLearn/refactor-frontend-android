@@ -42,7 +42,6 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     private Handler mHandler;
 
     private static final String TAG = "NationExamActivity";
-    private              String mSession_id;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
 
     public void initView() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerQuicklyFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -96,6 +95,7 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
     }
 
     public void initData() {
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
 
@@ -146,7 +146,7 @@ public class QuicklyFragment extends BaseFragment implements QuicklyFragmentCont
             public void run() {
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override

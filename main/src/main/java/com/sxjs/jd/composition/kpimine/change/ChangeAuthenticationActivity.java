@@ -90,35 +90,34 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
     @BindView(R2.id.new_message)
     TextView                      newMessage;
     @BindView(R2.id.rl_new_message)
-    RelativeLayout          rlNewMessage;
+    RelativeLayout                rlNewMessage;
     @BindView(R2.id.jkx_title_right)
-    TextView                jkxTitleRight;
+    TextView                      jkxTitleRight;
     @BindView(R2.id.et_name)
-    EditText                etName;
+    EditText                      etName;
     @BindView(R2.id.tv_sex)
-    TextView                tvSex;
+    TextView                      tvSex;
     @BindView(R2.id.et_hospitalName)
-    EditText                etHospitalName;
+    EditText                      etHospitalName;
     @BindView(R2.id.et_department)
-    EditText                etDepartment;
+    EditText                      etDepartment;
     @BindView(R2.id.et_resign)
-    EditText                etResign;
+    EditText                      etResign;
     @BindView(R2.id.et_workTel)
-    EditText                etWorkTel;
+    EditText                      etWorkTel;
     @BindView(R2.id.qr_name)
-    TextView                qrName;
+    TextView                      qrName;
     @BindView(R2.id.gridview)
-    GridView                gridview;
+    GridView                      gridview;
     @BindView(R2.id.flowlayout)
-    FlowLayout              flowlayout;
+    FlowLayout                    flowlayout;
     @BindView(R2.id.tv_commit)
-    TextView                tvCommit;
+    TextView                      tvCommit;
 
 
     private static final String TAG = "ChangeAuthenticationActivity";
     @BindView(R2.id.ll_user_authentication)
     LinearLayout llUserAuthentication;
-    private String                     mSession_id;
     private Intent                     mIntent;
     private String                     mStringExtra;
     private UserAuthenticationResponse userAuthenticationResponse;
@@ -130,15 +129,15 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
 
     public static final int                                TAKE_ALBUM         = 16; // 相册
     public static final int                                TAKE_PICTURE       = 3; // 拍照
-    private             Selector selector;                     //区划选择控件
+    private             Selector                           selector;                     //区划选择控件
     private             BottomDialog                       dialog;
     private             ArrayList<JkxAcContainerRes>       acContainerReslist;               //每次根据区划id获取的区划数据
     private             ArrayList<JkxAlreadySelectedQRRes> alreadySelectArray = null; //在编辑页获取的已选区划
 
-    private boolean                    qrEditFlag = false;                                   //弹出区划选择时判断是来自编辑还是重新选择
-    private UploadImageResponse        uploadImageResponse;
-    private AuthenticationDataResponse authenticationDataResponse;
-    private List<JkxZJZRes>            imgUriList = new ArrayList<>();
+    private boolean                          qrEditFlag = false;                                   //弹出区划选择时判断是来自编辑还是重新选择
+    private UploadImageResponse              uploadImageResponse;
+    private AuthenticationDataResponse       authenticationDataResponse;
+    private List<JkxZJZRes>                  imgUriList = new ArrayList<>();
     private UserChangeAuthenticationResponse userChangeAuthenticationResponse;
 
     @Override
@@ -178,7 +177,7 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
 
     private void initData() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         //        mapParameters.put("ACTION", "I002");
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -190,7 +189,7 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
 
     //上传图片(方法)
     private void uploadImageToServer(File file_name) {
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, String> mapHeaders = new HashMap<>(2);
         mapHeaders.put("ACTION", "CM003");
         mapHeaders.put("SESSION_ID", mSession_id);
@@ -211,14 +210,14 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
          * PROVINCIAL_CODE	省市代码	 字符型
          * DOCUMENT_URI	图像地址集合 	数组
          */
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(10);
-//        mapParameters.put("NAME", etName.getText().toString().trim());
-//        if ("男".equals(tvSex.getText().toString().trim())) {
-//            mapParameters.put("SEX", "1");
-//        } else {
-//            mapParameters.put("SEX", "2");
-//        }
+        //        mapParameters.put("NAME", etName.getText().toString().trim());
+        //        if ("男".equals(tvSex.getText().toString().trim())) {
+        //            mapParameters.put("SEX", "1");
+        //        } else {
+        //            mapParameters.put("SEX", "2");
+        //        }
 
         mapParameters.put("HOSPITAL_NAME", etHospitalName.getText().toString());
         mapParameters.put("DEPARTMENT", etDepartment.getText().toString());
@@ -350,24 +349,24 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
                 finish();
             } else {
                 //localMediaList 索引对应图片  0 身份证正面  1 身份证反面 2 职业医师证,3拍摄工作证或者胸卡
-              if(selectCommitTemp.size()==1){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==2){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "职业医师证:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==3){
-                  if (!TextUtils.isEmpty(msg)) {
-                      ToastUtil.showToast(this.getApplicationContext(), "身份证反面:"+msg);
-                  }
-              }else if(selectCommitTemp.size()==4){
-                  if (!TextUtils.isEmpty(msg)) {
-//                      ToastUtil.showToast(this.getApplicationContext(), "身份证正面:"+msg);
-                      ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:"+msg);
-                  }
-              }
+                if (selectCommitTemp.size() == 1) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 2) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "职业医师证:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 3) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        ToastUtil.showToast(this.getApplicationContext(), "身份证反面:" + msg);
+                    }
+                } else if (selectCommitTemp.size() == 4) {
+                    if (!TextUtils.isEmpty(msg)) {
+                        //                      ToastUtil.showToast(this.getApplicationContext(), "身份证正面:"+msg);
+                        ToastUtil.showToast(this.getApplicationContext(), "拍摄工作证或者胸卡:" + msg);
+                    }
+                }
 
 
                 hiddenProgressDialogView();
@@ -499,7 +498,7 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
             if (i == 0) {
                 src_img.setVisibility(View.VISIBLE);
                 dest_img_layout.setVisibility(View.GONE);
-//                src_img.setBackgroundResource(R.drawable.sf_zm);
+                //                src_img.setBackgroundResource(R.drawable.sf_zm);
                 //只有胸牌
                 src_img.setBackgroundResource(R.drawable.gzz);
 
@@ -593,15 +592,8 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
         int i = view.getId();
         if (i == R.id.jkx_title_left) {
 
-            //            finish();
-            //            数据是使用Intent返回
-            Intent intent = new Intent();
-            //把返回数据存入Intent
-            intent.putExtra("userAuthenticationCommitResult", "SUCCESS_OK");
-            //设置返回数据
-            ChangeAuthenticationActivity.this.setResult(RESULT_OK, intent);
-            //关闭Activity
-            ChangeAuthenticationActivity.this.finish();
+            finish();
+
         } else if (i == R.id.tv_sex) {
 
             //性别
@@ -626,10 +618,10 @@ public class ChangeAuthenticationActivity extends BaseActivity implements Change
     }
 
     private void commitToServer() {
-//        if ("".equals(etName.getText().toString().trim())) {
-//            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
-//            return;
-//        }
+        //        if ("".equals(etName.getText().toString().trim())) {
+        //            ToastUtil.showToast(mContext, "请输入姓名", Toast.LENGTH_SHORT);
+        //            return;
+        //        }
         if ("".equals(etHospitalName.getText().toString().trim())) {
             ToastUtil.showToast(mContext, "请输入医院", Toast.LENGTH_SHORT);
             return;

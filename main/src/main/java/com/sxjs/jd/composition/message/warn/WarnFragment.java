@@ -57,7 +57,6 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
     private Handler mHandler;
 
     private static final String                      TAG = "NationExamActivity";
-    private              String                      mSession_id;
     private              MessageNotificationResponse messageNotificationResponse;
     private              Dialog                      dialog;
     private              WarnAdapter                 adapter;
@@ -115,7 +114,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerWarnFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -251,7 +250,7 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
                 mPresenter.getRequestData(mapHeaders, mapParameters);
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -280,6 +279,6 @@ public class WarnFragment extends BaseFragment implements WarnFragmentContract.V
                 //
                 //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
             }
-        }, 2000);
+        }, 500);
     }
 }

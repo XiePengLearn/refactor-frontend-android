@@ -210,6 +210,7 @@ public class ChangePhoneActivity extends BaseActivity implements ChangePhoneCont
         /*
           retrofit 找回密码请求参数
          */
+//        lRandomNumber = Tool.GetRandomNumber(3);
 
         String session_id = PrefUtils.readSESSION_ID(this.getApplicationContext());
 

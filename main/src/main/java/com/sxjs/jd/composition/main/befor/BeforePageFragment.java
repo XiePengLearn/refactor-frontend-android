@@ -1,7 +1,10 @@
 package com.sxjs.jd.composition.main.befor;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -17,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.antiless.support.widget.TabLayout;
@@ -34,6 +38,7 @@ import com.sxjs.jd.composition.kpibefore.national.NationalPreviewsFragment;
 import com.sxjs.jd.composition.kpibefore.quality.MedicalQualityFragment;
 import com.sxjs.jd.composition.message.MessageActivity;
 import com.sxjs.jd.entities.UnReadMessageResponse;
+import com.sxjs.jd.entities.UserInfoResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,17 +86,17 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
     TabLayout      tabLayout;
     @BindView(R2.id.jkx_viewpager_before)
     ViewPager      jkxViewpager;
-    @BindView(R2.id.normal_display)
+    @BindView(R2.id.before_normal_display)
     LinearLayout   normalDisplay;
     @BindView(R2.id.img)
     ImageView      img;
     @BindView(R2.id.tip)
     TextView       tip;
-    @BindView(R2.id.empty_tip)
+    @BindView(R2.id.before_empty_tip)
     RelativeLayout emptyTip;
     @BindView(R2.id.no_data_img)
     ImageView      noDataImg;
-    @BindView(R2.id.rl_no_data)
+    @BindView(R2.id.before_rl_no_data)
     RelativeLayout rlNoData;
 
     private static final String TAG = "BeforePageFragment";
@@ -107,43 +112,76 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
     private List<Fragment>    fragments;
     private BeforePageAdapter adapter;
 
-    private String       mSession_id;
-    private List<String> mMTabTitle;
-    private boolean      isFirstEnterPage = true;
+    private       List<String> mMTabTitle;
+    private final String       MESSAGE_ACTION   = "com.jkx.message"; // 消息通知的广播名称
+    private       String       mAuthenticate_status;
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_before_page, container, false);
         unbinder = ButterKnife.bind(this, view);
-        isFirstEnterPage = false;
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (!isFirstEnterPage) {
-            initData();
-        }
+
     }
 
     @Override
     public void initEvent() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         initTitle();
         initView();
         initData();
+        //初始化用户认证状态
+        initUserStatusData();
         mMTabTitle = new ArrayList<>();
         mMTabTitle.add("指标监控");
         mMTabTitle.add("病案质量");
         mMTabTitle.add("国考预评");
         initDataFragment(mMTabTitle);
 
+        registerMessageBroadcast();
+
     }
 
     @Override
     public void onLazyLoad() {
+
+    }
+
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        mActivity.registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----BeforePage收到信鸽的服务推送消息-----");
+        //初始化消息数据
+        initData();
+        //初始化用户认证状态
+        initUserStatusData();
+        //初始化考前数据
+        initDataFragment(mMTabTitle);
+
 
     }
 
@@ -205,7 +243,7 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
 
     //未读消息
     public void initData() {
-
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         Map<String, Object> mapParameters = new HashMap<>(1);
 
@@ -216,6 +254,18 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
         mPresenter.getRequestData(mapHeaders, mapParameters);
 
 
+    }
+    public void initUserStatusData() {
+        String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+
+        Map<String, Object> mapParameters = new HashMap<>(1);
+        //        mapParameters.put("MESSAGE_TYPE", "3");
+
+        Map<String, String> mapHeaders = new HashMap<>(2);
+        mapHeaders.put("ACTION", "S004");
+        mapHeaders.put("SESSION_ID", session_id);
+
+        mPresenter.getUserStatusData(mapHeaders, mapParameters);
     }
 
 
@@ -266,6 +316,81 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
         }
     }
 
+    @Override
+    public void setUserStatusData(UserInfoResponse userInfoResponse) {
+        try {
+            String code = userInfoResponse.getCode();
+            String msg = userInfoResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+
+                //初始化 用户信息
+                initUserInfo(userInfoResponse);
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID过期或者报错  要调起登录页面
+                ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
+
+                mActivity.finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    /**
+     * 初始化用户信息
+     */
+    public void initUserInfo(UserInfoResponse userInfoResponse) {
+
+        if (userInfoResponse == null) {
+            ToastUtil.showToast(getActivity(), mActivity.getResources().getString(R.string.init_userdata_failed), Toast.LENGTH_SHORT);
+            return;
+        }
+
+        /**
+         * “NAME”: “姓名”,
+         * 		“HEAD_PORTRAIT”: “头像url”,
+         * 		“AUTHENTICATE_STATUS”: “认证状态”,
+         * 		“VIP_STATUS”: “VIP状态（ 医院）”
+         */
+
+        mAuthenticate_status = userInfoResponse.getData().getAUTHENTICATE_STATUS();
+
+        if (!TextUtils.isEmpty(mAuthenticate_status)) {
+            //"TYPE": "0:未认证，1:认证审核中，2:变更审核中，3:已认证",
+
+            if ("1".equals(mAuthenticate_status)) {
+                //1:认证审核中
+                tip.setText("认证审核中");
+                normalDisplay.setVisibility(View.GONE);
+                emptyTip.setVisibility(View.VISIBLE);
+            } else if ("0".equals(mAuthenticate_status)) {
+                //0:未认证
+                normalDisplay.setVisibility(View.GONE);
+                emptyTip.setVisibility(View.VISIBLE);
+                tip.setText("请去“我的”页面进行认证");
+
+            } else {
+                //2:变更审核中
+                //3:已认证
+                normalDisplay.setVisibility(View.VISIBLE);
+                emptyTip.setVisibility(View.GONE);
+
+            }
+
+        } else {
+            //0:未认证
+            normalDisplay.setVisibility(View.GONE);
+            emptyTip.setVisibility(View.VISIBLE);
+            tip.setText("请去“我的”页面进行认证");
+        }
+    }
 
     /**
      * 未读消息设置
@@ -308,7 +433,9 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
+        if (mSystemMessageReceiver != null) {
+            mActivity.unregisterReceiver(mSystemMessageReceiver);
+        }
     }
 
 

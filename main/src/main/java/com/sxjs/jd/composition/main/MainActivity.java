@@ -1,15 +1,25 @@
 package com.sxjs.jd.composition.main;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseActivity;
+import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.PrefUtils;
+import com.sxjs.common.util.ResponseCode;
+import com.sxjs.common.util.ToastUtil;
 import com.sxjs.common.util.statusbar.StatusBarUtil;
 import com.sxjs.common.widget.bottomnavigation.BadgeItem;
 import com.sxjs.common.widget.bottomnavigation.BottomNavigationBar;
@@ -21,6 +31,10 @@ import com.sxjs.jd.composition.main.befor.BeforePageFragment;
 import com.sxjs.jd.composition.main.home.HomePageFragment;
 import com.sxjs.jd.composition.main.middle.MiddlePageFragment;
 import com.sxjs.jd.composition.main.mine.MinePageFragment;
+import com.sxjs.jd.entities.LoginResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -38,15 +52,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     FrameLayout         mainContainer;
     //    private MainHomeFragment       mMainHomeFragment;
     private       HomePageFragment   mMainHomeFragment;
-//    private ClassificationFragment mClassificationFragment;
+    //    private ClassificationFragment mClassificationFragment;
     private       MiddlePageFragment mClassificationFragment;
     private       FragmentManager    mFragmentManager;
-//    private FindFragment       mFindFragment;
+    //    private FindFragment       mFindFragment;
     private       BeforePageFragment mFindFragment;
-//    private MyFragment             mMyFragment;
+    //    private MyFragment             mMyFragment;
     private       MinePageFragment   mMyFragment;
     @SuppressLint("StaticFieldLeak")
     public static MainActivity       instance;//关闭当前页面的instance
+    private final String             MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
 
 
     @Override
@@ -60,14 +75,64 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
         initData();
         //在oncreate中添加
         instance = this;
-
+        registerMessageBroadcast();
     }
 
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----MainActivity收到信鸽的服务推送消息-----");
+        //初始化首页数据
+        initLogin();
+    }
+
+    private void initLogin() {
+        String lAccount = PrefUtils.readUserNameDefault(this.getApplicationContext());
+        String lPassword = PrefUtils.readPasswordDefault(this.getApplicationContext());
+
+        String mXinGeToken = PrefUtils.readXinGeToken(this.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(6);
+        mapParameters.put("MOBILE", lAccount);
+        mapParameters.put("PASSWORD", lPassword);
+        mapParameters.put("SIGNIN_TYPE", "1");
+        mapParameters.put("USER_TYPE", "1");
+        mapParameters.put("MOBILE_TYPE", "1");
+        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+
+        Map<String, String> mapHeaders = new HashMap<>(1);
+        mapHeaders.put("ACTION", "S002");
+        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+
+        presenter.getLoginData(mapHeaders, mapParameters);
+    }
+
+
     public void initView() {
+
         mMainHomeFragment = (HomePageFragment) mFragmentManager.findFragmentByTag("home_fg");
         mClassificationFragment = (MiddlePageFragment) mFragmentManager.findFragmentByTag("class_fg");
         mFindFragment = (BeforePageFragment) mFragmentManager.findFragmentByTag("find_fg");
         mMyFragment = (MinePageFragment) mFragmentManager.findFragmentByTag("my_fg");
+
 
         if (mMainHomeFragment == null) {
             mMainHomeFragment = HomePageFragment.newInstance();
@@ -102,7 +167,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
                 .mainPresenterModule(new MainPresenterModule(this, MainDataManager.getInstance(mDataManager)))
                 .build()
                 .inject(this);
+
+
         initBottomNavigation();
+
 
     }
 
@@ -232,7 +300,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
 
     public void initData() {
-//        presenter.getText();
+        //        presenter.getText();
     }
 
     private String text;
@@ -240,15 +308,29 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
 
 
     @Override
-    public void setText(String text) {
+    public void setLoginData(LoginResponse loginResponse) {
+        try {
+            String code = loginResponse.getCode();
+            String msg = loginResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "----------用户默认登录了-------------: ");
 
-        this.text = text;
+                String SESSION_ID = loginResponse.getData();
+                PrefUtils.writeSESSION_ID(SESSION_ID, this.getApplicationContext());
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
 
-//        Toast.makeText(this, "text:" + text, Toast.LENGTH_SHORT).show();
-//
-//
-//        Log.e(TAG, "initData: " + text);
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(this.getApplicationContext(), msg);
+                }
 
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(this.getApplicationContext(), "解析数据失败");
+        }
 
     }
 
@@ -260,23 +342,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
     @Override
     public void hiddenProgressDialogView() {
         hiddenProgressDialog();
-    }
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("text", text);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            String text = savedInstanceState.getString("text");
-            this.text = text;
-
-        }
     }
 
 
@@ -303,9 +368,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Bot
             presenter.destory();
         }
 
+        if (mSystemMessageReceiver != null) {
+            unregisterReceiver(mSystemMessageReceiver);
+        }
 
     }
+
     private long timeMillis;
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {

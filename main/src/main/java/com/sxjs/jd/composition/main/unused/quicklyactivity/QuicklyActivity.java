@@ -36,7 +36,6 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
     private static final String        TAG = "NationExamActivity";
     private              Button        mLoginEntry;
     private              LoginResponse loginResponse;
-    private              String        mSession_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class QuicklyActivity extends BaseActivity implements QuicklyContract.Vie
 
     private void initData() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
 //        mapParameters.put("ACTION", "I002");
         Map<String, String> mapHeaders = new HashMap<>(2);

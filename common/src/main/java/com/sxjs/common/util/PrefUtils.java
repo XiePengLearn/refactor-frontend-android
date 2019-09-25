@@ -26,6 +26,21 @@ public class PrefUtils {
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getString("userName", "");
     }
+
+    public static void writeUserNameDefault(String userName, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("userNameDefault", userName);
+        editor.apply();
+    }
+
+    public static String readUserNameDefault(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getString("userNameDefault", "");
+    }
+
     public static void writeAuthenticationStatus(String userName, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -39,6 +54,23 @@ public class PrefUtils {
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
         return mySharedPreferences.getString("authenticationStatus", "");
     }
+
+    public static void writePasswordDefault(String password, Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putString("passwordDefault", password);
+        editor.apply();
+    }
+
+    public static String readPasswordDefault(Context context) {
+        SharedPreferences mySharedPreferences = context.getSharedPreferences(
+                SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
+        return mySharedPreferences.getString("passwordDefault", "");
+
+    }
+
+
     public static void writePassword(String password, Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
@@ -65,7 +97,7 @@ public class PrefUtils {
     public static boolean readCheckRemember(Context context) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(
                 SHARE_PREFS_NAME, Activity.MODE_PRIVATE);
-        return mySharedPreferences.getBoolean("isCheckRemember",false);
+        return mySharedPreferences.getBoolean("isCheckRemember", false);
 
     }
 

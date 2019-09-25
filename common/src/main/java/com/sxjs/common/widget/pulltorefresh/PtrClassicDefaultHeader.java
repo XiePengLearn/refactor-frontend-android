@@ -296,7 +296,7 @@ public class PtrClassicDefaultHeader extends FrameLayout implements PtrUIHandler
         public void run() {
             tryUpdateLastUpdateTime();
             if (mRunning) {
-                postDelayed(this, 1000);
+                postDelayed(this, 500);
             }
         }
     }

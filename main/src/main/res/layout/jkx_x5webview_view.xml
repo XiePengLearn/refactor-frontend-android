@@ -24,7 +24,7 @@
             android:drawableTop="@drawable/wuneirong2x"
             android:drawablePadding="@dimen/x10"
             android:gravity="center"
-            android:text="暂无法访问"
+            android:text="敬请期待"
             android:textColor="#333333"
             android:textSize="@dimen/x15" />
 

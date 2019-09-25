@@ -58,7 +58,6 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
 
     private static final String                      TAG      = "NationExamActivity";
     private static final String                      newsId   = "newsDetailsId";
-    private              String                      mSession_id;
     private              MessageNotificationResponse messageNotificationResponse;
     private              Dialog                      dialog;
     private              NewsItemDetailsAdapter      adapter;
@@ -133,7 +132,7 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+      String  mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerNewsItemDetailsFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -311,7 +310,7 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
 
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -332,7 +331,7 @@ public class NewsItemDetailsFragment extends BaseFragment implements NewsItemDet
                 mPAGE_no = mPAGE_no + 1;
                 initDataMorw(mNewsItemId, mPAGE_no);
             }
-        }, 2000);
+        }, 500);
 
 
     }

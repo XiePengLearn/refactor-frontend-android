@@ -1,5 +1,7 @@
 package com.sxjs.jd.composition.main;
 
+import com.sxjs.jd.entities.LoginResponse;
+
 import java.util.Map;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Map;
 
 public interface MainContract {
     interface View {
-        void setText(String text);
+        void setLoginData(LoginResponse loginResponse);
 
 
         void showProgressDialogView();
@@ -17,13 +19,13 @@ public interface MainContract {
     }
 
     interface Presenter {
-        void getText();
 
         void destory();
 
         void saveData();
 
         Map getData();
+        void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 

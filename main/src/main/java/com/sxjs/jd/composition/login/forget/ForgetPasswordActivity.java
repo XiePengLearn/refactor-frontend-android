@@ -269,6 +269,7 @@ public class ForgetPasswordActivity extends BaseActivity implements ForgetPasswo
         /*
           retrofit 找回密码请求参数
          */
+//        lRandomNumber = Tool.GetRandomNumber(3);
         Map<String, Object> mapParameters = new HashMap<>();
         mapParameters.put("MOBILE", findPhone.getText().toString().trim());
         mapParameters.put("RANDOM_NUMBER", lRandomNumber);

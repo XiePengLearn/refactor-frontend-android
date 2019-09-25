@@ -1,7 +1,10 @@
 package com.sxjs.jd.composition.main.middle;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -123,50 +126,29 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     private ExamMiddleResponse          examMiddleResponse;
     private List<String>                mTabTitle;
     private List<String>                mTabUrl;
-    private String                      mSession_id;
     private String                      mCurrenYear;
     private ExamMiddleKpiReportResponse examMiddleKpiReportResponse;
 
-    private boolean isFirstEnterPage = true;
+    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
 
-    //    @Nullable
-    //    @Override
-    //    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    //        View view = inflater.inflate(R.layout.fragment_middle_page, container, false);
-    //        unbinder = ButterKnife.bind(this, view);
-    //        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-    //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-    //        Date date = new Date(System.currentTimeMillis());
-    //        mCurrenYear = simpleDateFormat.format(date);
-    //
-    //        initTitle();
-    //        initView();
-    //        initData();
-    //        initExamMiddleData(mCurrenYear);
-    //        return view;
-    //
-    //    }
+
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_middle_page, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        isFirstEnterPage = false;
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(!isFirstEnterPage){
-            initData();
-        }
+        //        initData();
     }
 
     @Override
     public void initEvent() {
 
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
         Date date = new Date(System.currentTimeMillis());
         mCurrenYear = simpleDateFormat.format(date);
@@ -175,10 +157,40 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
         initView();
         initData();
         initExamMiddleData(mCurrenYear);
+        registerMessageBroadcast();
     }
 
     @Override
     public void onLazyLoad() {
+
+    }
+
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        mActivity.registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----MiddlePage收到信鸽的服务推送消息-----");
+        //初始化消息数据
+        initData();
+        //初始化考中数据
+        initExamMiddleData(mCurrenYear);
 
     }
 
@@ -241,7 +253,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     //未读消息
     public void initData() {
 
-
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
 
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -255,7 +267,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
     public void initExamMiddleData(String mCurrenYear) {
 
-
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("YEAR", mCurrenYear);
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -269,7 +281,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
 
     public void initExamMiddleKpiReportData(String mCurrenYear) {
 
-
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
         Map<String, Object> mapParameters = new HashMap<>(1);
         mapParameters.put("YEAR", mCurrenYear);
         Map<String, String> mapHeaders = new HashMap<>(2);
@@ -336,6 +348,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
             String code = examMiddleResponse.getCode();
             String msg = examMiddleResponse.getMsg();
             if (code.equals(ResponseCode.SUCCESS_OK)) {
+                findPullRefreshHeader.setEnabled(false);
                 emptyTip.setVisibility(View.GONE);
                 normalDisplay.setVisibility(View.VISIBLE);
 
@@ -353,6 +366,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
                     for (int i = 0; i < data.size(); i++) {
                         String name = data.get(i).getNAME();
                         mTabTitle.add(name);
+                        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
                         String uri = data.get(i).getURI() + "&sessionId=" + mSession_id;
                         mTabUrl.add(uri);
                     }
@@ -372,6 +386,7 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
             } else {
                 emptyTip.setVisibility(View.VISIBLE);
                 normalDisplay.setVisibility(View.GONE);
+                findPullRefreshHeader.setEnabled(true);
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(mContext.getApplicationContext(), msg);
                 }
@@ -472,18 +487,14 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
             @Override
             public void run() {
 
-                Map<String, Object> mapParameters = new HashMap<>(1);
-                mapParameters.put("YEAR", mCurrenYear);
-                Map<String, String> mapHeaders = new HashMap<>(2);
-                mapHeaders.put("ACTION", "X003");
-                mapHeaders.put("SESSION_ID", mSession_id);
 
-                mPresenter.getExamMiddleData(mapHeaders, mapParameters);
-
-
+                //初始化消息数据
+                initData();
+                //初始化考中数据
+                initExamMiddleData(mCurrenYear);
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
 
 
     }
@@ -494,7 +505,9 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
+        if (mSystemMessageReceiver != null) {
+            mActivity.unregisterReceiver(mSystemMessageReceiver);
+        }
     }
 
 

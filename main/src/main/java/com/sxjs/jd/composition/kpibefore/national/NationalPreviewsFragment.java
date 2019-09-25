@@ -73,7 +73,6 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
     private Handler mHandler;
 
     private static final String                  TAG = "NationExamActivity";
-    private              String                  mSession_id;
     private              Dialog                  dialog;
     private              NationalPreviewsAdapter adapter;
     private              View                    mView;
@@ -111,7 +110,7 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerNationalPreviewsFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -296,7 +295,7 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
                 initNationalData();
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -326,7 +325,7 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
                 //
                 //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
             }
-        }, 2000);
+        }, 500);
     }
 
 

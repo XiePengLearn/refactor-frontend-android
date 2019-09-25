@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/x13"
-    android:paddingRight="@dimen/x13">
+
+    >
 
     <include layout="@layout/jkx_public_title_home" />
 

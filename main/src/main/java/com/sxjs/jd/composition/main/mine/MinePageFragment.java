@@ -2,7 +2,10 @@ package com.sxjs.jd.composition.main.mine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -143,10 +146,11 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
     private              String                mAuthenticate_status;
     private              UnReadMessageResponse unReadMessageResponse;
 
-    private int    mTz = 0;
-    private int    mTx = 0;
-    private int    mGz = 0;
-    private Intent mIntent;
+    private       int    mTz            = 0;
+    private       int    mTx            = 0;
+    private       int    mGz            = 0;
+    private       Intent mIntent;
+    private final String MESSAGE_ACTION = "com.jkx.message"; // 消息通知的广播名称
 
     @Override
     public View initView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -161,11 +165,42 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         initView();
         initData();
         initMessageData();
+
+        registerMessageBroadcast();
     }
 
     @Override
     public void onLazyLoad() {
 
+    }
+
+    /**
+     * 注册消息广播
+     */
+    private void registerMessageBroadcast() {
+        IntentFilter filter = new IntentFilter(MESSAGE_ACTION);
+        mActivity.registerReceiver(mSystemMessageReceiver, filter);// 注册广播
+    }
+
+    private BroadcastReceiver mSystemMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (MESSAGE_ACTION.equals(action)) {
+                initMoreState();
+            }
+        }
+
+    };
+
+    private void initMoreState() {
+
+        LogUtil.e(TAG, "-----MinePage收到信鸽的服务推送消息-----");
+        //初始用户信息
+        initData();
+
+        //初始化消息数据
+        initMessageData();
     }
 
     /**
@@ -439,13 +474,15 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
                 initData();
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
+        if (mSystemMessageReceiver != null) {
+            mActivity.unregisterReceiver(mSystemMessageReceiver);
+        }
     }
 
 
@@ -462,7 +499,7 @@ public class MinePageFragment extends BaseFragment implements MinePageContract.V
         } else if (i == R.id.jkx_title_right_btn) {
             //我的消息
             if (!NoDoubleClickUtils.isDoubleClick())
-            mIntent = new Intent(mActivity, MessageActivity.class);
+                mIntent = new Intent(mActivity, MessageActivity.class);
             mIntent.putExtra("tz", mTz);
             mIntent.putExtra("tx", mTx);
             mIntent.putExtra("gz", mGz);

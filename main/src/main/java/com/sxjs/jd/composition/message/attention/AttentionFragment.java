@@ -58,7 +58,6 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
     private Handler mHandler;
 
     private static final String                      TAG = "NationExamActivity";
-    private              String                      mSession_id;
     private              MessageNotificationResponse messageNotificationResponse;
     private              Dialog                      dialog;
     private              AttentionAdapter            adapter;
@@ -116,7 +115,7 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
 
     public void initView() {
         mHandler = new Handler();
-        mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerAttentionFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -256,7 +255,7 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
                 mPresenter.getRequestData(mapHeaders, mapParameters);
                 frame.refreshComplete();
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -286,7 +285,7 @@ public class AttentionFragment extends BaseFragment implements AttentionFragment
                 //
                 //                mPresenter.getMoreFindData(mapHeaders, mapParameters);
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override

@@ -176,7 +176,7 @@ public class MainHomeFragment extends BaseFragment implements JDHeaderView.Refre
                     flag = 0;
                 }
             }
-        }, 1000);
+        }, 500);
     }
 
     @Override
@@ -246,6 +246,6 @@ public class MainHomeFragment extends BaseFragment implements JDHeaderView.Refre
                     mPresenter.getRecommendedWares();
                 }
             }
-        },1000);
+        },500);
     }
 }

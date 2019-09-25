@@ -221,10 +221,10 @@
     </application>
     <!--小米权限开始-->
     <permission
-        android:name="com.kpi.clientx.permission.MIPUSH_RECEIVE"
+        android:name="com.kpi.client.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
     <!-- 这里com.example.mipushtest改成app的包名 -->
 
-    <uses-permission android:name="com.kpi.clientx.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="com.kpi.client.permission.MIPUSH_RECEIVE" />
     <!--小米权限结束-->
 </manifest>
