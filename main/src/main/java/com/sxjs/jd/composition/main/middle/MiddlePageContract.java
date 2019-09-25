@@ -3,6 +3,7 @@ package com.sxjs.jd.composition.main.middle;
 import com.sxjs.jd.entities.ExamMiddleKpiReportResponse;
 import com.sxjs.jd.entities.ExamMiddleResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
 
 import java.util.Map;
@@ -23,6 +24,8 @@ public interface MiddlePageContract {
 
         void setExamMiddleKpiReportData(ExamMiddleKpiReportResponse examMiddleKpiReportResponse);
 
+        void setLoginData(LoginResponse loginResponse);
+
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -42,6 +45,7 @@ public interface MiddlePageContract {
         void getExamMiddleData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getExamMiddleKpiReportData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
+        void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
     }
 }

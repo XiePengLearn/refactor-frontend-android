@@ -197,6 +197,20 @@ public class MainDataManager extends BaseDataManager {
                 (KPI_ROOT_URL + HOME_DIR, mapParameters, mapHeaders), consumer);
 
     }
+
+    /**
+     * 获取首页 考试计划
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getHomeExamScheduleData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + HOME_DIR, mapParameters, mapHeaders), consumer);
+
+    }
     /**
      * 获取App更新数据
      *
@@ -460,6 +474,20 @@ public class MainDataManager extends BaseDataManager {
     }
 
     /**
+     * 获取考前 国考预评进度
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getNationalScheduleData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + BEFORE_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+
+    /**
      * 获取考前 国考预评数据
      *
      * @param mapHeaders    请求头
@@ -470,6 +498,19 @@ public class MainDataManager extends BaseDataManager {
     public Disposable getNationalData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
         return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
                 (KPI_ROOT_URL + HOME_DIR, mapParameters, mapHeaders), consumer);
+
+    }
+    /**
+     * 获取考前 关注指标 更多数据
+     *
+     * @param mapHeaders    请求头
+     * @param mapParameters 请求参数
+     * @param consumer      consumer
+     * @return Disposable
+     */
+    public Disposable getMoreAttentionIndicatorsData(Map<String, String> mapHeaders, Map<String, Object> mapParameters, DisposableObserver<ResponseBody> consumer) {
+        return changeIOToMainThread(getService(BaseApiService.class).executePostHeader
+                (KPI_ROOT_URL + BEFORE_DIR, mapParameters, mapHeaders), consumer);
 
     }
     //=================================================================================================

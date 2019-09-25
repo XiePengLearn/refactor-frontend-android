@@ -29,6 +29,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -42,10 +43,14 @@ import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.html.homeweb.HomeWebViewActivity;
 import com.sxjs.jd.composition.html.messagedetails.MessageWebViewActivity;
+import com.sxjs.jd.composition.kpihome.abnormal.AbnormalActivity;
+import com.sxjs.jd.composition.kpihome.previews.PreviewsScheduleActivity;
+import com.sxjs.jd.composition.kpihome.schedule.ExamScheduleActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
 import com.sxjs.jd.composition.nationexam.NationExamActivity;
 import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.HomePageResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.PolicyElucidationResponse;
 import com.sxjs.jd.entities.UserResearchResponse;
 import com.youth.banner.Banner;
@@ -252,8 +257,29 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
     private void initMoreState() {
 
         LogUtil.e(TAG, "-----HomePage收到信鸽的服务推送消息-----");
-        //初始化首页数据
-        initData();
+
+        initLogin();
+    }
+
+    private void initLogin() {
+        String lAccount = PrefUtils.readUserNameDefault(mContext.getApplicationContext());
+        String lPassword = PrefUtils.readPasswordDefault(mContext.getApplicationContext());
+
+        String mXinGeToken = PrefUtils.readXinGeToken(mContext.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(6);
+        mapParameters.put("MOBILE", lAccount);
+        mapParameters.put("PASSWORD", lPassword);
+        mapParameters.put("SIGNIN_TYPE", "1");
+        mapParameters.put("USER_TYPE", "1");
+        mapParameters.put("MOBILE_TYPE", "1");
+        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+
+        Map<String, String> mapHeaders = new HashMap<>(1);
+        mapHeaders.put("ACTION", "S002");
+        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+
+        mPresenter.getLoginData(mapHeaders, mapParameters);
     }
 
     /**
@@ -570,6 +596,36 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         } catch (Exception e) {
             ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setLoginData(LoginResponse loginResponse) {
+        try {
+            String code = loginResponse.getCode();
+            String msg = loginResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "----------HomeFragment用户默认登录了-------------: ");
+
+                String SESSION_ID = loginResponse.getData();
+                PrefUtils.writeSESSION_ID(SESSION_ID, mContext.getApplicationContext());
+
+                //初始化首页数据
+                initData();
+
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 
@@ -1038,28 +1094,36 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
             //开启扫一扫
 
         } else if (i == R.id.jkx_title_right_btn) {
-            String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
-            //我的消息
 
-
-            mIntent = new Intent(mActivity, MessageActivity.class);
-            if (i002 != null) {
-                int tz = i002.getWD();
-                mIntent.putExtra("tz", tz);
-                int tx = i002.getTX();
-                mIntent.putExtra("tx", tx);
-                int gz = i002.getYJ();
-                mIntent.putExtra("gz", gz);
-
-
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+                //我的消息
+                mIntent = new Intent(mActivity, MessageActivity.class);
+                if (i002 != null) {
+                    int tz = i002.getWD();
+                    mIntent.putExtra("tz", tz);
+                    int tx = i002.getTX();
+                    mIntent.putExtra("tx", tx);
+                    int gz = i002.getYJ();
+                    mIntent.putExtra("gz", gz);
+                }
+                startActivity(mIntent);
             }
 
-            startActivity(mIntent);
-
-
         } else if (i == R.id.ll_examSchedule) {
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, ExamScheduleActivity.class);
+                intent.putExtra("title", "国考进展");
+                mActivity.startActivity(intent);
+            }
 
         } else if (i == R.id.rl_examWarn) {
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, AbnormalActivity.class);
+                intent.putExtra("title", "国考提醒");
+                mActivity.startActivity(intent);
+            }
+
 
         } else if (i == R.id.zhibiao_sort) {
 
@@ -1067,32 +1131,35 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
         } else if (i == R.id.zcjd) {
             //政策解读
-            initPolicyElucidationData();
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                initPolicyElucidationData();
+            }
         } else if (i == R.id.tv_news_more) {
-
             //国考快讯更多
-            mIntent = new Intent(mActivity, NationExamActivity.class);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                mIntent = new Intent(mActivity, NationExamActivity.class);
+                startActivity(mIntent);
+            }
 
-
-            startActivity(mIntent);
         } else if (i == R.id.ll_newsItem) {
-            String itemUrl = llNewsItem.getTag().toString();
+            if (!NoDoubleClickUtils.isDoubleClick()) {
 
-
-            Intent intent = new Intent(mContext, MessageWebViewActivity.class);
-            intent.putExtra("title", "详情");
-            intent.putExtra("url", itemUrl);
-            mActivity.startActivity(intent);
-
+                String itemUrl = llNewsItem.getTag().toString();
+                Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+                intent.putExtra("title", "详情");
+                intent.putExtra("url", itemUrl);
+                mActivity.startActivity(intent);
+            }
 
         } else if (i == R.id.ll_newsItem1) {
-            String itemUrl1 = llNewsItem1.getTag().toString();
 
-
-            Intent intent = new Intent(mContext, MessageWebViewActivity.class);
-            intent.putExtra("title", "详情");
-            intent.putExtra("url", itemUrl1);
-            mActivity.startActivity(intent);
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                String itemUrl1 = llNewsItem1.getTag().toString();
+                Intent intent = new Intent(mContext, MessageWebViewActivity.class);
+                intent.putExtra("title", "详情");
+                intent.putExtra("url", itemUrl1);
+                mActivity.startActivity(intent);
+            }
         }
 
     }

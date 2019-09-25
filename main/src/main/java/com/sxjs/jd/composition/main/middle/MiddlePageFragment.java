@@ -46,6 +46,7 @@ import com.sxjs.jd.composition.html.messagedetails.MessageWebViewActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
 import com.sxjs.jd.entities.ExamMiddleKpiReportResponse;
 import com.sxjs.jd.entities.ExamMiddleResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
 
 import java.text.SimpleDateFormat;
@@ -187,10 +188,8 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
     private void initMoreState() {
 
         LogUtil.e(TAG, "-----MiddlePage收到信鸽的服务推送消息-----");
-        //初始化消息数据
-        initData();
-        //初始化考中数据
-        initExamMiddleData(mCurrenYear);
+
+        initLogin();
 
     }
 
@@ -277,6 +276,27 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
         mPresenter.getExamMiddleData(mapHeaders, mapParameters);
 
 
+    }
+
+    private void initLogin() {
+        String lAccount = PrefUtils.readUserNameDefault(mContext.getApplicationContext());
+        String lPassword = PrefUtils.readPasswordDefault(mContext.getApplicationContext());
+
+        String mXinGeToken = PrefUtils.readXinGeToken(mContext.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(6);
+        mapParameters.put("MOBILE", lAccount);
+        mapParameters.put("PASSWORD", lPassword);
+        mapParameters.put("SIGNIN_TYPE", "1");
+        mapParameters.put("USER_TYPE", "1");
+        mapParameters.put("MOBILE_TYPE", "1");
+        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+
+        Map<String, String> mapHeaders = new HashMap<>(1);
+        mapHeaders.put("ACTION", "S002");
+        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+
+        mPresenter.getLoginData(mapHeaders, mapParameters);
     }
 
     public void initExamMiddleKpiReportData(String mCurrenYear) {
@@ -444,6 +464,37 @@ public class MiddlePageFragment extends BaseFragment implements MiddlePageContra
         } catch (Exception e) {
             ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败:");
             LogUtil.e(TAG, "解析数据失败:" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void setLoginData(LoginResponse loginResponse) {
+        try {
+            String code = loginResponse.getCode();
+            String msg = loginResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "----------MiddleFragment用户默认登录了-------------: ");
+
+                String SESSION_ID = loginResponse.getData();
+                PrefUtils.writeSESSION_ID(SESSION_ID, mContext.getApplicationContext());
+
+                //初始化消息数据
+                initData();
+                //初始化考中数据
+                initExamMiddleData(mCurrenYear);
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
         }
     }
 

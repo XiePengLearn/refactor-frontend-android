@@ -37,6 +37,7 @@ import com.sxjs.jd.composition.kpibefore.indicators.IndicatorsMonitorFragment;
 import com.sxjs.jd.composition.kpibefore.national.NationalPreviewsFragment;
 import com.sxjs.jd.composition.kpibefore.quality.MedicalQualityFragment;
 import com.sxjs.jd.composition.message.MessageActivity;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
 import com.sxjs.jd.entities.UserInfoResponse;
 
@@ -175,16 +176,31 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
     private void initMoreState() {
 
         LogUtil.e(TAG, "-----BeforePage收到信鸽的服务推送消息-----");
-        //初始化消息数据
-        initData();
-        //初始化用户认证状态
-        initUserStatusData();
-        //初始化考前数据
-        initDataFragment(mMTabTitle);
 
+
+        initLogin();
 
     }
+    private void initLogin() {
+        String lAccount = PrefUtils.readUserNameDefault(mContext.getApplicationContext());
+        String lPassword = PrefUtils.readPasswordDefault(mContext.getApplicationContext());
 
+        String mXinGeToken = PrefUtils.readXinGeToken(mContext.getApplicationContext());
+        Map<String, Object> mapParameters = new HashMap<>(6);
+        mapParameters.put("MOBILE", lAccount);
+        mapParameters.put("PASSWORD", lPassword);
+        mapParameters.put("SIGNIN_TYPE", "1");
+        mapParameters.put("USER_TYPE", "1");
+        mapParameters.put("MOBILE_TYPE", "1");
+        mapParameters.put("XINGE_TOKEN", mXinGeToken);
+        LogUtil.e(TAG, "-------mXinGeToken-------" + mXinGeToken);
+
+        Map<String, String> mapHeaders = new HashMap<>(1);
+        mapHeaders.put("ACTION", "S002");
+        //        mapHeaders.put("SESSION_ID", TaskManager.SESSION_ID);
+
+        mPresenter.getLoginData(mapHeaders, mapParameters);
+    }
     private void initDataFragment(List<String> mTabTitle) {
         fragments = new ArrayList<>();
         fragments.clear();
@@ -330,6 +346,39 @@ public class BeforePageFragment extends BaseFragment implements BeforePageContra
                 ARouter.getInstance().build("/login/login").greenChannel().navigation(mContext);
 
                 mActivity.finish();
+            } else {
+                if (!TextUtils.isEmpty(msg)) {
+                    ToastUtil.showToast(mContext.getApplicationContext(), msg);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            ToastUtil.showToast(mContext.getApplicationContext(), "解析数据失败");
+        }
+    }
+
+    @Override
+    public void setLoginData(LoginResponse loginResponse) {
+        try {
+            String code = loginResponse.getCode();
+            String msg = loginResponse.getMsg();
+            if (code.equals(ResponseCode.SUCCESS_OK)) {
+                LogUtil.e(TAG, "----------BeforeFragment用户默认登录了-------------: ");
+
+                String SESSION_ID = loginResponse.getData();
+                PrefUtils.writeSESSION_ID(SESSION_ID, mContext.getApplicationContext());
+
+                //初始化消息数据
+                initData();
+                //初始化用户认证状态
+                initUserStatusData();
+                //初始化考前数据
+                initDataFragment(mMTabTitle);
+            } else if (code.equals(ResponseCode.SEESION_ERROR)) {
+                //SESSION_ID为空别的页面 要调起登录页面
+
             } else {
                 if (!TextUtils.isEmpty(msg)) {
                     ToastUtil.showToast(mContext.getApplicationContext(), msg);

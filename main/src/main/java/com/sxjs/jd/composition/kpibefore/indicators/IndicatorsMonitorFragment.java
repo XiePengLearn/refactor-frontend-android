@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.kpibefore.indicators;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -23,6 +25,8 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpibefore.moreindicators.AttentionIndicatorsActivity;
+import com.sxjs.jd.composition.kpihome.previews.PreviewsScheduleActivity;
 import com.sxjs.jd.entities.BeforeIndicatorsResponse;
 
 import java.util.HashMap;
@@ -87,7 +91,7 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
 
     public void initView() {
 
-       String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
+        String mSession_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         DaggerIndicatorsMonitorFragmentComponent.builder()
                 .appComponent(getAppComponent())
@@ -181,12 +185,17 @@ public class IndicatorsMonitorFragment extends BaseFragment implements Indicator
 
     @SuppressLint("SetTextI18n")
     public void notifyWatch(BeforeIndicatorsResponse.DataBean data) {
-        //            tv_followMore.setOnClickListener(new View.OnClickListener() {
-        //                @Override
-        //                public void onClick(View view) {
-        //                    mEventCallBack.EventClick(JkxBeforeExamFragment.EVENT_MORE, null);
-        //                }
-        //            });
+        tvFollowMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    Intent intent = new Intent(mContext, AttentionIndicatorsActivity.class);
+                    intent.putExtra("title", "关注指标");
+                    mActivity.startActivity(intent);
+                }
+            }
+        });
         String follow_indicators_end_date = data.getFOLLOW_INDICATORS_END_DATE();
         if (!TextUtils.isEmpty(follow_indicators_end_date)) {
             tvTime.setText("关注指标（截至" + follow_indicators_end_date + "）");

@@ -64,6 +64,18 @@
         <activity
             android:name=".composition.kpimine.feedback.FeedBackActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpihome.schedule.ExamScheduleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpihome.previews.PreviewsScheduleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpihome.abnormal.AbnormalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpibefore.moreindicators.AttentionIndicatorsActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

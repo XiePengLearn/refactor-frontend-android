@@ -3,6 +3,7 @@ package com.sxjs.jd.composition.main.home;
 import com.sxjs.jd.entities.AppUpdateResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
 import com.sxjs.jd.entities.HomePageResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.PolicyElucidationResponse;
 import com.sxjs.jd.entities.RegisterCodeResponse;
 import com.sxjs.jd.entities.UserResearchResponse;
@@ -23,7 +24,7 @@ public interface HomePageContract {
         void setResponseUpdateData(AppUpdateResponse appUpdateResponse);
         void setResponsePolicyElucidationData(PolicyElucidationResponse policyElucidationResponse);
         void setUserResearchData(UserResearchResponse userResearchResponse);
-
+        void setLoginData(LoginResponse loginResponse);
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -42,6 +43,6 @@ public interface HomePageContract {
         void getRequestUpdateData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
         void getRequestPolicyElucidationData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
         void getUserResearchData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
-
+        void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

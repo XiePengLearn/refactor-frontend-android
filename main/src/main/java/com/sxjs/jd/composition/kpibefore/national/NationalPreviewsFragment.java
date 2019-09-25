@@ -2,6 +2,7 @@ package com.sxjs.jd.composition.kpibefore.national;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.blankj.utilcode.util.TimeUtils;
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
 import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -31,6 +33,8 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpihome.previews.PreviewsScheduleActivity;
+import com.sxjs.jd.composition.kpihome.schedule.ExamScheduleActivity;
 import com.sxjs.jd.entities.JkxYuPingResponse;
 import com.sxjs.jd.entities.JkxYuPingStatusResponse;
 import com.sxjs.jd.entities.MedicalQualityResponse;
@@ -359,7 +363,11 @@ public class NationalPreviewsFragment extends BaseFragment implements NationalPr
         ll_examSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                    mEventCallBack.EventClick(JkxBeforeExamFragment.EVENT_GO_PREVIEW_EXAMSCHEDULE, null);
+                if (!NoDoubleClickUtils.isDoubleClick()) {
+                    Intent intent = new Intent(mContext, PreviewsScheduleActivity.class);
+                    intent.putExtra("title", "预评进展");
+                    mActivity.startActivity(intent);
+                }
             }
         });
         String preview_name = performanceStatusResponse.getPREVIEW_NAME();

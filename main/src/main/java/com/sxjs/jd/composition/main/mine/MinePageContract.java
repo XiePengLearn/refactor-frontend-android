@@ -1,6 +1,7 @@
 package com.sxjs.jd.composition.main.mine;
 
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
 import com.sxjs.jd.entities.UserInfoResponse;
 
@@ -19,7 +20,7 @@ public interface MinePageContract {
         void setResponseData(UserInfoResponse userInfoResponse);
 
         void setUnreadMessageResponseData(UnReadMessageResponse unReadMessageResponse);
-
+        void setLoginData(LoginResponse loginResponse);
         void showProgressDialogView();
 
         void hiddenProgressDialogView();
@@ -37,6 +38,6 @@ public interface MinePageContract {
         void getRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
 
         void getUnreadMessageRequestData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
-
+        void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters);
     }
 }

@@ -8,6 +8,7 @@ import com.sxjs.jd.composition.BasePresenter;
 import com.sxjs.jd.entities.ExamMiddleKpiReportResponse;
 import com.sxjs.jd.entities.ExamMiddleResponse;
 import com.sxjs.jd.entities.ForgetPasswordResponse;
+import com.sxjs.jd.entities.LoginResponse;
 import com.sxjs.jd.entities.UnReadMessageResponse;
 
 import java.util.Map;
@@ -154,6 +155,44 @@ public class MiddlePagePresenter extends BasePresenter implements MiddlePageCont
                 mContractView.hiddenProgressDialogView();
             }
 
+
+            //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                mContractView.hiddenProgressDialogView();
+            }
+
+            @Override
+            public void onComplete() {
+                long completeRequestTime = System.currentTimeMillis();
+                long useTime = completeRequestTime - beforeRequestTime;
+                LogUtil.e(TAG, "=======onCompleteUseMillisecondTime:======= " + useTime + "  ms");
+                mContractView.hiddenProgressDialogView();
+            }
+        });
+        addDisposabe(disposable);
+    }
+
+    @Override
+    public void getLoginData(Map<String, String> mapHeaders, Map<String, Object> mapParameters) {
+        mContractView.showProgressDialogView();
+        final long beforeRequestTime = System.currentTimeMillis();
+        Disposable disposable = mDataManager.getLoginData(mapHeaders, mapParameters, new ErrorDisposableObserver<ResponseBody>() {
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+
+                    String response = responseBody.string();
+                    LogUtil.e(TAG, "=======response:=======" + response);
+                    Gson gson = new Gson();
+                    LoginResponse loginResponse = gson.fromJson(response, LoginResponse.class);
+
+                    mContractView.setLoginData(loginResponse);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             //如果需要发生Error时操作UI可以重写onError，统一错误操作可以在ErrorDisposableObserver中统一执行
             @Override
