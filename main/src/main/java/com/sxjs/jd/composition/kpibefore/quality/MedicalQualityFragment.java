@@ -2,6 +2,7 @@ package com.sxjs.jd.composition.kpibefore.quality;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseFragment;
 import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
 import com.sxjs.common.util.LogUtil;
+import com.sxjs.common.util.NoDoubleClickUtils;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
 import com.sxjs.common.util.ToastUtil;
@@ -28,6 +30,7 @@ import com.sxjs.common.widget.pulltorefresh.PtrHandler;
 import com.sxjs.jd.MainDataManager;
 import com.sxjs.jd.R;
 import com.sxjs.jd.R2;
+import com.sxjs.jd.composition.kpibefore.moreindicators.AttentionIndicatorsActivity;
 import com.sxjs.jd.entities.MedicalQualityResponse;
 
 import java.util.Calendar;
@@ -306,7 +309,11 @@ public class MedicalQualityFragment extends BaseFragment implements MedicalQuali
         if (i == R.id.tv_text1) {
 
         } else if (i == R.id.tv_more) {
-
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, AttentionIndicatorsActivity.class);
+                intent.putExtra("title", "关注指标");
+                mActivity.startActivity(intent);
+            }
 
         }
     }

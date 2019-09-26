@@ -44,6 +44,7 @@ import com.sxjs.jd.R2;
 import com.sxjs.jd.composition.html.homeweb.HomeWebViewActivity;
 import com.sxjs.jd.composition.html.messagedetails.MessageWebViewActivity;
 import com.sxjs.jd.composition.kpihome.abnormal.AbnormalActivity;
+import com.sxjs.jd.composition.kpihome.indexranking.IndexRankingActivity;
 import com.sxjs.jd.composition.kpihome.previews.PreviewsScheduleActivity;
 import com.sxjs.jd.composition.kpihome.schedule.ExamScheduleActivity;
 import com.sxjs.jd.composition.message.MessageActivity;
@@ -1126,8 +1127,15 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
 
 
         } else if (i == R.id.zhibiao_sort) {
+            //指标排行
+            if (!NoDoubleClickUtils.isDoubleClick()) {
+                Intent intent = new Intent(mContext, IndexRankingActivity.class);
+                intent.putExtra("title", "指标排名提醒");
+                mActivity.startActivity(intent);
+            }
 
         } else if (i == R.id.zhibiao_check) {
+            //国考指标法人审核
 
         } else if (i == R.id.zcjd) {
             //政策解读

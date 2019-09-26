@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y40"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/four_level_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x8"
+            android:layout_marginRight="@dimen/x8"
+            android:text="1. 特需医疗服务量占比"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+
+        <TextView
+            android:id="@+id/four_level_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/x8"
+            android:layout_marginRight="@dimen/x8"
+            android:text="24.33%"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y30"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FAEBCA"
+            android:gravity="center"
+            android:text="同类医院排名"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F1F1F1"
+            android:gravity="center"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13">
+
+            <TextView
+                android:id="@+id/tonglei_paiming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/down"
+                android:drawablePadding="@dimen/x8"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#F34A4A"
+                android:textSize="@dimen/x13" />
+
+            <TextView
+                android:id="@+id/tonglei_paiming1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/up"
+                android:drawablePadding="@dimen/x8"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#0AAF33"
+                android:textSize="@dimen/x13" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tonglei_yuan_paiming"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F1F1F1"
+            android:gravity="center"
+            android:text="12 原排名"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y30"
+        android:layout_marginLeft="@dimen/x8"
+        android:layout_marginRight="@dimen/x8"
+        android:layout_marginBottom="@dimen/y10">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FAEBCA"
+            android:gravity="center"
+            android:text="地区医院排名"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F1F1F1"
+            android:gravity="center"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13">
+
+            <TextView
+                android:id="@+id/diqu_paiming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/down"
+                android:drawablePadding="@dimen/x8"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#F34A4A"
+                android:textSize="@dimen/x13" />
+
+            <TextView
+                android:id="@+id/diqu_paiming1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/up"
+                android:drawablePadding="@dimen/x8"
+                android:gravity="center"
+                android:text="12"
+                android:textColor="#0AAF33"
+                android:textSize="@dimen/x13" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="2px"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/diqu_yuan_paiming"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#F1F1F1"
+            android:gravity="center"
+            android:text="12 原排名"
+            android:textColor="#333333"
+            android:textSize="@dimen/x13" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y5"
+        android:background="#F6F6F6" />
+
+</LinearLayout>

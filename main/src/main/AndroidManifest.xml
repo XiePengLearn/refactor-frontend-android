@@ -76,6 +76,9 @@
         <activity
             android:name=".composition.kpibefore.moreindicators.AttentionIndicatorsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".composition.kpihome.indexranking.IndexRankingActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity

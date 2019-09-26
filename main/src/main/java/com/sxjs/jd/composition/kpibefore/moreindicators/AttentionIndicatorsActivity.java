@@ -1,13 +1,18 @@
 package com.sxjs.jd.composition.kpibefore.moreindicators;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +20,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.sxjs.common.base.BaseActivity;
 import com.sxjs.common.base.baseadapter.BaseQuickAdapter;
+import com.sxjs.common.base.baseadapter.BaseViewHolder;
+import com.sxjs.common.layoutmanager.MyLinearLayoutManager;
 import com.sxjs.common.util.LogUtil;
 import com.sxjs.common.util.PrefUtils;
 import com.sxjs.common.util.ResponseCode;
@@ -93,13 +100,12 @@ public class AttentionIndicatorsActivity extends BaseActivity implements Attenti
         unbinder = ButterKnife.bind(this);
         initTitle();
         initView();
-        initData("2019", "09");
+
     }
 
     /**
      * 初始化title
      */
-    int rightSelect;
 
     public void initTitle() {
         String title = getIntent().getStringExtra("title");
@@ -161,15 +167,15 @@ public class AttentionIndicatorsActivity extends BaseActivity implements Attenti
         adapter.loadMoreComplete();
         findRecyclerview.setAdapter(adapter);
 
-
+        initData(jkxTitleRightSelect.getTag().toString());
     }
 
-    private void initData(String year, String m) {
+    private void initData(String monthly) {
 
         String session_id = PrefUtils.readSESSION_ID(mContext.getApplicationContext());
 
         Map<String, Object> mapParameters = new HashMap<>(1);
-        mapParameters.put("MONTHLY", year + m);
+        mapParameters.put("MONTHLY", monthly);
 
         Map<String, String> mapHeaders = new HashMap<>(2);
         mapHeaders.put("ACTION", "Y002");
@@ -201,6 +207,9 @@ public class AttentionIndicatorsActivity extends BaseActivity implements Attenti
                         adapter.addData(messageDate);
                         rlNoData.setVisibility(View.GONE);
                     } else {
+                        List<AttentionIndicatorsResponse.DataBean> data = adapter.getData();
+                        data.clear();
+                        adapter.addData(messageDate);
                         rlNoData.setVisibility(View.VISIBLE);
                     }
 
@@ -310,19 +319,121 @@ public class AttentionIndicatorsActivity extends BaseActivity implements Attenti
         frame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                initData("2019", "09");
+                initData(jkxTitleRightSelect.getTag().toString());
                 frame.refreshComplete();
             }
         }, 500);
     }
 
-    @OnClick({R2.id.jkx_title_left, R2.id.jkx_title_left_btn})
+    @OnClick({R2.id.jkx_title_left, R2.id.jkx_text_right_select})
     public void onViewClicked(View view) {
         int i = view.getId();
         if (i == R.id.jkx_title_left) {
             finish();
-        } else if (i == R.id.jkx_title_left_btn) {
-
+        } else if (i == R.id.jkx_text_right_select) {
+            if (popupWindow == null)
+                initPop();
+            setWindowAlhpa(0.97f);
+            popupWindow.showAsDropDown(jkxTitleRightSelect, 0, 0);
         }
+    }
+
+    private void setWindowAlhpa(float f) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
+
+    PopupWindow popupWindow;
+    int         leftSelect;
+    int         rightSelect;
+    private LeftAdapter  leftAdapter;
+    private RightAdapter rightAdapter;
+
+    public void initPop() {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.jkx_focus_zhibiao_pop_view, null);
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        RecyclerView left_recycleView = view.findViewById(R.id.left_recycleView);
+        leftAdapter = new LeftAdapter(R.layout.jkx_middle_exam_year_item, leftList);
+        left_recycleView.setAdapter(leftAdapter);
+        left_recycleView.setLayoutManager(new MyLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        leftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                leftSelect = position;
+                leftAdapter.notifyDataSetChanged();
+            }
+        });
+
+        RecyclerView right_recycleView = view.findViewById(R.id.right_recycleView);
+        rightAdapter = new RightAdapter(R.layout.jkx_middle_exam_year_item, rightList);
+        right_recycleView.setAdapter(rightAdapter);
+        right_recycleView.setLayoutManager(new MyLinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        rightAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                rightSelect = position;
+                rightAdapter.notifyDataSetChanged();
+                popupWindow.dismiss();
+                jkxTitleRightSelect.setText(leftList.get(leftSelect).getName() + "年" + rightList.get(rightSelect).getName());
+                jkxTitleRightSelect.setTag(leftList.get(leftSelect).getId() + rightList.get(rightSelect).getId());
+                getFollowIndicator();
+            }
+        });
+
+        popupWindow.setContentView(view);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                setWindowAlhpa(1f);
+            }
+        });
+    }
+
+    private void getFollowIndicator() {
+
+        LogUtil.e(TAG, "-------jkxTitleRightSelect----" + jkxTitleRightSelect.getTag().toString());
+        initData(jkxTitleRightSelect.getTag().toString());
+    }
+
+    private class LeftAdapter extends BaseQuickAdapter<JkxNameIdBean, BaseViewHolder> {
+
+        public LeftAdapter(int layoutResId, @Nullable List<JkxNameIdBean> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, JkxNameIdBean item, int position) {
+            helper.setText(R.id.tv_year, item.getName());
+            if (helper.getAdapterPosition() == leftSelect) {
+                helper.getView(R.id.tv_year).setBackgroundColor(mContext.getResources().getColor(R.color.pop_right));
+            } else {
+                helper.getView(R.id.tv_year).setBackgroundColor(mContext.getResources().getColor(R.color.pop_left));
+            }
+        }
+
+
+    }
+
+    private class RightAdapter extends BaseQuickAdapter<JkxNameIdBean, BaseViewHolder> {
+
+        public RightAdapter(int layoutResId, @Nullable List<JkxNameIdBean> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, JkxNameIdBean item, int position) {
+            helper.setText(R.id.tv_year, item.getName());
+            if (helper.getAdapterPosition() == rightSelect) {
+                helper.getView(R.id.tv_year).setBackgroundColor(mContext.getResources().getColor(R.color.pop_left));
+            } else {
+                helper.getView(R.id.tv_year).setBackgroundColor(mContext.getResources().getColor(R.color.pop_right));
+            }
+        }
+
+
     }
 }

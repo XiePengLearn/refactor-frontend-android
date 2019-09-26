@@ -447,8 +447,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/y12"
                     android:scaleType="fitXY"
+
                     android:src="@drawable/gkzb"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/consult"
@@ -456,6 +457,7 @@
                     android:layout_height="@dimen/y69"
                     android:layout_marginTop="@dimen/y12"
                     android:background="#f8f8f8"
+                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 

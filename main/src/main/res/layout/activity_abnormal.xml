@@ -40,7 +40,6 @@
         android:id="@+id/rl_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/abnormal_title"
         android:layout_centerInParent="true"
         android:paddingLeft="@dimen/x14"
         android:paddingRight="@dimen/x14"
