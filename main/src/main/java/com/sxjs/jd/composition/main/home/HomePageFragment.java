@@ -682,7 +682,7 @@ public class HomePageFragment extends BaseFragment implements HomePageContract.V
         if (flag == 1) {
             updateConfig.setForce(true);   //flag == 1 强制更新
         } else {
-            updateConfig.setForce(false);  //flag == 1 非强制更新
+            updateConfig.setForce(false);  //flag == 2 非强制更新
         }
 
         updateConfig.setNotifyImgRes(R.drawable.notification_logo_72);
